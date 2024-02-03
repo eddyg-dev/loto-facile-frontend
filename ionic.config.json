@@ -1,0 +1,7 @@
+{
+  "name": "loto-facile",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
