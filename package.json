@@ -27,9 +27,13 @@
     "@capacitor/keyboard": "5.0.8",
     "@capacitor/status-bar": "5.0.7",
     "@ionic/angular": "^7.5.0",
+    "@ngxs/devtools-plugin": "^3.8.2",
+    "@ngxs/storage-plugin": "^3.8.2",
+    "@ngxs/store": "^3.8.2",
     "ionicons": "^7.2.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "uuid": "^9.0.1",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {
@@ -45,6 +49,7 @@
     "@capacitor/cli": "5.6.0",
     "@ionic/angular-toolkit": "^9.0.0",
     "@types/jasmine": "~5.1.0",
+    "@types/uuid": "^9.0.8",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^7.26.0",

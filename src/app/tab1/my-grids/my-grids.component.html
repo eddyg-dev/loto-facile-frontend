@@ -1,0 +1,14 @@
+<ion-list>
+  <ion-item>
+    <input type="file" class="file-upload" (change)="fileImported($event)" />
+  </ion-item>
+  <ion-item>
+    <ion-button (click)="addGrid()">
+      Ajouter un carton manuellement
+    </ion-button>
+    <ion-button (click)="clearAll()"> Clear </ion-button>
+  </ion-item>
+</ion-list>
+@for (grid of grids$ | async; track $index) {
+<app-grid-full [grid]="grid" />
+}

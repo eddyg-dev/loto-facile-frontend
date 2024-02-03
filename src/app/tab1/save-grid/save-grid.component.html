@@ -1,0 +1,170 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Annuler</ion-button>
+    </ion-buttons>
+    <ion-title>{{ grid ? "Modifier carton" : "Nouveau Carton" }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-input
+      size="large"
+      labelPlacement="stacked"
+      label="Numéro du carton"
+      [(ngModel)]="numero"
+      placeholder="Numéro"
+    ></ion-input>
+  </ion-item>
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Quine 1</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-input
+        #field1
+        [(ngModel)]="field1Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field1, field2)"
+      ></ion-input>
+      <ion-input
+        #field2
+        [(ngModel)]="field2Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field2, field3)"
+      ></ion-input>
+      <ion-input
+        #field3
+        [(ngModel)]="field3Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field3, field4)"
+      ></ion-input>
+      <ion-input
+        #field4
+        [(ngModel)]="field4Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field4, field5)"
+      ></ion-input>
+      <ion-input
+        #field5
+        [(ngModel)]="field5Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+      ></ion-input>
+    </ion-item>
+    <ion-list-header>
+      <ion-label>Quine 2</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-input
+        #field6
+        [(ngModel)]="field6Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field6, field7)"
+      ></ion-input>
+      <ion-input
+        #field7
+        [(ngModel)]="field7Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field7, field8)"
+      ></ion-input>
+      <ion-input
+        #field8
+        [(ngModel)]="field8Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field8, field9)"
+      ></ion-input>
+      <ion-input
+        #field9
+        [(ngModel)]="field9Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field9, field10)"
+      ></ion-input>
+      <ion-input
+        #field10
+        [(ngModel)]="field10Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field10, field11)"
+      ></ion-input>
+    </ion-item>
+    <ion-list-header>
+      <ion-label>Quine 3</ion-label>
+    </ion-list-header>
+    <ion-item>
+      <ion-input
+        #field11
+        [(ngModel)]="field11Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field11, field12)"
+      ></ion-input>
+      <ion-input
+        #field12
+        [(ngModel)]="field12Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field12, field13)"
+      ></ion-input>
+      <ion-input
+        #field13
+        [(ngModel)]="field13Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field13, field14)"
+      ></ion-input>
+      <ion-input
+        #field14
+        [(ngModel)]="field14Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+        (keyup)="setFocus(field14, field15)"
+      ></ion-input>
+      <ion-input
+        #field15
+        [(ngModel)]="field15Value"
+        class="quine-number"
+        type="number"
+        inputmode="numeric"
+        placeholder="_"
+      ></ion-input>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="confirm()">Valider</ion-button>
+</ion-content>

@@ -17,11 +17,15 @@ log.txt
 /.versions
 /coverage
 
+# Nx
+/.nx
+
 # Ionic
 /.ionic
 /www
 /platforms
 /plugins
+
 
 # Compiled output
 /dist

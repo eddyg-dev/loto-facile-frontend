@@ -1,0 +1,18 @@
+.grid {
+  margin: 8px auto;
+}
+
+.row {
+  justify-content: center;
+}
+
+.number {
+  height: 1.875rem;
+  border: solid 1px gray;
+  border-radius: 2rem;
+  text-align: center;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
