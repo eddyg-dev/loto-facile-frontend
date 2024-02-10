@@ -5,8 +5,9 @@
     {
       "files": ["*.ts"],
       "parserOptions": {
-        "project": ["tsconfig.json"],
-        "createDefaultProgram": true
+        "project": ["tsconfig.app.json"],
+        "createDefaultProgram": true,
+        "tsconfigRootDir": "./"
       },
       "extends": [
         "plugin:@angular-eslint/recommended",

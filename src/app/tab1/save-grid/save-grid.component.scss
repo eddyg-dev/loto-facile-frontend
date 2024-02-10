@@ -5,3 +5,16 @@
 .quine-number {
   font-size: 2rem;
 }
+
+.errors {
+  margin: 0.4rem;
+  padding: 0.4rem;
+  .error-text {
+    font-size: 0.8rem;
+    color: red;
+    margin: 0.6rem;
+    &.valid {
+      color: green;
+    }
+  }
+}

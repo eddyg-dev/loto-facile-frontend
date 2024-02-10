@@ -1,8 +1,22 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button size="small" fill="clear" color="medium" (click)="close()"
+        >Fermer</ion-button
+      >
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header> -->
 <ion-grid class="grid">
   <ion-row class="row">
     @for (n of numbers; track $index) {
     <ion-col size="1.2">
-      <div class="number">
+      <div
+        class="number"
+        [class.disabled]="isInTirage(n + 1)"
+        [class.last]="isLast(n + 1)"
+        (click)="addTirage(n + 1)"
+      >
         {{ n + 1 }}
       </div>
     </ion-col>

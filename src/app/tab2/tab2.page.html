@@ -1,16 +1,85 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> Tirage </ion-title>
-  </ion-toolbar>
+  <div>
+    <ion-list>
+      @if (selectionMode === SelectionMode.INITIAL) {
+      <ion-item>
+        <div>
+          <p>Choisissiez les cartons pour ce nouveau tirage</p>
+          <ion-button
+            (click)="startTirage()"
+            [disabled]="!selectedGrids()?.length"
+          >
+            Commencer le tirage
+          </ion-button>
+
+          @if(selectedGrids()?.length){
+          <ion-button (click)="unselectAll()"> Unselect all </ion-button>
+          }
+        </div>
+      </ion-item>
+      } @else if (selectionMode === SelectionMode.IN_PROGRESS) {
+      <ion-item>
+        <ion-button (click)="reselectGrids()"> Terminer la partie </ion-button>
+        <ion-button fill="outline" (click)="demarquer()">
+          Démarquer
+        </ion-button>
+        <ion-button
+          fill="outline"
+          size="small"
+          (click)="showKeyboard=!showKeyboard"
+        >
+          <ion-icon name="keypad"></ion-icon>
+          <span> {{showKeyboard ? 'Cacher clavier' :'Ouvrir clavier'}} </span>
+        </ion-button>
+      </ion-item>
+      <ion-item>
+        <ion-radio-group
+          class="tirage-type-group"
+          [formControl]="tirageTypeFormcontrol"
+        >
+          @for (type of (TirageType | keyvalue :originalOrder ) ; track $index)
+          {
+          <ion-radio class="tirage-type" mode="md" [value]="type.value"
+            ><span
+              [class.is-selected]="tirageTypeFormcontrol.value === type.value"
+            >
+              {{ type.value }}
+            </span>
+          </ion-radio>
+          }
+        </ion-radio-group>
+      </ion-item>
+      }</ion-list
+    >
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true" scrollY="false">
+<ion-content>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tirage</ion-title>
+      <ion-title size="large" class="ion-text-center">Tirage</ion-title>
     </ion-toolbar>
   </ion-header>
-  <app-tirage />
+  @if (selectionMode === SelectionMode.INITIAL) {
+  <app-my-grids
+    [isSelectable]="true"
+    [isEditable]="false"
+    [displayBadges]="false"
+    [grids]="(grids$ | async)!"
+  />
+  } @if (selectionMode === SelectionMode.IN_PROGRESS) {
+  <ion-item>
+    <app-tirage-last-numbers></app-tirage-last-numbers>
+  </ion-item>
+  <app-my-grids
+    [isSelectable]="false"
+    [isEditable]="false"
+    [grids]="selectedGrids()!"
+    [displayBadges]="true"
+  ></app-my-grids>
+  }
 </ion-content>
 
+@if (selectionMode === SelectionMode.IN_PROGRESS && showKeyboard ) {
 <ion-footer> <app-ninety-keyboard /> </ion-footer>
+}

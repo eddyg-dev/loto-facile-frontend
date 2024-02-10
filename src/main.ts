@@ -7,12 +7,15 @@ import {
 } from '@ionic/angular/standalone';
 
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
-import { environment } from './environments/environment';
+import { StateKey } from './app/data/enum/state-key.enum';
+import { CategoryState } from './app/store/category/category.state';
 import { GridState } from './app/store/grids/grids.state';
-import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { TirageState } from './app/store/tirage/tirage.state';
+import { environment } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
@@ -24,10 +27,10 @@ bootstrapApplication(AppComponent, {
     provideIonicAngular(),
     provideRouter(routes),
     importProvidersFrom(
-      NgxsModule.forRoot([GridState]),
+      NgxsModule.forRoot([GridState, TirageState, CategoryState]),
       NgxsReduxDevtoolsPluginModule.forRoot(),
       NgxsStoragePluginModule.forRoot({
-        key: ['grids'],
+        key: [StateKey.Grids, StateKey.Tirage, StateKey.Category],
       })
     ),
   ],

@@ -1,32 +1,59 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { Tirage } from 'src/app/data/models/tirage';
-import { SaveTirageAction } from './tirage.actions';
+import { StateKey } from 'src/app/data/enum/state-key.enum';
+import {
+  AddNumberTirageAction,
+  ClearTirageAction,
+  DeleteNumberTirageAction,
+} from './tirage.actions';
 
 export interface TirageStateModel {
-  tirage: Tirage;
+  numbers: number[];
 }
 
 @State({
-  name: 'tirage',
+  name: StateKey.Tirage,
   defaults: {
-    tirage: undefined,
+    numbers: [],
   },
 })
 @Injectable()
 export class TirageState {
   @Selector()
-  static getTirage(state: TirageStateModel): Tirage {
-    return state.tirage;
+  static getTirageNumbers(state: TirageStateModel): number[] {
+    return state.numbers;
   }
 
-  @Action(SaveTirageAction)
-  saveTirage(
+  @Action(AddNumberTirageAction)
+  addNumberTirage(
     context: StateContext<TirageStateModel>,
-    action: SaveTirageAction
+    action: AddNumberTirageAction
   ): void {
-    context.patchState({
-      tirage: action.tirage,
+    const state = context.getState();
+    context.setState({
+      ...state,
+      numbers: [...state.numbers, action.number],
+    });
+  }
+
+  @Action(DeleteNumberTirageAction)
+  deleteNumberTirage(
+    context: StateContext<TirageStateModel>,
+    action: DeleteNumberTirageAction
+  ): void {
+    const state = context.getState();
+    context.setState({
+      ...state,
+      numbers: state.numbers.filter((n) => n !== action.number),
+    });
+  }
+
+  @Action(ClearTirageAction)
+  clearTirage(context: StateContext<TirageStateModel>): void {
+    const state = context.getState();
+    context.setState({
+      ...state,
+      numbers: [],
     });
   }
 }

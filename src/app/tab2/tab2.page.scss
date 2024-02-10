@@ -1,0 +1,15 @@
+.tirage-type-group {
+  display: flex;
+  font-size: 0.8rem;
+  .tirage-type {
+    margin-right: 1rem;
+    .is-selected {
+      font-weight: 600;
+    }
+  }
+}
+
+ion-footer {
+  background: var(--ion-color-light);
+  margin-top: 0.5rem;
+}

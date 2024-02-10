@@ -1,0 +1,11 @@
+<ion-icon name="close"></ion-icon>
+<div class="colors">
+  @for(color of categoryColorEnum|keyvalue; track $index){
+  <div
+    [class.selected]="selectedColor === color.value"
+    (click)="selectColor(color.value)"
+  >
+    <app-category-color [color]="color.value" />
+  </div>
+  }
+</div>

@@ -1,8 +1,12 @@
-import { GridType } from '../enum/grid-type.enum';
+import { TirageNumber } from './grid-full';
 
 export interface Grid {
-  id: string;
+  id?: string;
   numero: number;
-  quines: number[][];
-  type: GridType;
+  quines: TirageNumber[][];
+  isSelected: boolean;
+  isQuine: boolean;
+  isDoubleQuine: boolean;
+  isCartonPlein: boolean;
+  categoryId: string;
 }

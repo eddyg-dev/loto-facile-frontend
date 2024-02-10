@@ -20,6 +20,9 @@ log.txt
 # Nx
 /.nx
 
+# Env
+/src/environments
+
 # Ionic
 /.ionic
 /www

@@ -5,8 +5,9 @@ const config: CapacitorConfig = {
   appName: 'loto-facile',
   webDir: 'www',
   server: {
-    androidScheme: 'https'
-  }
+    androidScheme: 'https',
+    cleartext: true,
+  },
 };
 
 export default config;

@@ -1,20 +1,55 @@
-<div class="title">
-  <p>Carton N°{{ grid.numero }}</p>
-  <ion-chip (click)="editGrid(grid)">Modifier</ion-chip>
-</div>
-<div class="grid-container">
-  <div class="grid">
-    <div *ngFor="let row of [0, 1, 2]; let indexRow = index" class="row">
+<form [formGroup]="formGroup">
+  <div class="title">
+    @if (isSelectable) {
+    <ion-checkbox
+      labelPlacement="start"
+      class="checkbox"
+      formControlName="isSelected"
+      >N° {{ grid.numero }}</ion-checkbox
+    >
+    }@else {
+    <span>N° {{ grid.numero }}</span>
+    @if (isEditable) {
+    <ion-icon size="small" name="create" (click)="editGrid(grid)" />
+    } }
+  </div>
+  <div class="badges">
+    @if (displayBadges) {
+    <ion-badge [color]="gridFull?.isQuine ? 'success' : 'danger'">
+      Quine
+    </ion-badge>
+    <ion-badge [color]="gridFull?.isDoubleQuine ? 'success' : 'danger'">
+      2 Quines
+    </ion-badge>
+    <ion-badge [color]="gridFull?.isCartonPlein ? 'success' : 'danger'">
+      Carton Plein
+    </ion-badge>
+
+    }
+  </div>
+  @for (row of [0, 1, 2]; track indexRow; let indexRow = $index) {
+  <div class="row">
+    <div
+      *ngFor="let col of [0, 1, 2, 3, 4, 5, 6, 7, 8]; let indexCol = index"
+      class="square"
+    >
       <div
-        *ngFor="let col of [0, 1, 2, 3, 4, 5, 6, 7, 8]; let indexCol = index"
-        class="square"
+        class="value"
+        [class.empty]="element(indexRow, indexCol)?.number === 0"
+        [class.drawed]="element(indexRow, indexCol)?.isDrawed"
+        [ngStyle]="
+          element(indexRow, indexCol)?.number === 0
+            ? { background: backgroundColor }
+            : {}
+        "
       >
-        <div class="value" [class.empty]="element(indexRow, indexCol) === 0">
-          {{
-            element(indexRow, indexCol) === 0 ? "" : element(indexRow, indexCol)
-          }}
-        </div>
+        {{
+          element(indexRow, indexCol)?.number === 0
+            ? ""
+            : element(indexRow, indexCol)?.number
+        }}
       </div>
     </div>
   </div>
-</div>
+  }
+</form>

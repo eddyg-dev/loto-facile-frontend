@@ -1,9 +1,11 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Annuler</ion-button>
+      <ion-button color="medium" (click)="close()">Annuler</ion-button>
     </ion-buttons>
-    <ion-title>{{ grid ? "Modifier carton" : "Nouveau Carton" }}</ion-title>
+    <ion-title class="ion-text-center">{{
+      grid ? "Modifier carton N° " + grid.numero : "Nouveau Carton"
+    }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -15,6 +17,21 @@
       [(ngModel)]="numero"
       placeholder="Numéro"
     ></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Catégorie</ion-label>
+    <ion-select
+      mode="ios"
+      placeholder="Catégorie"
+      [(ngModel)]="category"
+      interface="popover"
+    >
+      <ion-select-option
+        *ngFor="let category of categories$ | async"
+        [value]="category.id"
+        >{{ category.name }}</ion-select-option
+      >
+    </ion-select>
   </ion-item>
   <ion-list>
     <ion-list-header>
@@ -64,6 +81,7 @@
         type="number"
         inputmode="numeric"
         placeholder="_"
+        (keyup)="setFocus(field5, field6)"
       ></ion-input>
     </ion-item>
     <ion-list-header>
@@ -163,8 +181,38 @@
         type="number"
         inputmode="numeric"
         placeholder="_"
+        (keyup)="setFocus(field15)"
       ></ion-input>
     </ion-item>
   </ion-list>
-  <ion-button (click)="confirm()">Valider</ion-button>
+
+  <div class="errors">
+    <ul>
+      <li class="error-text" [class.valid]="isValidOneToNinety()">
+        Toutes les valeurs sont comprises entre 1 et 90
+      </li>
+      <li class="error-text" [class.valid]="isNumbersDifferent()">
+        Il y a 15 numéros différents sur votre grille
+      </li>
+      <li
+        class="error-text"
+        [class.valid]="isSorted1() && isSorted2() && isSorted3()"
+      >
+        Chaque quine doit être rangée par ordre croissant
+      </li>
+      <li
+        class="error-text"
+        [class.valid]="
+          isDifferentDizaine1() &&
+          isDifferentDizaine2() &&
+          isDifferentDizaine3()
+        "
+      >
+        Chaque quine comporte des dizaines différentes
+      </li>
+    </ul>
+  </div>
+  <ion-button [disabled]="!isGridValid()" (click)="confirm()"
+    >Valider</ion-button
+  >
 </ion-content>

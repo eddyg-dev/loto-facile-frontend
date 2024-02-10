@@ -17,11 +17,24 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
+import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.component';
+import { getSpecifiDizaine } from 'src/app/shared/utils/transfo.utils';
+import { CategoryState } from 'src/app/store/category/category.state';
+import {
+  AddGridsAction,
+  EditGridsAction,
+} from 'src/app/store/grids/grids.actions';
+import { v4 as guid } from 'uuid';
 
 @Component({
   selector: 'app-save-grid',
@@ -40,16 +53,24 @@ import { Grid } from 'src/app/data/models/grid';
     IonItem,
     IonButton,
     FormsModule,
+    GridFullComponent,
+    IonSelect,
+    IonSelectOption,
   ],
   templateUrl: './save-grid.component.html',
   styleUrl: './save-grid.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SaveGridComponent implements OnInit {
+  private readonly store = inject(Store);
   private readonly modalController = inject(ModalController);
   @Input() grid?: Grid;
 
+  public categories$: Observable<Category[]> = this.store.select(
+    CategoryState.getCategories
+  );
   numero?: number;
+  category?: string;
   field1Value?: number;
   field2Value?: number;
   field3Value?: number;
@@ -67,39 +88,195 @@ export class SaveGridComponent implements OnInit {
   field15Value?: number;
 
   public ngOnInit(): void {
-    console.log(this.grid);
-
     if (this.grid) {
       this.numero = this.grid.numero;
-      this.field1Value = this.grid.quines[0][0];
-      this.field2Value = this.grid.quines[0][1];
-      this.field3Value = this.grid.quines[0][2];
-      this.field4Value = this.grid.quines[0][3];
-      this.field5Value = this.grid.quines[0][4];
-      this.field6Value = this.grid.quines[1][0];
-      this.field7Value = this.grid.quines[1][1];
-      this.field8Value = this.grid.quines[1][2];
-      this.field9Value = this.grid.quines[1][3];
-      this.field10Value = this.grid.quines[1][4];
-      this.field11Value = this.grid.quines[2][0];
-      this.field12Value = this.grid.quines[2][1];
-      this.field13Value = this.grid.quines[2][2];
-      this.field14Value = this.grid.quines[2][3];
-      this.field15Value = this.grid.quines[2][4];
+      this.category = this.grid.categoryId;
+      this.field1Value = this.grid.quines[0][0].number;
+      this.field2Value = this.grid.quines[0][1].number;
+      this.field3Value = this.grid.quines[0][2].number;
+      this.field4Value = this.grid.quines[0][3].number;
+      this.field5Value = this.grid.quines[0][4].number;
+      this.field6Value = this.grid.quines[1][0].number;
+      this.field7Value = this.grid.quines[1][1].number;
+      this.field8Value = this.grid.quines[1][2].number;
+      this.field9Value = this.grid.quines[1][3].number;
+      this.field10Value = this.grid.quines[1][4].number;
+      this.field11Value = this.grid.quines[2][0].number;
+      this.field12Value = this.grid.quines[2][1].number;
+      this.field13Value = this.grid.quines[2][2].number;
+      this.field14Value = this.grid.quines[2][3].number;
+      this.field15Value = this.grid.quines[2][4].number;
     }
   }
 
-  cancel() {
-    return this.modalController.dismiss(null, 'cancel');
+  close() {
+    this.modalController.dismiss();
   }
 
   confirm() {
-    console.log(this.numero);
-
-    // return this.modalController.dismiss(this., 'confirm');
+    const newGrid = this.createGrid();
+    this.grid?.id
+      ? this.store.dispatch(new EditGridsAction([newGrid]))
+      : this.store.dispatch(new AddGridsAction([{ ...newGrid, id: guid() }]));
+    this.close();
   }
 
-  async setFocus(element: IonInput, nextElement: IonInput) {
+  private createGrid(): Grid {
+    return {
+      categoryId: this.category as string,
+      numero: this.numero as number,
+      quines: [
+        [
+          { number: this.field1Value as number, isDrawed: false },
+          { number: this.field2Value as number, isDrawed: false },
+          { number: this.field3Value as number, isDrawed: false },
+          { number: this.field4Value as number, isDrawed: false },
+          { number: this.field5Value as number, isDrawed: false },
+        ],
+        [
+          { number: this.field6Value as number, isDrawed: false },
+          { number: this.field7Value as number, isDrawed: false },
+          { number: this.field8Value as number, isDrawed: false },
+          { number: this.field9Value as number, isDrawed: false },
+          { number: this.field10Value as number, isDrawed: false },
+        ],
+        [
+          { number: this.field11Value as number, isDrawed: false },
+          { number: this.field12Value as number, isDrawed: false },
+          { number: this.field13Value as number, isDrawed: false },
+          { number: this.field14Value as number, isDrawed: false },
+          { number: this.field15Value as number, isDrawed: false },
+        ],
+      ],
+      isSelected: false,
+      isQuine: false,
+      isDoubleQuine: false,
+      isCartonPlein: false,
+      id: this.grid?.id ?? undefined,
+    };
+  }
+
+  public isValidOneToNinety(): boolean {
+    return this.getAllValues().every((n) => n && n > 0 && n <= 90);
+  }
+
+  public isNumbersDifferent(): boolean {
+    return (
+      this.getAllValues().length === 15 &&
+      [...new Set(this.getAllValues())].length === 15
+    );
+  }
+
+  public isSorted1(): boolean {
+    return (
+      (this.field1Value as number) < (this.field2Value as number) &&
+      (this.field2Value as number) < (this.field3Value as number) &&
+      (this.field3Value as number) < (this.field4Value as number) &&
+      (this.field4Value as number) < (this.field5Value as number)
+    );
+  }
+  public isSorted2(): boolean {
+    return (
+      (this.field6Value as number) < (this.field7Value as number) &&
+      (this.field7Value as number) < (this.field8Value as number) &&
+      (this.field8Value as number) < (this.field9Value as number) &&
+      (this.field9Value as number) < (this.field10Value as number)
+    );
+  }
+  public isSorted3(): boolean {
+    return (
+      (this.field11Value as number) < (this.field12Value as number) &&
+      (this.field12Value as number) < (this.field13Value as number) &&
+      (this.field13Value as number) < (this.field14Value as number) &&
+      (this.field14Value as number) < (this.field15Value as number)
+    );
+  }
+  public isDifferentDizaine1(): boolean {
+    return (
+      [
+        ...new Set(
+          [
+            this.field1Value as number,
+            this.field2Value as number,
+            this.field3Value as number,
+            this.field4Value as number,
+            this.field5Value as number,
+          ].map((n) => getSpecifiDizaine(n))
+        ),
+      ].length === 5
+    );
+  }
+  public isDifferentDizaine2(): boolean {
+    return (
+      [
+        ...new Set(
+          [
+            this.field6Value as number,
+            this.field7Value as number,
+            this.field8Value as number,
+            this.field9Value as number,
+            this.field10Value as number,
+          ].map((n) => getSpecifiDizaine(n))
+        ),
+      ].length === 5
+    );
+  }
+  public isDifferentDizaine3(): boolean {
+    return (
+      [
+        ...new Set(
+          [
+            this.field11Value as number,
+            this.field12Value as number,
+            this.field13Value as number,
+            this.field14Value as number,
+            this.field15Value as number,
+          ].map((n) => getSpecifiDizaine(n))
+        ),
+      ].length === 5
+    );
+  }
+
+  isGridValid(): boolean {
+    const rulesOK =
+      !!this.numero &&
+      !!this.category &&
+      this.isValidOneToNinety() &&
+      this.isNumbersDifferent() &&
+      this.isSorted1() &&
+      this.isSorted2() &&
+      this.isSorted3() &&
+      this.isDifferentDizaine1() &&
+      this.isDifferentDizaine2() &&
+      this.isDifferentDizaine3();
+
+    if (rulesOK) {
+      this.grid = this.createGrid();
+    }
+    return rulesOK;
+  }
+
+  private getAllValues(): (number | undefined)[] {
+    return [
+      this.field1Value,
+      this.field2Value,
+      this.field3Value,
+      this.field4Value,
+      this.field5Value,
+      this.field6Value,
+      this.field7Value,
+      this.field8Value,
+      this.field9Value,
+      this.field10Value,
+      this.field11Value,
+      this.field12Value,
+      this.field13Value,
+      this.field14Value,
+      this.field15Value,
+    ];
+  }
+
+  async setFocus(element: IonInput, nextElement?: IonInput) {
     const value = element.value as number;
     if (!value) {
       return;
@@ -108,7 +285,7 @@ export class SaveGridComponent implements OnInit {
         element.writeValue(null);
         return;
       }
-      if (value >= 10 && value <= 90) {
+      if (value >= 10 && value <= 90 && nextElement) {
         await nextElement.setFocus();
       }
     }

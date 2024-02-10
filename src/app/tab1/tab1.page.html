@@ -1,14 +1,46 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title> Mes cartons </ion-title>
+    <ion-title class="ion-text-center"> Gestion des cartons </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Mes cartons</ion-title>
+      <ion-title size="large" class="ion-text-center"
+        >Gestion des cartons</ion-title
+      >
     </ion-toolbar>
   </ion-header>
-  <app-my-grids></app-my-grids>
+
+  <ion-segment [(ngModel)]="segment" class="segment" value="carton">
+    <ion-segment-button value="carton">
+      <ion-label>Cartons</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="category">
+      <ion-label>Catégories</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  @if(segment==='carton'){
+  <ion-list>
+    <ion-item>
+      <input type="file" class="file-upload" (change)="fileImported($event)" />
+    </ion-item>
+    <ion-item>
+      <ion-button (click)="addGrid()">
+        Ajouter un carton manuellement
+      </ion-button>
+      <ion-button (click)="clearAll()"> Clear </ion-button>
+    </ion-item>
+  </ion-list>
+  <app-my-grids
+    [isEditable]="true"
+    [isSelectable]="false"
+    [grids]="grids"
+    [displayBadges]="false"
+  ></app-my-grids>
+  } @if(segment==='category'){
+  <app-categories />
+  }
 </ion-content>

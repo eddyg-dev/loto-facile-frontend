@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">{{ title }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()"> Fermer </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <div class="win-numbers">
+    <h2>{{ winNumbers }} &nbsp;</h2>
+    @if (winNumbers===1) {
+    <h2>grille gagnante</h2>
+    } @else {
+    <h2>grilles gagnantes</h2>
+    }
+  </div>
+  <app-my-grids
+    [isEditable]="isEditable"
+    [isSelectable]="isSelectable"
+    [grids]="grids"
+    [displayBadges]="displayBadges"
+  />
+  <div>
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Continuer la partie</ion-label>
+      </ion-list-header>
+      <ion-item>
+        @switch (tirageType) { @case (tirageTypeEnum.Quine) {
+        <ion-button size="small" fill="solid"> Autre quine</ion-button>
+        <ion-button
+          size="small"
+          fill="solid"
+          (click)="close(tirageTypeEnum.Double_Quine)"
+        >
+          Double quine</ion-button
+        >
+        <ion-button
+          size="small"
+          fill="solid"
+          (click)="close(tirageTypeEnum.Carton_Plein)"
+        >
+          Carton plein</ion-button
+        >
+        } @case (tirageTypeEnum.Double_Quine) {
+        <ion-button
+          size="small"
+          fill="solid"
+          (click)="close(tirageTypeEnum.Carton_Plein)"
+        >
+          Jouer le carton plein</ion-button
+        >
+        } @case (tirageTypeEnum.Carton_Plein) {
+        <ion-button
+          size="small"
+          fill="solid"
+          (click)="close(tirageTypeEnum.Carton_Plein)"
+        >
+          Terminer la partie
+        </ion-button>
+        } }
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

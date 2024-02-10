@@ -1,0 +1,21 @@
+<ion-list>
+  <ion-item>
+    <ion-button (click)="openSaveCategoryModal()">
+      Ajouter une catégorie
+    </ion-button>
+  </ion-item>
+</ion-list>
+
+@for(c of categories$|async; track $index){
+<ion-item>
+  <app-category-color [categoryId]="c.id" />
+  <ion-label>
+    {{ c.name | titlecase }}
+  </ion-label>
+
+  <ion-icon (click)="openSaveCategoryModal(c)" name="create"></ion-icon>
+  @if(c.isDeletable){
+  <ion-icon (click)="deleteCategory(c.id)" name="trash"></ion-icon>
+  }
+</ion-item>
+}

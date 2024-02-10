@@ -1,18 +1,24 @@
-.grid {
-  margin: 8px auto;
-}
-
 .row {
   justify-content: center;
 }
 
 .number {
-  height: 1.875rem;
+  background: white;
+  font-size: 1rem;
+  height: 1.4rem;
   border: solid 1px gray;
-  border-radius: 2rem;
+  border-radius: 4rem;
   text-align: center;
   font-weight: bold;
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  &.disabled {
+    background: lightgreen;
+  }
+
+  &.last {
+    background: lightcoral;
+  }
 }
