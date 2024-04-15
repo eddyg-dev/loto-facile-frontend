@@ -1,11 +1,16 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar mode="ios">
     <ion-buttons slot="start">
-      <ion-button (click)="close()" color="medium">Annuler</ion-button>
+      <ion-button size="small" color="medium" (click)="close()" color="medium"
+        >Annuler</ion-button
+      >
     </ion-buttons>
-    <ion-title class="ion-text-center">Modal</ion-title>
+    <ion-title class="ion-text-center">{{
+      category ? "Modification catégorie" : "Nouvelle catégorie"
+    }}</ion-title>
     <ion-buttons slot="end">
       <ion-button
+        size="small"
         [disabled]="!categoryForm.valid"
         [strong]="true"
         (click)="validate()"
@@ -17,7 +22,7 @@
 <ion-content class="ion-padding">
   <form [formGroup]="categoryForm">
     <ion-list>
-      <ion-item>
+      <ion-item lines="none">
         <ion-input
           formControlName="name"
           label="Catégorie"
@@ -29,17 +34,17 @@
           }
         </ion-input>
       </ion-item>
-      <ion-item>
+      <ion-item lines="none">
         <ion-input
           formControlName="color"
           label="Couleur"
           placeholder="Choisir la couleur"
-          (click)="openColorPalette(categoryForm?.get('color')?.value)"
+          (click)="openColorPalette(categoryForm.get('color')?.value)"
         >
         </ion-input>
         <app-category-color
-          (click)="openColorPalette(categoryForm?.get('color')?.value)"
-          [color]="categoryForm?.get('color')?.value"
+          (click)="openColorPalette(categoryForm.get('color')?.value)"
+          [color]="categoryForm.get('color')?.value"
         />
       </ion-item>
     </ion-list>

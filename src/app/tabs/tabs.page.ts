@@ -1,4 +1,5 @@
-import { Component, EnvironmentInjector, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   IonIcon,
   IonLabel,
@@ -15,5 +16,11 @@ import {
   imports: [IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel],
 })
 export class TabsPage {
-  public environmentInjector = inject(EnvironmentInjector);
+  private router = inject(Router);
+  public tab = '';
+  public tabChange(event: any): void {
+    console.log(event);
+    this.tab = event.tab;
+    this.router.navigate([`tabs/${event.tab}`]);
+  }
 }

@@ -1,11 +1,14 @@
-.category-title {
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  gap: 0.2rem;
-  .category {
-    font-weight: bold;
-    padding: 0 1rem;
+.category {
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-size: 1.2rem;
+    .name {
+      font-weight: bold;
+      padding: 0 1rem;
+    }
   }
 }
 

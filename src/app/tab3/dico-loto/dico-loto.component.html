@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-buttons slot="start">
+      <ion-button size="small" (click)="close()" color="medium"
+        >Fermer</ion-button
+      >
+    </ion-buttons>
+    <ion-title class="ion-text-center">Le Dico Loto</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="modal-content ion-padding">
+    <ion-accordion-group>
+      <ion-accordion value="first">
+        <ion-item slot="header" color="light">
+          <ion-label>Les expressions par numéro</ion-label>
+        </ion-item>
+        <div class="ion-padding" slot="content">
+          @for (dicoNumber of dicoNumbers; track $index) {
+          <ion-item
+            class="animate__animated animate__bounceIn"
+            lines="none"
+            [button]="true"
+          >
+            <ion-label>
+              <h2>{{ $index + 1 }}</h2>
+              <p>{{ dicoNumber }}</p>
+            </ion-label>
+          </ion-item>
+          }
+        </div>
+      </ion-accordion>
+    </ion-accordion-group>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Footer</ion-title>
+  </ion-toolbar>
+</ion-footer>

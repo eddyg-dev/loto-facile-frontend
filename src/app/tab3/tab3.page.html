@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title class="ion-text-center">Réglages</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header mode="ios">Le Loto</ion-list-header>
+    <ion-item lines="none" [button]="true" (click)="openDicoLoto()">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="book"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Le Dico Loto </ion-label>
+    </ion-item>
+    <ion-list-header mode="ios">Options</ion-list-header>
+    <ion-item lines="none">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="notifications"
+        slot="start"
+      ></ion-icon>
+      <ion-toggle>
+        <ion-label>Notifications</ion-label>
+      </ion-toggle>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="refresh"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Données par défaut</ion-label>
+      <ion-button (click)="resetAllDatas()">Reset</ion-button>
+    </ion-item>
+    <ion-list-header mode="ios">A propos</ion-list-header>
+    <ion-item lines="none">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="cube"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Version</ion-label>
+      <ion-note slot="end">[{{version}}]</ion-note>
+    </ion-item>
+    <ion-item lines="none" [button]="true">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="star"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Evaluez-nous</ion-label>
+    </ion-item>
+    <ion-item lines="none" [button]="true">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="mail"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Nous contacter</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

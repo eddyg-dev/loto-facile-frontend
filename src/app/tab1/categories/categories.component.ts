@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+  inject,
+} from '@angular/core';
 import {
   AlertController,
   IonButton,
@@ -16,7 +22,6 @@ import { Category } from 'src/app/data/models/category';
 import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
 import { DeleteCategoryAction } from 'src/app/store/category/category.actions';
 import { CategoryState } from 'src/app/store/category/category.state';
-import { SaveCategoryComponent } from './save-category/save-category.component';
 
 @Component({
   selector: 'app-categories',
@@ -38,25 +43,18 @@ export class CategoriesComponent {
   private readonly store = inject(Store);
   private readonly modalController = inject(ModalController);
   private readonly alertController = inject(AlertController);
+  @Output() public openSaveCategoryEvent = new EventEmitter<Category>();
 
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
   );
 
-  public async openSaveCategoryModal(category?: Category): Promise<void> {
-    const saveCategoryComponentModal = await this.modalController.create({
-      component: SaveCategoryComponent,
-      animated: true,
-      componentProps: { category },
-    });
-    await saveCategoryComponentModal.present();
-  }
-
   public async deleteCategory(id: string): Promise<void> {
     const alert = await this.alertController.create({
       animated: true,
       header: 'Suppression',
-      message: `${Message.Delete_Category}`,
+      subHeader: Message.Delete_Category,
+      message: Message.Delete_Category_Detail,
       buttons: [
         {
           text: 'Non',

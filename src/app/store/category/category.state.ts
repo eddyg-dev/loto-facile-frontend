@@ -1,8 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Injectable, inject } from '@angular/core';
+import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
 import { defaultCategories } from 'src/app/data/constants/app.constants';
+import { CategoryId } from 'src/app/data/enum/category-id.enum';
 import { StateKey } from 'src/app/data/enum/state-key.enum';
 import { Category } from 'src/app/data/models/category';
+import { Grid } from 'src/app/data/models/grid';
+import { EditGridsAction } from '../grids/grids.actions';
+import { GridState } from '../grids/grids.state';
 import {
   AddCategoryAction,
   DeleteCategoryAction,
@@ -21,6 +25,8 @@ export interface CategoryStateModel {
 })
 @Injectable()
 export class CategoryState {
+  private store = inject(Store);
+
   @Selector()
   static getCategory(
     state: CategoryStateModel,
@@ -73,5 +79,12 @@ export class CategoryState {
     context.patchState({
       categories: [...newCats],
     });
+
+    const grids = this.store.selectSnapshot(GridState.getGrids);
+    let impactedgrids: Grid[] = grids.filter(
+      (g) => g.categoryId === action.categoryId
+    );
+    impactedgrids.map((g) => (g.categoryId = CategoryId.Other));
+    context.dispatch(new EditGridsAction(impactedgrids));
   }
 }

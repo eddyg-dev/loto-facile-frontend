@@ -8,7 +8,6 @@ import {
   inject,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -68,7 +67,6 @@ export class SaveCategoryComponent implements OnInit {
   private readonly cd = inject(ChangeDetectorRef);
   private readonly modalController = inject(ModalController);
   private readonly popovercontroller = inject(PopoverController);
-  private readonly alertController = inject(AlertController);
   private readonly fb = inject(FormBuilder);
 
   public categoryColorEnum = CategoryColor;
@@ -78,7 +76,6 @@ export class SaveCategoryComponent implements OnInit {
   });
 
   public ngOnInit(): void {
-    console.log(this.category);
     if (this.category) {
       this.categoryForm.patchValue({
         color: this.category.color,
@@ -100,7 +97,6 @@ export class SaveCategoryComponent implements OnInit {
     });
 
     palette.onDidDismiss().then((result) => {
-      console.log('data ', result);
       if (result?.data) {
         this.categoryForm.controls['color'].patchValue(
           result.data as any as CategoryColor

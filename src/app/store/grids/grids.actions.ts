@@ -13,6 +13,15 @@ export class EditGridsAction {
   static readonly type = '[Grids] Edit Grids';
   constructor(public grids: Grid[]) {}
 }
+export class DeleteGridAction {
+  static readonly type = '[Grids] Delete Grid';
+  constructor(public gridId: string) {}
+}
+export class DeleteGridsAction {
+  static readonly type = '[Grids] Delete Grids';
+  constructor(public gridIds: string[]) {}
+}
+
 export class DeleteAllGridsAction {
   static readonly type = '[Grids] Delete All Grids';
 }

@@ -5,6 +5,8 @@ import { Grid } from 'src/app/data/models/grid';
 import {
   AddGridsAction,
   DeleteAllGridsAction,
+  DeleteGridAction,
+  DeleteGridsAction,
   EditGridAction,
   EditGridsAction,
   UnselectAllGridsAction,
@@ -48,6 +50,16 @@ export class GridState {
     });
   }
 
+  @Action(DeleteGridsAction)
+  deleteGrids(
+    context: StateContext<GridStateModel>,
+    action: DeleteGridsAction
+  ): void {
+    action.gridIds.forEach((id) => {
+      this.store.dispatch(new DeleteGridAction(id));
+    });
+  }
+
   @Action(EditGridAction)
   editGrid(
     context: StateContext<GridStateModel>,
@@ -65,7 +77,8 @@ export class GridState {
   unselectAllGrids(context: StateContext<GridStateModel>): void {
     context.patchState({
       grids: context.getState().grids.map((grid) => {
-        grid.isSelected = false;
+        grid.isSelectedForPlay = false;
+        grid.isSelectedForEdit = false;
         return grid;
       }),
     });
@@ -74,6 +87,22 @@ export class GridState {
   deleteAllGrids(context: StateContext<GridStateModel>): void {
     context.patchState({
       grids: [],
+    });
+  }
+
+  @Action(DeleteGridAction)
+  deleteCategory(
+    context: StateContext<GridStateModel>,
+    action: DeleteGridAction
+  ): void {
+    const index = context
+      .getState()
+      .grids.findIndex((g) => g.id === action.gridId);
+
+    const newGrids = [...context.getState().grids];
+    newGrids.splice(index, 1);
+    context.patchState({
+      grids: [...newGrids],
     });
   }
 }

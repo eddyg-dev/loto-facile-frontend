@@ -3,7 +3,9 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  EventEmitter,
   Input,
+  Output,
   Signal,
   inject,
 } from '@angular/core';
@@ -17,8 +19,10 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonSearchbar,
   IonSelect,
   IonSelectOption,
+  IonSkeletonText,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -26,6 +30,7 @@ import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
 import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.component';
+import { PageLoaderComponent } from 'src/app/shared/ui/page-loader/page-loader.component';
 import { CategoryState } from 'src/app/store/category/category.state';
 import { EditGridAction } from 'src/app/store/grids/grids.actions';
 
@@ -33,6 +38,8 @@ import { EditGridAction } from 'src/app/store/grids/grids.actions';
   selector: 'app-my-grids',
   standalone: true,
   imports: [
+    IonSearchbar,
+    IonSkeletonText,
     IonListHeader,
     IonItem,
     IonInput,
@@ -47,6 +54,7 @@ import { EditGridAction } from 'src/app/store/grids/grids.actions';
     IonLabel,
     CategoryColorComponent,
     IonCheckbox,
+    PageLoaderComponent,
   ],
   templateUrl: './my-grids.component.html',
   styleUrl: './my-grids.component.scss',
@@ -56,8 +64,12 @@ export class MyGridsComponent {
   private readonly store = inject(Store);
   private readonly cd = inject(ChangeDetectorRef);
   private _grids!: Grid[];
+  public isLoading = false;
+  @Output() public editGridEvent = new EventEmitter<Grid>();
+  @Output() public deleteGridEvent = new EventEmitter<Grid>();
 
-  @Input({ required: true }) public isSelectable!: boolean;
+  @Input({ required: true }) public isSelectableForPlay!: boolean;
+  @Input() public isSelectableForEdit?: boolean;
   @Input({ required: true }) public isEditable!: boolean;
   @Input({ required: true }) public displayBadges!: boolean;
 
@@ -97,12 +109,22 @@ export class MyGridsComponent {
     return cat;
   }
 
-  public selectAllCategory(id: string): void {
-    if (this.isSelectable) {
+  public selectAllCategoryChange(isChecked: boolean, id: string): void {
+    if (this.isSelectableForPlay || this.isSelectableForEdit) {
+      this.isLoading = true;
       this.gridsByCategorie[id].forEach((grid) => {
-        this.store.dispatch(new EditGridAction({ ...grid, isSelected: true }));
-        this.cd.detectChanges();
+        this.store.dispatch(
+          new EditGridAction({
+            ...grid,
+            isSelectedForPlay: this.isSelectableForPlay && isChecked,
+            isSelectedForEdit: !!this.isSelectableForEdit && isChecked,
+          })
+        );
       });
+      setTimeout(() => {
+        this.isLoading = false;
+        this.cd.detectChanges();
+      }, 500);
     }
   }
 }

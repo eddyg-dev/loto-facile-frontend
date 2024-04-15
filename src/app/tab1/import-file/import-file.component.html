@@ -1,0 +1,12 @@
+<ion-item lines="none">
+  <input
+    type="file"
+    class="file-upload"
+    (change)="openfileImportedAlert($event)"
+  />
+  <ion-icon
+    name="information-circle"
+    slot="end"
+    (click)="openImportInfo()"
+  ></ion-icon>
+</ion-item>

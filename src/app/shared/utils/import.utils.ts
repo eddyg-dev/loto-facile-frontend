@@ -1,8 +1,12 @@
 import { regex1 } from 'src/app/data/constants/regex.constants';
 import { Grid } from 'src/app/data/models/grid';
 import { v4 as uuidv4 } from 'uuid';
+import { getSpecifiDizaine } from './transfo.utils';
 
-export function transformChaineToGrid(chaine: string): Grid[] | undefined {
+export function transformChaineToGrid(
+  chaine: string,
+  categoryId: string
+): Grid[] | undefined {
   const lignes = chaine.split('\n');
   const result: Grid[] = [];
   for (const ligne of lignes) {
@@ -37,11 +41,12 @@ export function transformChaineToGrid(chaine: string): Grid[] | undefined {
         id: uuidv4(),
         numero: numeroGrille,
         quines: quines,
-        isSelected: false,
+        isSelectedForPlay: false,
+        isSelectedForEdit: false,
         isQuine: false,
         isDoubleQuine: false,
         isCartonPlein: false,
-        categoryId: '0',
+        categoryId,
       };
 
       result.push(grid);
@@ -53,27 +58,42 @@ export function transformChaineToGrid(chaine: string): Grid[] | undefined {
 
       if (matchBingo) {
         const numeroGrille = parseInt(matchBingo[1], 10);
+        const field1Value = parseInt(matchBingo[4], 10);
+        const field2Value = parseInt(matchBingo[5], 10);
+        const field3Value = parseInt(matchBingo[6], 10);
+        const field4Value = parseInt(matchBingo[7], 10);
+        const field5Value = parseInt(matchBingo[8], 10);
+        const field6Value = parseInt(matchBingo[9], 10);
+        const field7Value = parseInt(matchBingo[10], 10);
+        const field8Value = parseInt(matchBingo[11], 10);
+        const field9Value = parseInt(matchBingo[12], 10);
+        const field10Value = parseInt(matchBingo[13], 10);
+        const field11Value = parseInt(matchBingo[14], 10);
+        const field12Value = parseInt(matchBingo[15], 10);
+        const field13Value = parseInt(matchBingo[16], 10);
+        const field14Value = parseInt(matchBingo[17], 10);
+        const field15Value = parseInt(matchBingo[18], 10);
         const quines = [
           [
-            { number: parseInt(matchBingo[4], 10), isDrawed: false },
-            { number: parseInt(matchBingo[5], 10), isDrawed: false },
-            { number: parseInt(matchBingo[6], 10), isDrawed: false },
-            { number: parseInt(matchBingo[7], 10), isDrawed: false },
-            { number: parseInt(matchBingo[8], 10), isDrawed: false },
+            { number: field1Value, isDrawed: false },
+            { number: field2Value, isDrawed: false },
+            { number: field3Value, isDrawed: false },
+            { number: field4Value, isDrawed: false },
+            { number: field5Value, isDrawed: false },
           ],
           [
-            { number: parseInt(matchBingo[9], 10), isDrawed: false },
-            { number: parseInt(matchBingo[10], 10), isDrawed: false },
-            { number: parseInt(matchBingo[11], 10), isDrawed: false },
-            { number: parseInt(matchBingo[12], 10), isDrawed: false },
-            { number: parseInt(matchBingo[13], 10), isDrawed: false },
+            { number: field6Value, isDrawed: false },
+            { number: field7Value, isDrawed: false },
+            { number: field8Value, isDrawed: false },
+            { number: field9Value, isDrawed: false },
+            { number: field10Value, isDrawed: false },
           ],
           [
-            { number: parseInt(matchBingo[14], 10), isDrawed: false },
-            { number: parseInt(matchBingo[15], 10), isDrawed: false },
-            { number: parseInt(matchBingo[16], 10), isDrawed: false },
-            { number: parseInt(matchBingo[17], 10), isDrawed: false },
-            { number: parseInt(matchBingo[18], 10), isDrawed: false },
+            { number: field11Value, isDrawed: false },
+            { number: field12Value, isDrawed: false },
+            { number: field13Value, isDrawed: false },
+            { number: field14Value, isDrawed: false },
+            { number: field15Value, isDrawed: false },
           ],
         ];
 
@@ -81,17 +101,50 @@ export function transformChaineToGrid(chaine: string): Grid[] | undefined {
           id: uuidv4(),
           numero: numeroGrille,
           quines: quines,
-          isSelected: false,
+          isSelectedForPlay: false,
+          isSelectedForEdit: false,
           isQuine: false,
           isDoubleQuine: false,
           isCartonPlein: false,
-          categoryId: '0',
+          categoryId,
         };
 
         result.push(planche);
       }
     }
   }
-
   return result;
 }
+
+export function isValidOneToNinety(numbers: (number | undefined)[]): boolean {
+  return numbers.every((n) => n && n > 0 && n <= 90);
+}
+
+export function isNumbersDifferent(numbers: (number | undefined)[]): boolean {
+  return numbers.length === 15 && [...new Set(numbers)].length === 15;
+}
+
+export function isSorted(
+  n1: number,
+  n2: number,
+  n3: number,
+  n4: number,
+  n5: number
+): boolean {
+  return n1 < n2 && n2 < n3 && n3 < n4 && n4 < n5;
+}
+
+export function isDifferentDizaine(
+  n1: number,
+  n2: number,
+  n3: number,
+  n4: number,
+  n5: number
+): boolean {
+  return (
+    [...new Set([n1, n2, n3, n4, n5].map((n) => getSpecifiDizaine(n)))]
+      .length === 5
+  );
+}
+
+// export function isGridValid(): boolean {}

@@ -27,4 +27,8 @@ export class ColorPaletteComponent {
     this.selectedColor = color;
     this.popvercontroller.dismiss(color);
   }
+
+  public orignalOrder(): number {
+    return 0;
+  }
 }

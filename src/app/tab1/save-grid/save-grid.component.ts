@@ -11,6 +11,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFooter,
   IonHeader,
   IonInput,
   IonItem,
@@ -28,7 +29,12 @@ import { Observable } from 'rxjs';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.component';
-import { getSpecifiDizaine } from 'src/app/shared/utils/transfo.utils';
+import {
+  isDifferentDizaine,
+  isNumbersDifferent,
+  isSorted,
+  isValidOneToNinety,
+} from 'src/app/shared/utils/import.utils';
 import { CategoryState } from 'src/app/store/category/category.state';
 import {
   AddGridsAction,
@@ -56,6 +62,7 @@ import { v4 as guid } from 'uuid';
     GridFullComponent,
     IonSelect,
     IonSelectOption,
+    IonFooter,
   ],
   templateUrl: './save-grid.component.html',
   styleUrl: './save-grid.component.scss',
@@ -109,16 +116,19 @@ export class SaveGridComponent implements OnInit {
     }
   }
 
-  close() {
-    this.modalController.dismiss();
+  close(grid?: Grid) {
+    this.modalController.dismiss(grid);
   }
 
   confirm() {
-    const newGrid = this.createGrid();
-    this.grid?.id
-      ? this.store.dispatch(new EditGridsAction([newGrid]))
-      : this.store.dispatch(new AddGridsAction([{ ...newGrid, id: guid() }]));
-    this.close();
+    let newGrid = this.createGrid();
+    if (this.grid?.id) {
+      this.store.dispatch(new EditGridsAction([newGrid]));
+    } else {
+      newGrid = { ...newGrid, id: guid() };
+      this.store.dispatch(new AddGridsAction([{ ...newGrid, id: guid() }]));
+    }
+    this.close(newGrid);
   }
 
   private createGrid(): Grid {
@@ -148,7 +158,8 @@ export class SaveGridComponent implements OnInit {
           { number: this.field15Value as number, isDrawed: false },
         ],
       ],
-      isSelected: false,
+      isSelectedForPlay: false,
+      isSelectedForEdit: false,
       isQuine: false,
       isDoubleQuine: false,
       isCartonPlein: false,
@@ -157,83 +168,66 @@ export class SaveGridComponent implements OnInit {
   }
 
   public isValidOneToNinety(): boolean {
-    return this.getAllValues().every((n) => n && n > 0 && n <= 90);
+    return isValidOneToNinety(this.getAllValues());
   }
 
   public isNumbersDifferent(): boolean {
-    return (
-      this.getAllValues().length === 15 &&
-      [...new Set(this.getAllValues())].length === 15
-    );
+    return isNumbersDifferent(this.getAllValues());
   }
 
   public isSorted1(): boolean {
-    return (
-      (this.field1Value as number) < (this.field2Value as number) &&
-      (this.field2Value as number) < (this.field3Value as number) &&
-      (this.field3Value as number) < (this.field4Value as number) &&
-      (this.field4Value as number) < (this.field5Value as number)
+    return isSorted(
+      this.field1Value as number,
+      this.field2Value as number,
+      this.field3Value as number,
+      this.field4Value as number,
+      this.field5Value as number
     );
   }
   public isSorted2(): boolean {
-    return (
-      (this.field6Value as number) < (this.field7Value as number) &&
-      (this.field7Value as number) < (this.field8Value as number) &&
-      (this.field8Value as number) < (this.field9Value as number) &&
-      (this.field9Value as number) < (this.field10Value as number)
+    return isSorted(
+      this.field6Value as number,
+      this.field7Value as number,
+      this.field8Value as number,
+      this.field9Value as number,
+      this.field10Value as number
     );
   }
   public isSorted3(): boolean {
-    return (
-      (this.field11Value as number) < (this.field12Value as number) &&
-      (this.field12Value as number) < (this.field13Value as number) &&
-      (this.field13Value as number) < (this.field14Value as number) &&
-      (this.field14Value as number) < (this.field15Value as number)
+    return isSorted(
+      this.field11Value as number,
+      this.field12Value as number,
+      this.field13Value as number,
+      this.field14Value as number,
+      this.field15Value as number
     );
   }
   public isDifferentDizaine1(): boolean {
-    return (
-      [
-        ...new Set(
-          [
-            this.field1Value as number,
-            this.field2Value as number,
-            this.field3Value as number,
-            this.field4Value as number,
-            this.field5Value as number,
-          ].map((n) => getSpecifiDizaine(n))
-        ),
-      ].length === 5
+    return isDifferentDizaine(
+      this.field1Value as number,
+      this.field2Value as number,
+      this.field3Value as number,
+      this.field4Value as number,
+      this.field5Value as number
     );
   }
   public isDifferentDizaine2(): boolean {
-    return (
-      [
-        ...new Set(
-          [
-            this.field6Value as number,
-            this.field7Value as number,
-            this.field8Value as number,
-            this.field9Value as number,
-            this.field10Value as number,
-          ].map((n) => getSpecifiDizaine(n))
-        ),
-      ].length === 5
+    return isDifferentDizaine(
+      this.field6Value as number,
+      this.field7Value as number,
+      this.field8Value as number,
+      this.field9Value as number,
+      this.field10Value as number
     );
   }
+
   public isDifferentDizaine3(): boolean {
-    return (
-      [
-        ...new Set(
-          [
-            this.field11Value as number,
-            this.field12Value as number,
-            this.field13Value as number,
-            this.field14Value as number,
-            this.field15Value as number,
-          ].map((n) => getSpecifiDizaine(n))
-        ),
-      ].length === 5
+    return isDifferentDizaine(
+      this.field11Value as number,
+      this.field12Value as number,
+      this.field13Value as number,
+      this.field14Value as number,
+      this.field15Value as number
     );
   }
 

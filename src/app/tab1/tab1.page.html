@@ -1,19 +1,41 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title class="ion-text-center"> Gestion des cartons </ion-title>
+<ion-header>
+  <ion-toolbar mode="ios">
+    <ion-title class="ion-text-center"
+      >Mes {{segment==='carton' ? 'cartons':'catégories' }}
+    </ion-title>
+    @if (segment==='carton') {
+    <ion-buttons slot="start">
+      <ion-button (click)="addGrid()">
+        <ion-icon slot="icon-only" name="add-circle" />
+      </ion-button>
+    </ion-buttons>
+    @if ((grids$|async)?.length && (grids$|async)!.length>1) {
+    <ion-buttons slot="end">
+      <ion-button size="small" (click)="editMulitpleMode()">
+        @if (isSelectableForEdit) { Annuler } @else {
+        <ion-icon slot="icon-only" name="checkbox-outline" />
+        }
+      </ion-button>
+    </ion-buttons>
+
+    } }@else if (segment==="category") {
+    <ion-buttons slot="start">
+      <ion-button (click)="openSaveCategoryModal()">
+        <ion-icon slot="icon-only" name="add-circle" />
+      </ion-button>
+    </ion-buttons>
+
+    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" class="ion-text-center"
-        >Gestion des cartons</ion-title
-      >
-    </ion-toolbar>
-  </ion-header>
-
-  <ion-segment [(ngModel)]="segment" class="segment" value="carton">
+  <ion-segment
+    [(ngModel)]="segment"
+    class="segment"
+    value="carton"
+    (ngModelChange)="segmentChange()"
+  >
     <ion-segment-button value="carton">
       <ion-label>Cartons</ion-label>
     </ion-segment-button>
@@ -21,26 +43,31 @@
       <ion-label>Catégories</ion-label>
     </ion-segment-button>
   </ion-segment>
+  @if(segment==='carton'){ @if (!isSelectableForEdit) {
 
-  @if(segment==='carton'){
-  <ion-list>
-    <ion-item>
-      <input type="file" class="file-upload" (change)="fileImported($event)" />
-    </ion-item>
-    <ion-item>
-      <ion-button (click)="addGrid()">
-        Ajouter un carton manuellement
-      </ion-button>
-      <ion-button (click)="clearAll()"> Clear </ion-button>
-    </ion-item>
-  </ion-list>
+  <app-import-file />
+  } @if (isSelectableForEdit) {
+  <ion-item lines="none">
+    <ion-button (click)="editGrids('delete')">
+      <ion-icon slot="start" name="trash"></ion-icon>
+      Supprimer
+    </ion-button>
+    <ion-button (click)="editGrids('move')">
+      <ion-icon slot="start" name="arrow-redo"></ion-icon>
+      Déplacer
+    </ion-button>
+  </ion-item>
+  } @if (grids$ |async; as grids) { @if (!isLoading) {
   <app-my-grids
     [isEditable]="true"
-    [isSelectable]="false"
+    [isSelectableForPlay]="false"
+    [isSelectableForEdit]="isSelectableForEdit"
     [grids]="grids"
     [displayBadges]="false"
-  ></app-my-grids>
-  } @if(segment==='category'){
-  <app-categories />
+    (editGridEvent)="editGrid($event)"
+    (deleteGridEvent)="deleteGrid($event)"
+  />
+  } } } @if(segment==='category'){
+  <app-categories (openSaveCategoryEvent)="openSaveCategoryModal($event)" />
   }
 </ion-content>

@@ -4,7 +4,8 @@ export interface Grid {
   id?: string;
   numero: number;
   quines: TirageNumber[][];
-  isSelected: boolean;
+  isSelectedForPlay: boolean;
+  isSelectedForEdit: boolean;
   isQuine: boolean;
   isDoubleQuine: boolean;
   isCartonPlein: boolean;

@@ -24,7 +24,61 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+@import "theme/variables.scss";
+@import "../node_modules/animate.css/animate.min.css";
+
+*,
+ion-label {
+  font-family: monospace !important;
+}
+
+ion-content,
+ion-list {
+  --background: var(--ion-color-light);
+  background: var(--ion-color-light);
+}
 
 ion-modal.autoheight {
   --height: auto;
+}
+
+ion-item,
+.frame {
+  border: solid 2px rgba(0, 0, 0, 0.2);
+  margin: 0.5rem;
+  border-radius: 10px;
+  background: white;
+}
+
+.frame {
+  padding: 0.2rem;
+}
+
+ion-button {
+  font-weight: 600;
+  text-transform: capitalize;
+  text-align: center;
+  --padding-top: var(--button-padding);
+  --padding-bottom: var(--button-padding);
+  --padding-start: var(--button-padding);
+  --padding-end: var(--button-padding);
+}
+
+.text-small {
+  font-size: 1rem;
+}
+
+.text-normal {
+  font-size: 1.2rem;
+}
+
+.text-big {
+  font-size: 1.4rem;
+}
+
+.text-extra-big {
+  font-size: 1.6rem;
+}
+.modal-content {
+  padding-bottom: 50px;
 }

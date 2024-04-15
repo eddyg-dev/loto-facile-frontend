@@ -1,4 +1,8 @@
 :host {
+  display: flex;
   font-size: 1.6rem;
-  margin-top: 0.8rem;
+  margin: auto 0.4rem;
+}
+ion-icon {
+  border: solid 1px rgba($color: #000000, $alpha: 0.2);
 }

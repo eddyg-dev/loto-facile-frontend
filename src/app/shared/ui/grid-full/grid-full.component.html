@@ -1,6 +1,6 @@
 <form [formGroup]="formGroup">
   <div class="title">
-    @if (isSelectable) {
+    @if (isSelectableForPlay || isSelectableForEdit) {
     <ion-checkbox
       labelPlacement="start"
       class="checkbox"
@@ -10,19 +10,20 @@
     }@else {
     <span>N° {{ grid.numero }}</span>
     @if (isEditable) {
-    <ion-icon size="small" name="create" (click)="editGrid(grid)" />
+    <ion-icon size="small" name="create" (click)="editGridEvent.emit(grid)" />
+    <ion-icon size="small" name="trash" (click)="deleteGridEvent.emit(grid)" />
     } }
   </div>
   <div class="badges">
     @if (displayBadges) {
     <ion-badge [color]="gridFull?.isQuine ? 'success' : 'danger'">
-      Quine
+      1Q
     </ion-badge>
     <ion-badge [color]="gridFull?.isDoubleQuine ? 'success' : 'danger'">
-      2 Quines
+      2Q
     </ion-badge>
     <ion-badge [color]="gridFull?.isCartonPlein ? 'success' : 'danger'">
-      Carton Plein
+      3Q
     </ion-badge>
 
     }

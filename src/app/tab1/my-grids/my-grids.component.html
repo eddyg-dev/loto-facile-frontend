@@ -1,19 +1,35 @@
 @for (category of gridsByCategorie | keyvalue; track $index) {
-<div class="category-title">
-  <h2 class="category">{{ getCategory(category.key)?.name | titlecase }}</h2>
-  <app-category-color
-    (click)="selectAllCategory(category.key)"
-    [categoryId]="category.key"
-  ></app-category-color>
-</div>
-<div class="parent">
-  @for (grid of category.value; track $index) {
-  <app-grid-full
-    [grid]="grid"
-    [isSelectable]="isSelectable"
-    [isEditable]="isEditable"
-    [displayBadges]="displayBadges"
-  />
+<div class="category frame animate__animated animate__zoomIn animate__faster">
+  <div class="title">
+    <!-- <app-category-color [categoryId]="category.key" /> -->
+    <span class="name"
+      >{{ getCategory(category.key)?.name | titlecase }} ({{
+        gridsByCategorie[category.key].length
+      }})</span
+    >
+    @if (isSelectableForPlay ||isSelectableForEdit) {
+    <ion-checkbox
+      class="checkbox"
+      (ionChange)="selectAllCategoryChange($event.detail.checked, category.key)"
+    />
+    }
+  </div>
+  @if (!isLoading) {
+  <div class="parent">
+    @for (grid of category.value; track $index) {
+    <app-grid-full
+      [grid]="grid"
+      [isSelectableForPlay]="isSelectableForPlay"
+      [isSelectableForEdit]="isSelectableForEdit"
+      [isEditable]="isEditable"
+      [displayBadges]="displayBadges"
+      (editGridEvent)="editGridEvent.emit($event)"
+      (deleteGridEvent)="deleteGridEvent.emit($event)"
+    />
+    }
+  </div>
+  } @else {
+  <app-page-loader />
   }
 </div>
 }

@@ -1,85 +1,126 @@
-<ion-header [translucent]="true">
-  <div>
-    <ion-list>
-      @if (selectionMode === SelectionMode.INITIAL) {
-      <ion-item>
-        <div>
-          <p>Choisissiez les cartons pour ce nouveau tirage</p>
-          <ion-button
-            (click)="startTirage()"
-            [disabled]="!selectedGrids()?.length"
-          >
-            Commencer le tirage
-          </ion-button>
+<ion-header>
+  <ion-toolbar mode="ios">
+    @if ((tirageMode$|async) === TirageMode.IN_PROGRESS) {
+    <ion-buttons slot="start">
+      <ion-button
+        fill="outline"
+        size="small"
+        (click)="showKeyboard=!showKeyboard"
+      >
+        <ion-icon name="keypad"></ion-icon>
+        <span> {{showKeyboard ? 'Cacher' :'Ouvrir'}} </span>
+      </ion-button>
+    </ion-buttons>
 
-          @if(selectedGrids()?.length){
-          <ion-button (click)="unselectAll()"> Unselect all </ion-button>
-          }
-        </div>
-      </ion-item>
-      } @else if (selectionMode === SelectionMode.IN_PROGRESS) {
-      <ion-item>
-        <ion-button (click)="reselectGrids()"> Terminer la partie </ion-button>
-        <ion-button fill="outline" (click)="demarquer()">
-          Démarquer
-        </ion-button>
-        <ion-button
-          fill="outline"
-          size="small"
-          (click)="showKeyboard=!showKeyboard"
-        >
-          <ion-icon name="keypad"></ion-icon>
-          <span> {{showKeyboard ? 'Cacher clavier' :'Ouvrir clavier'}} </span>
-        </ion-button>
-      </ion-item>
-      <ion-item>
-        <ion-radio-group
-          class="tirage-type-group"
-          [formControl]="tirageTypeFormcontrol"
-        >
-          @for (type of (TirageType | keyvalue :originalOrder ) ; track $index)
-          {
-          <ion-radio class="tirage-type" mode="md" [value]="type.value"
-            ><span
-              [class.is-selected]="tirageTypeFormcontrol.value === type.value"
-            >
-              {{ type.value }}
-            </span>
-          </ion-radio>
-          }
-        </ion-radio-group>
-      </ion-item>
-      }</ion-list
-    >
-  </div>
+    <ion-buttons slot="end">
+      @if ((tirageNumbers$|async)?.length) {
+      <ion-button size="small" fill="outline" (click)="demarquer()">
+        Démarquer
+      </ion-button>
+
+      }
+      <ion-button
+        size="small"
+        color="danger"
+        fill="outline"
+        (click)="endTirage()"
+      >
+        <ion-icon name="hourglass"></ion-icon>
+        Terminer la partie
+      </ion-button>
+    </ion-buttons>
+    } @else {
+    <ion-title class="ion-text-center">Tirage </ion-title>
+    }
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large" class="ion-text-center">Tirage</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  @if (selectionMode === SelectionMode.INITIAL) {
+  @if (!(grids$ | async)?.length) {
+  <ion-item lines="none">
+    <ion-label>
+      Vous n'avez pas de cartons pour lancer un tirage. <br />
+      <br />
+      Rendez vous dans l'onglet "Cartons" pour créer ou importer vos cartons.
+    </ion-label>
+  </ion-item>
+  } @else { @if ((tirageMode$|async) === TirageMode.INITIAL) {
+  <ion-list class="animate__animated animate__zoomIn animate__faster">
+    <ion-item lines="none">
+      <div>
+        <p>Choisissiez les cartons pour ce nouveau tirage</p>
+        @if (!isDisplayGrids) {
+        <ion-button (click)="isDisplayGrids=true">
+          Choisir mes cartons
+        </ion-button>
+        } @else {
+        <ion-button
+          (click)="startTirage()"
+          [disabled]="!selectedGrids()?.length"
+        >
+          Commencer le tirage
+        </ion-button>
+        @if(selectedGrids()?.length){
+        <ion-button (click)="unselectAll()"> Tout décocher </ion-button>
+        } }
+      </div>
+    </ion-item>
+  </ion-list>
+  } @else if ((tirageMode$|async) === TirageMode.IN_PROGRESS) {
+
+  <!-- Quine / double quine / carton plein -->
+  <ion-list class="animate__animated animate__zoomIn animate__faster">
+    <ion-item lines="none">
+      <ion-radio-group
+        class="tirage-type-group"
+        [formControl]="tirageTypeFormcontrol"
+      >
+        @for (type of (TirageType | keyvalue :originalOrder ) ; track $index) {
+        <ion-radio class="tirage-type" mode="md" [value]="type.value"
+          ><span
+            [class.is-selected]="tirageTypeFormcontrol.value === type.value"
+          >
+            {{ type.value }}
+          </span>
+        </ion-radio>
+        }
+      </ion-radio-group>
+    </ion-item>
+  </ion-list>
+  }
+
+  <!-- GRIDS -->
+  @if (isDisplayGrids) { @if ((tirageMode$|async) === TirageMode.INITIAL &&
+  !isLoading) {
   <app-my-grids
-    [isSelectable]="true"
+    [isSelectableForPlay]="true"
     [isEditable]="false"
     [displayBadges]="false"
     [grids]="(grids$ | async)!"
   />
-  } @if (selectionMode === SelectionMode.IN_PROGRESS) {
-  <ion-item>
-    <app-tirage-last-numbers></app-tirage-last-numbers>
+  } @if ((tirageMode$|async) === TirageMode.IN_PROGRESS) { @if
+  ((tirageNumbers$|async)?.length) {
+  <ion-item lines="none" animated fadeIn infinite>
+    <app-tirage-last-numbers class="animate__animated animate__fadeIn" />
   </ion-item>
+  }
   <app-my-grids
-    [isSelectable]="false"
+    [isSelectableForPlay]="false"
     [isEditable]="false"
     [grids]="selectedGrids()!"
     [displayBadges]="true"
   ></app-my-grids>
-  }
+  } } }
 </ion-content>
 
-@if (selectionMode === SelectionMode.IN_PROGRESS && showKeyboard ) {
-<ion-footer> <app-ninety-keyboard /> </ion-footer>
+<!-- keyboard -->
+@if ((tirageMode$|async) === TirageMode.IN_PROGRESS && showKeyboard ) {
+<ion-footer class="animate__animated animate__jackInTheBox">
+  <app-ninety-keyboard />
+</ion-footer>
+} @if (isLoading) {
+
+<ion-content class="ion-padding">
+  <app-page-loader />
+</ion-content>
 }

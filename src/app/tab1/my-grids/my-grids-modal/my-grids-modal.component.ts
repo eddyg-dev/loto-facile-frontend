@@ -47,17 +47,18 @@ import { MyGridsComponent } from '../my-grids.component';
 })
 export class MyGridsModalComponent {
   @Input({ required: true }) grids: Grid[] = [];
-  @Input({ required: true }) public isSelectable!: boolean;
+  @Input({ required: true }) public isSelectableForPlay!: boolean;
   @Input({ required: true }) public isEditable!: boolean;
   @Input({ required: true }) public displayBadges!: boolean;
   @Input({ required: true }) public title = '';
   @Input({ required: true }) public winNumbers!: number;
+  @Input({ required: true }) public lastNumber!: number;
   @Input({ required: true }) public tirageType!: TirageType;
 
   public tirageTypeEnum = TirageType;
   private readonly modalController = inject(ModalController);
 
-  public close(tirageType?: TirageType): void {
-    this.modalController.dismiss({ tirageType });
+  public async close(tirageType?: TirageType): Promise<void> {
+    await this.modalController.dismiss({ tirageType });
   }
 }
