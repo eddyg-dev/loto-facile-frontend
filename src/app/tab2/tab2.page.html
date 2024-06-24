@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar mode="ios">
+<ion-header mode="ios" collapse="fade">
+  <ion-toolbar mode="ios" class="ion-no-border">
     @if ((tirageMode$|async) === TirageMode.IN_PROGRESS) {
     <ion-buttons slot="start">
       <ion-button
@@ -35,7 +35,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-padding">
   @if (!(grids$ | async)?.length) {
   <ion-item lines="none">
     <ion-label>

@@ -7,6 +7,7 @@ export enum Message {
   Delete_Category = `Souhaitez-vous supprimer cette catégorie ?`,
   Delete_Category_Detail = `Si des cartons sont présents dans cette catégorie, ils seront déplacés dans la catégorie 'Autre'`,
   Import_Which_Category = 'Dans quelle catégorie souhaitez-vous importer ces cartons ?',
+  Import_Info = `Pour l'instant, seuls les imports BaskoLoto sont opérationnels`,
   Delete_All_Datas = 'Souhaitez-vous réiniialiser toutes les données ?',
   Quit_Tirage_Page = 'Le tirage en cours sera arrêté si vou changez de page. Continuez ? ',
   End_Tirage = 'Souhaitez-vous bien terminer cette partie ?',

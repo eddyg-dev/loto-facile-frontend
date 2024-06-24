@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar mode="ios">
+<ion-header mode="ios" collapse="fade">
+  <ion-toolbar mode="ios" class="ion-no-border">
     <ion-title class="ion-text-center"
       >Mes {{segment==='carton' ? 'cartons':'catégories' }}
     </ion-title>
@@ -29,24 +29,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-segment
-    [(ngModel)]="segment"
-    class="segment"
-    value="carton"
-    (ngModelChange)="segmentChange()"
-  >
-    <ion-segment-button value="carton">
-      <ion-label>Cartons</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="category">
-      <ion-label>Catégories</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-  @if(segment==='carton'){ @if (!isSelectableForEdit) {
-
-  <app-import-file />
-  } @if (isSelectableForEdit) {
+<ion-segment
+  [(ngModel)]="segment"
+  class="segment"
+  value="carton"
+  mode="md"
+  (ngModelChange)="segmentChange()"
+>
+  <ion-segment-button value="carton">
+    <ion-label>Cartons</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="category">
+    <ion-label>Catégories</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-content class="ion-padding">
+  @if(segment==='carton'){ @if (isSelectableForEdit) {
   <ion-item lines="none">
     <ion-button (click)="editGrids('delete')">
       <ion-icon slot="start" name="trash"></ion-icon>

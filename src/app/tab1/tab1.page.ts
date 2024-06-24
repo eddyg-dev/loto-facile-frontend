@@ -9,6 +9,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import {
+  ActionSheetController,
   AlertController,
   IonButton,
   IonButtons,
@@ -80,6 +81,7 @@ import { SaveGridComponent } from './save-grid/save-grid.component';
 export class Tab1Page {
   private readonly store = inject(Store);
   private readonly modalController = inject(ModalController);
+  private readonly actionSheetController = inject(ActionSheetController);
   private readonly alertController = inject(AlertController);
   private readonly cd$ = inject(ChangeDetectorRef);
   public segment: 'carton' | 'category' = 'carton';
@@ -159,12 +161,59 @@ export class Tab1Page {
   }
 
   public editMulitpleMode(): void {
+    this.store.dispatch(new UnselectAllGridsAction());
     this.isSelectableForEdit = !this.isSelectableForEdit;
   }
 
   public async addGrid(): Promise<void> {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Ajouter un nouveau carton',
+      keyboardClose: true,
+      buttons: [
+        {
+          text: 'Fichier PDF ou Excel',
+          icon: 'document-text-outline',
+          handler: () => {
+            this.addFileGrid();
+          },
+        },
+        {
+          text: 'Appareil Photo',
+          icon: 'camera-outline',
+          handler: () => {
+            console.log('file');
+          },
+        },
+        {
+          text: 'Photo de votre galerie',
+          icon: 'image-outline',
+          handler: () => {
+            console.log('file');
+          },
+        },
+        {
+          text: 'Manuellement',
+          icon: 'pencil-outline',
+          handler: () => {
+            this.addManualGrid();
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
+  }
+
+  private async addManualGrid(): Promise<void> {
     const modal = await this.modalController.create({
       component: SaveGridComponent,
+    });
+    modal.present();
+  }
+
+  private async addFileGrid(): Promise<void> {
+    const modal = await this.modalController.create({
+      component: ImportFileComponent,
     });
     modal.present();
   }

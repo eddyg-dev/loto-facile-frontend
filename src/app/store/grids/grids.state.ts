@@ -1,5 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { Action, Selector, State, StateContext, Store } from '@ngxs/store';
+import { Injectable } from '@angular/core';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { StateKey } from 'src/app/data/enum/state-key.enum';
 import { Grid } from 'src/app/data/models/grid';
 import {
@@ -24,7 +24,6 @@ export interface GridStateModel {
 })
 @Injectable()
 export class GridState {
-  private store = inject(Store);
   @Selector()
   static getGrids(state: GridStateModel): Grid[] {
     return state.grids;
@@ -45,8 +44,15 @@ export class GridState {
     context: StateContext<GridStateModel>,
     action: EditGridsAction
   ): void {
-    action.grids.forEach((grid) => {
-      this.store.dispatch(new EditGridAction(grid));
+    const newGrids = context.getState().grids;
+    action.grids.forEach((newGrid) => {
+      const index = newGrids.findIndex((g) => g.id === newGrid.id);
+      if (index > -1) {
+        newGrids[index] = { ...newGrid };
+      }
+    });
+    context.patchState({
+      grids: [...newGrids],
     });
   }
 
@@ -55,8 +61,11 @@ export class GridState {
     context: StateContext<GridStateModel>,
     action: DeleteGridsAction
   ): void {
-    action.gridIds.forEach((id) => {
-      this.store.dispatch(new DeleteGridAction(id));
+    const newgrids = context
+      .getState()
+      .grids.filter((g) => !(g.id && action.gridIds.includes(g.id)));
+    context.patchState({
+      grids: [...newgrids],
     });
   }
 

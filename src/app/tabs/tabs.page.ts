@@ -7,6 +7,8 @@ import {
   IonTabButton,
   IonTabs,
 } from '@ionic/angular/standalone';
+import { Store } from '@ngxs/store';
+import { ClearTirageAction } from '../store/tirage/tirage.actions';
 
 @Component({
   selector: 'app-tabs',
@@ -17,10 +19,11 @@ import {
 })
 export class TabsPage {
   private router = inject(Router);
+  private store = inject(Store);
   public tab = '';
   public tabChange(event: any): void {
-    console.log(event);
     this.tab = event.tab;
     this.router.navigate([`tabs/${event.tab}`]);
+    this.store.dispatch(new ClearTirageAction());
   }
 }
