@@ -1,5 +1,5 @@
 @for(c of categories$|async; track $index){
-<ion-item lines="none">
+<ion-item>
   <app-category-color [categoryId]="c.id" />
   <ion-label>
     {{ c.name | titlecase }}

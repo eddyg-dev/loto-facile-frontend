@@ -11,6 +11,7 @@ import {
   AddCategoryAction,
   DeleteCategoryAction,
   EditCategoryAction,
+  ResetCategoriesAction,
 } from './category.actions';
 
 export interface CategoryStateModel {
@@ -86,5 +87,14 @@ export class CategoryState {
     );
     impactedgrids.map((g) => (g.categoryId = CategoryId.Other));
     context.dispatch(new EditGridsAction(impactedgrids));
+  }
+  @Action(ResetCategoriesAction)
+  resetCategories(
+    context: StateContext<CategoryStateModel>,
+    action: ResetCategoriesAction
+  ): void {
+    context.patchState({
+      categories: [...defaultCategories],
+    });
   }
 }

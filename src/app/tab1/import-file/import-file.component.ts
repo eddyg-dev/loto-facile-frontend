@@ -93,7 +93,6 @@ export class ImportFileComponent {
         this.csvText,
         this.categoryId
       ) as Grid[];
-      this.store.dispatch(new AddGridsAction(this.newGrids));
     }
   }
 

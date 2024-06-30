@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import {
   AlertController,
   IonButton,
+  IonButtons,
   IonContent,
   IonFooter,
   IonHeader,
@@ -19,6 +20,7 @@ import {
 import { Store } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { Message } from '../data/enum/message.enum';
+import { ResetCategoriesAction } from '../store/category/category.actions';
 import { DeleteAllGridsAction } from '../store/grids/grids.actions';
 import { ClearTirageAction } from '../store/tirage/tirage.actions';
 import { DicoLotoComponent } from './dico-loto/dico-loto.component';
@@ -43,6 +45,7 @@ import { DicoLotoComponent } from './dico-loto/dico-loto.component';
     IonContent,
     IonFooter,
     IonToggle,
+    IonButtons,
   ],
 })
 export class Tab3Page {
@@ -67,6 +70,7 @@ export class Tab3Page {
           handler: () => {
             this.store.dispatch(new DeleteAllGridsAction());
             this.store.dispatch(new ClearTirageAction());
+            this.store.dispatch(new ResetCategoriesAction());
           },
         },
       ],
@@ -80,5 +84,13 @@ export class Tab3Page {
       component: DicoLotoComponent,
     });
     await modal.present();
+  }
+
+  public openFacebookPage(): void {
+    console.log('openFacebookPage');
+  }
+
+  public sendMail(): void {
+    console.log('sendMail');
   }
 }

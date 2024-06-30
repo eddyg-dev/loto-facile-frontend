@@ -1,5 +1,6 @@
 import { regex1 } from 'src/app/data/constants/regex.constants';
 import { Grid } from 'src/app/data/models/grid';
+import { GridFromImageResponse } from 'src/app/data/models/grid-from-image-response';
 import { v4 as uuidv4 } from 'uuid';
 import { getSpecifiDizaine } from './transfo.utils';
 
@@ -147,4 +148,21 @@ export function isDifferentDizaine(
   );
 }
 
+export function gridFromImageResponseToGrids(
+  gridFromImageResponse: GridFromImageResponse[]
+): Grid[] {
+  return gridFromImageResponse.map((gridResponse) => {
+    return {
+      id: uuidv4(),
+      numero: 1,
+      quines: [],
+      isSelectedForPlay: false,
+      isSelectedForEdit: false,
+      isQuine: false,
+      isDoubleQuine: false,
+      isCartonPlein: false,
+      categoryId: '1',
+    };
+  });
+}
 // export function isGridValid(): boolean {}

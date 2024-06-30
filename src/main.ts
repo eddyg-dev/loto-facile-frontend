@@ -6,6 +6,7 @@ import {
   provideIonicAngular,
 } from '@ionic/angular/standalone';
 
+import { provideHttpClient } from '@angular/common/http';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -26,6 +27,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes),
+    provideHttpClient(),
     importProvidersFrom(
       NgxsModule.forRoot([GridState, TirageState, CategoryState]),
       NgxsReduxDevtoolsPluginModule.forRoot(),

@@ -13,3 +13,6 @@ export class DeleteCategoryAction {
   static readonly type = '[Category] Delete Category';
   constructor(public categoryId: string) {}
 }
+export class ResetCategoriesAction {
+  static readonly type = '[Category] Reset Categories';
+}

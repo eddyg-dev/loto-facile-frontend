@@ -41,7 +41,7 @@ export const defaultCategories: Category[] = [
     id: '2',
     color: CategoryColor.Black,
     name: 'Autre',
-    isDeletable: false,
+    isDeletable: true,
   },
 ];
 

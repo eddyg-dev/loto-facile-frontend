@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import {
   ActionSheetController,
   AlertController,
@@ -33,6 +34,8 @@ import { Observable } from 'rxjs';
 import { Message } from '../data/enum/message.enum';
 import { Category } from '../data/models/category';
 import { Grid } from '../data/models/grid';
+import { GridFromImageResponse } from '../data/models/grid-from-image-response';
+import { OpenAiService } from '../shared/services/open-ai.service';
 import { CategoryState } from '../store/category/category.state';
 import {
   DeleteGridAction,
@@ -84,6 +87,7 @@ export class Tab1Page {
   private readonly actionSheetController = inject(ActionSheetController);
   private readonly alertController = inject(AlertController);
   private readonly cd$ = inject(ChangeDetectorRef);
+  private readonly openAiService = inject(OpenAiService);
   public segment: 'carton' | 'category' = 'carton';
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
@@ -181,14 +185,14 @@ export class Tab1Page {
           text: 'Appareil Photo',
           icon: 'camera-outline',
           handler: () => {
-            console.log('file');
+            this.addFromPhoto(CameraSource.Camera);
           },
         },
         {
           text: 'Photo de votre galerie',
           icon: 'image-outline',
           handler: () => {
-            console.log('file');
+            this.addFromPhoto(CameraSource.Photos);
           },
         },
         {
@@ -202,6 +206,54 @@ export class Tab1Page {
     });
 
     await actionSheet.present();
+  }
+
+  private async addFromPhoto(source: CameraSource): Promise<void> {
+    const photo = await Camera.getPhoto({
+      quality: 100,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+      source,
+    });
+
+    console.log(photo);
+
+    const base64Image = photo.base64String as string;
+    const formData = new FormData();
+    formData.append('image', base64Image as string);
+
+    // const base64Image = image.base64String;
+    // console.log('base64Image ', base64Image);
+    // const formData = new FormData();
+    // formData.append('image', base64Image as string);
+    console.log('formData ');
+    this.openAiService
+      .analyzeImage(base64Image)
+      .subscribe((r: GridFromImageResponse[]) => {
+        alert(r);
+
+        if (r.length) {
+          console.log(r);
+        }
+      }),
+      (err: any) => {
+        alert(err);
+      };
+  }
+
+  splitGrid(text: string): string[][] {
+    // Supposons que la grille soit 3x3 pour l'exemple
+    const grid: string[][] = [];
+    let index = 0;
+    for (let i = 0; i < 3; i++) {
+      const row: string[] = [];
+      for (let j = 0; j < 3; j++) {
+        row.push(text[index]);
+        index++;
+      }
+      grid.push(row);
+    }
+    return grid;
   }
 
   private async addManualGrid(): Promise<void> {

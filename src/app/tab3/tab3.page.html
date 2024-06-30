@@ -6,7 +6,7 @@
 <ion-content class="ion-padding">
   <ion-list>
     <ion-list-header mode="ios">Le Loto</ion-list-header>
-    <ion-item lines="none" [button]="true" (click)="openDicoLoto()">
+    <ion-item [button]="true" (click)="openDicoLoto()">
       <ion-icon
         color="primary"
         aria-hidden="true"
@@ -16,7 +16,7 @@
       <ion-label>Le Dico Loto </ion-label>
     </ion-item>
     <ion-list-header mode="ios">Options</ion-list-header>
-    <ion-item lines="none">
+    <!-- <ion-item>
       <ion-icon
         color="primary"
         aria-hidden="true"
@@ -26,8 +26,8 @@
       <ion-toggle>
         <ion-label>Notifications</ion-label>
       </ion-toggle>
-    </ion-item>
-    <ion-item lines="none">
+    </ion-item> -->
+    <ion-item>
       <ion-icon
         color="primary"
         aria-hidden="true"
@@ -38,7 +38,7 @@
       <ion-button (click)="resetAllDatas()">Reset</ion-button>
     </ion-item>
     <ion-list-header mode="ios">A propos</ion-list-header>
-    <ion-item lines="none">
+    <ion-item>
       <ion-icon
         color="primary"
         aria-hidden="true"
@@ -48,7 +48,7 @@
       <ion-label>Version</ion-label>
       <ion-note slot="end">[{{version}}]</ion-note>
     </ion-item>
-    <ion-item lines="none" [button]="true">
+    <ion-item [button]="true">
       <ion-icon
         color="primary"
         aria-hidden="true"
@@ -57,14 +57,20 @@
       ></ion-icon>
       <ion-label>Evaluez-nous</ion-label>
     </ion-item>
-    <ion-item lines="none" [button]="true">
+    <ion-item [button]="true">
       <ion-icon
         color="primary"
         aria-hidden="true"
-        name="mail"
+        name="help"
         slot="start"
       ></ion-icon>
       <ion-label>Nous contacter</ion-label>
+      <ion-button fill="outline" (click)="openFacebookPage()">
+        <ion-icon name="logo-facebook" />
+      </ion-button>
+      <ion-button fill="outline" (click)="sendMail()">
+        <ion-icon name="mail-outline" />
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

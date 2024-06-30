@@ -37,7 +37,7 @@
 
 <ion-content class="ion-padding">
   @if (!(grids$ | async)?.length) {
-  <ion-item lines="none">
+  <ion-item>
     <ion-label>
       Vous n'avez pas de cartons pour lancer un tirage. <br />
       <br />
@@ -46,7 +46,7 @@
   </ion-item>
   } @else { @if ((tirageMode$|async) === TirageMode.INITIAL) {
   <ion-list class="animate__animated animate__zoomIn animate__faster">
-    <ion-item lines="none">
+    <ion-item>
       <div>
         <p>Choisissiez les cartons pour ce nouveau tirage</p>
         @if (!isDisplayGrids) {
@@ -70,7 +70,7 @@
 
   <!-- Quine / double quine / carton plein -->
   <ion-list class="animate__animated animate__zoomIn animate__faster">
-    <ion-item lines="none">
+    <ion-item>
       <ion-radio-group
         class="tirage-type-group"
         [formControl]="tirageTypeFormcontrol"
@@ -100,7 +100,7 @@
   />
   } @if ((tirageMode$|async) === TirageMode.IN_PROGRESS) { @if
   ((tirageNumbers$|async)?.length) {
-  <ion-item lines="none" animated fadeIn infinite>
+  <ion-item animated fadeIn infinite>
     <app-tirage-last-numbers class="animate__animated animate__fadeIn" />
   </ion-item>
   }
