@@ -6,7 +6,7 @@ export interface GridFullNumber {
 
 export interface GridFull {
   matrix: TirageNumber[][];
-  numero: number;
+  numero: string;
   categoryId: string;
   isQuine1: boolean;
   isQuine2: boolean;

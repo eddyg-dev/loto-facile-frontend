@@ -1,0 +1,49 @@
+<ion-header mode="ios" collapse="fade">
+  <ion-toolbar mode="ios" class="ion-no-border">
+    <ion-buttons slot="start">
+      <ion-button color="medium" size="small" (click)="close()"
+        >Annuler</ion-button
+      >
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button
+        color="medium"
+        size="small"
+        [disabled]="!categoryId"
+        (click)="validate()"
+        >Valider</ion-button
+      >
+    </ion-buttons>
+    <ion-title class="ion-text-center">Import de fichier</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-button (click)="selectPhoto()">
+    <ion-icon slot="start" name="camera-outline"></ion-icon>
+    Sélectionner une photo
+  </ion-button>
+  <ion-item>
+    <ion-label>Catégorie</ion-label>
+    <ion-select
+      mode="ios"
+      placeholder="Catégorie"
+      [(ngModel)]="categoryId"
+      (ngModelChange)="update()"
+      interface="popover"
+    >
+      <ion-select-option
+        *ngFor="let category of categories$ | async"
+        [value]="category.id"
+        >{{ category.name }}</ion-select-option
+      >
+    </ion-select>
+  </ion-item>
+  @if (categoryId) {
+  <app-my-grids
+    [grids]="newGrids"
+    [isEditable]="false"
+    [isSelectableForPlay]="false"
+    [displayBadges]="false"
+  />
+  }
+</ion-content>

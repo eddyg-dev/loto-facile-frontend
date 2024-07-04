@@ -1,6 +1,7 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AlertController } from '@ionic/angular';
 import {
   IonButton,
@@ -25,7 +26,8 @@ import { Observable } from 'rxjs';
 import { Message } from 'src/app/data/enum/message.enum';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
-import { transformChaineToGrid } from 'src/app/shared/utils/import.utils';
+import { GridFromImageResponse } from 'src/app/data/models/grid-from-image-response';
+import { OpenAiService } from 'src/app/shared/services/open-ai.service';
 import { CategoryState } from 'src/app/store/category/category.state';
 import { AddGridsAction } from 'src/app/store/grids/grids.actions';
 import { MyGridsComponent } from '../my-grids/my-grids.component';
@@ -54,46 +56,26 @@ import { MyGridsComponent } from '../my-grids/my-grids.component';
     AsyncPipe,
     MyGridsComponent,
   ],
-  templateUrl: './import-file.component.html',
-  styleUrl: './import-file.component.scss',
+  templateUrl: './import-photo.component.html',
+  styleUrl: './import-photo.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImportFileComponent {
+export class ImportPhotoComponent {
   private readonly alertController = inject(AlertController);
   private readonly modalController = inject(ModalController);
   private readonly store = inject(Store);
+  private readonly openAiService = inject(OpenAiService);
   newGrids: Grid[] = [];
 
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
   );
   categoryId?: string;
-  csvText?: string;
 
-  public fileImported(event: any): void {
-    this.csvText = '';
-    const file = event.target.files[0];
-    // "text/csv"
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      const format = file.type;
-      this.csvText = e.target.result as string;
-      this.update();
-    };
-    reader.readAsText(file);
-  }
+  public update(): void {}
 
   public close(): void {
     this.modalController.dismiss();
-  }
-
-  public update(): void {
-    if (this.csvText && this.categoryId) {
-      this.newGrids = transformChaineToGrid(
-        this.csvText,
-        this.categoryId
-      ) as Grid[];
-    }
   }
 
   public validate(): void {
@@ -111,5 +93,28 @@ export class ImportFileComponent {
       message: Message.Import_Info,
     });
     await alert.present();
+  }
+
+  public async selectPhoto(source?: CameraSource): Promise<void> {
+    const photo = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64,
+      source: source ?? CameraSource.Photos,
+    });
+
+    const base64Image = photo.base64String as string;
+    const formData = new FormData();
+    formData.append('image', base64Image as string);
+    this.openAiService
+      .analyzeImage(base64Image)
+      .subscribe((r: GridFromImageResponse[]) => {
+        if (r.length) {
+          console.log(r);
+        }
+      }),
+      (err: any) => {
+        console.log(err);
+      };
   }
 }

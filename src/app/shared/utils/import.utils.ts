@@ -13,7 +13,7 @@ export function transformChaineToGrid(
   for (const ligne of lignes) {
     const match = ligne.match(regex1);
     if (match) {
-      const numeroGrille = parseInt(match[1], 10);
+      const numeroGrille = match[1];
       const quines = [
         [
           { number: parseInt(match[4], 10), isDrawed: false },
@@ -58,7 +58,7 @@ export function transformChaineToGrid(
       const matchBingo = ligne.match(regexBingo);
 
       if (matchBingo) {
-        const numeroGrille = parseInt(matchBingo[1], 10);
+        const numeroGrille = matchBingo[1];
         const field1Value = parseInt(matchBingo[4], 10);
         const field2Value = parseInt(matchBingo[5], 10);
         const field3Value = parseInt(matchBingo[6], 10);
@@ -148,21 +148,78 @@ export function isDifferentDizaine(
   );
 }
 
-export function gridFromImageResponseToGrids(
-  gridFromImageResponse: GridFromImageResponse[]
+export function photosToValidGrids(
+  gridFromPhoto: GridFromImageResponse[]
 ): Grid[] {
-  return gridFromImageResponse.map((gridResponse) => {
-    return {
-      id: uuidv4(),
-      numero: 1,
-      quines: [],
-      isSelectedForPlay: false,
-      isSelectedForEdit: false,
-      isQuine: false,
-      isDoubleQuine: false,
-      isCartonPlein: false,
-      categoryId: '1',
-    };
-  });
+  return gridFromPhoto
+    .filter((gridPhoto) => isGridFromPhotoValid(gridPhoto))
+    .map((gridResponse) => {
+      return {
+        id: uuidv4(),
+        numero: '1',
+        quines: [],
+        isSelectedForPlay: false,
+        isSelectedForEdit: false,
+        isQuine: false,
+        isDoubleQuine: false,
+        isCartonPlein: false,
+        categoryId: '1',
+      };
+    });
 }
-// export function isGridValid(): boolean {}
+
+export function isGridFromPhotoValid(
+  gridFromPhoto: GridFromImageResponse
+): boolean {
+  const allNumbers = getAllNumbers(gridFromPhoto.quines);
+  const rulesOK =
+    isValidOneToNinety(allNumbers) &&
+    isNumbersDifferent(allNumbers) &&
+    isSorted(
+      gridFromPhoto.quines[0][0],
+      gridFromPhoto.quines[0][1],
+      gridFromPhoto.quines[0][2],
+      gridFromPhoto.quines[0][3],
+      gridFromPhoto.quines[0][4]
+    ) &&
+    isSorted(
+      gridFromPhoto.quines[1][0],
+      gridFromPhoto.quines[1][1],
+      gridFromPhoto.quines[1][2],
+      gridFromPhoto.quines[1][3],
+      gridFromPhoto.quines[1][4]
+    ) &&
+    isSorted(
+      gridFromPhoto.quines[2][0],
+      gridFromPhoto.quines[2][1],
+      gridFromPhoto.quines[2][2],
+      gridFromPhoto.quines[2][3],
+      gridFromPhoto.quines[2][4]
+    ) &&
+    isDifferentDizaine(
+      gridFromPhoto.quines[0][0],
+      gridFromPhoto.quines[0][1],
+      gridFromPhoto.quines[0][2],
+      gridFromPhoto.quines[0][3],
+      gridFromPhoto.quines[0][4]
+    ) &&
+    isDifferentDizaine(
+      gridFromPhoto.quines[1][0],
+      gridFromPhoto.quines[1][1],
+      gridFromPhoto.quines[1][2],
+      gridFromPhoto.quines[1][3],
+      gridFromPhoto.quines[1][4]
+    ) &&
+    isDifferentDizaine(
+      gridFromPhoto.quines[2][0],
+      gridFromPhoto.quines[2][1],
+      gridFromPhoto.quines[2][2],
+      gridFromPhoto.quines[2][3],
+      gridFromPhoto.quines[2][4]
+    );
+  return rulesOK;
+}
+
+export function getAllNumbers(quines: number[][]): number[] {
+  return quines.reduce((acc, current) => acc.concat(current), []);
+}

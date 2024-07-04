@@ -76,7 +76,7 @@ export class SaveGridComponent implements OnInit {
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
   );
-  numero?: number;
+  numero?: string;
   category?: string;
   field1Value?: number;
   field2Value?: number;
@@ -134,7 +134,7 @@ export class SaveGridComponent implements OnInit {
   private createGrid(): Grid {
     return {
       categoryId: this.category as string,
-      numero: this.numero as number,
+      numero: this.numero as string,
       quines: [
         [
           { number: this.field1Value as number, isDrawed: false },

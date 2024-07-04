@@ -2,7 +2,7 @@ import { TirageNumber } from './grid-full';
 
 export interface Grid {
   id?: string;
-  numero: number;
+  numero: string;
   quines: TirageNumber[][];
   isSelectedForPlay: boolean;
   isSelectedForEdit: boolean;
