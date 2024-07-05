@@ -5,3 +5,18 @@
 .win-numbers {
   display: flex;
 }
+
+ion-content {
+  --background: lavender;
+}
+ion-title {
+  color: ghostwhite;
+}
+ion-header {
+  background: darkslateblue;
+}
+
+.last-number {
+  font-weight: bold;
+  font-size: 1.4rem;
+}

@@ -4,9 +4,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding flex">
+<ion-content class="ion-padding flex" [class.add-offset]="showKeyboard">
   @if (!(grids$ | async)?.length) {
-  <div class="frame">
+  <div class="frame block">
     <p>Vous n'avez pas de cartons pour lancer un tirage.</p>
     <p>
       Rendez vous dans l'onglet "Cartons" pour créer ou importer vos cartons.
@@ -69,8 +69,10 @@
     [isEditable]="false"
     [grids]="selectedGrids()!"
     [displayBadges]="true"
+    <<<<<<<
+    HEAD
   ></app-my-grids>
-  } } } @if(!showKeyboard){
+  ======= /> >>>>>>> 972c158 (refacto design) } } } @if(!showKeyboard){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="showKeyboard=true">
       <ion-icon name="keypad"></ion-icon>

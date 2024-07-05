@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   Signal,
+  computed,
   inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -101,6 +102,9 @@ export class Tab1Page {
   );
   public grids$: Observable<Grid[]> = this.store.select(GridState.getGrids);
   private gridsSignal: Signal<Grid[] | undefined> = toSignal(this.grids$);
+  public selectedGrids = computed(() =>
+    this.gridsSignal()?.filter((grid) => grid.isSelectedForEdit)
+  );
 
   public isLoading = false;
   public isSelectableForEdit = false;

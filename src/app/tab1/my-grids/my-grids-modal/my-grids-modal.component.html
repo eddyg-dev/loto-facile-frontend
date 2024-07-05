@@ -7,7 +7,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <p>Dernier numéro tiré: {{ lastNumber }}</p>
+  <p>
+    Dernier numéro tiré: <span class="last-number">{{ lastNumber }}</span>
+  </p>
   <div class="win-numbers">
     <h2>{{ winNumbers }} &nbsp;</h2>
     @if (winNumbers===1) {

@@ -1,16 +1,10 @@
 <ion-header mode="ios" collapse="fade">
   <ion-toolbar mode="ios" class="ion-no-border">
     <ion-buttons slot="start">
-      <ion-button color="medium" size="small" (click)="close()"
-        >Annuler</ion-button
-      >
+      <ion-button color="medium" (click)="close()">Annuler</ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button
-        color="medium"
-        size="small"
-        [disabled]="!categoryId"
-        (click)="validate()"
+      <ion-button color="medium" [disabled]="!categoryId" (click)="validate()"
         >Valider</ion-button
       >
     </ion-buttons>
@@ -22,6 +16,14 @@
     <ion-icon slot="start" name="camera-outline"></ion-icon>
     Sélectionner une photo
   </ion-button>
+
+  <input
+    type="file"
+    accept=".pdf, .csv, image/*"
+    (change)="onFileSelected($event)"
+    id="fileInput"
+  />
+
   <ion-item>
     <ion-label>Catégorie</ion-label>
     <ion-select

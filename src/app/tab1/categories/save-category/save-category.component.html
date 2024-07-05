@@ -1,14 +1,13 @@
 <ion-header mode="ios" collapse="fade">
   <ion-toolbar mode="ios" class="ion-no-border">
     <ion-buttons slot="start">
-      <ion-button size="small" color="medium" (click)="close()" color="medium"
+      <ion-button color="medium" (click)="close()" color="medium"
         >Annuler</ion-button
       >
     </ion-buttons>
     <ion-title class="ion-text-center">Catégorie</ion-title>
     <ion-buttons slot="end">
       <ion-button
-        size="small"
         [disabled]="!categoryForm.valid"
         [strong]="true"
         (click)="validate()"

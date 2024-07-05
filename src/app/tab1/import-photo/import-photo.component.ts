@@ -67,6 +67,8 @@ export class ImportPhotoComponent {
   private readonly openAiService = inject(OpenAiService);
   newGrids: Grid[] = [];
 
+  fileSizeLimit = 20;
+
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
   );
@@ -95,6 +97,49 @@ export class ImportPhotoComponent {
     await alert.present();
   }
 
+  public async onFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+
+      // Check file type
+      const allowedTypes = ['application/pdf', 'text/csv'];
+      if (!allowedTypes.includes(file.type)) {
+        alert('Only PDF and CSV files are accepted.');
+        return;
+      }
+
+      // Check file size
+      const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 10MB
+      if (file.size > maxSizeInBytes) {
+        alert('File size exceeds the limit of 20MB.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      let fileType = 'csv';
+      if (file.type === 'application/pdf') {
+        fileType = 'pdf';
+      }
+
+      formData.append('fileType', fileType);
+
+      this.openAiService.analyzeFile(formData).subscribe(
+        (r: GridFromImageResponse[]) => {
+          if (r.length) {
+            console.log(r);
+          }
+        },
+        (err: any) => {
+          console.log(err);
+        }
+      );
+    }
+  }
+
+  // Select photo from camera or gallery
   public async selectPhoto(source?: CameraSource): Promise<void> {
     const photo = await Camera.getPhoto({
       quality: 90,
@@ -104,17 +149,33 @@ export class ImportPhotoComponent {
     });
 
     const base64Image = photo.base64String as string;
-    const formData = new FormData();
-    formData.append('image', base64Image as string);
-    this.openAiService
-      .analyzeImage(base64Image)
-      .subscribe((r: GridFromImageResponse[]) => {
+
+    // Check image type
+    const mimeType = photo.format === 'jpeg' ? 'image/jpeg' : 'image/png'; // Assuming jpeg or png format
+
+    const allowedTypes = ['image/jpeg', 'image/png'];
+    if (!allowedTypes.includes(mimeType)) {
+      alert('Only JPEG and PNG images are accepted.');
+      return;
+    }
+
+    // Check image size
+    const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 10MB
+    const fileSizeInBytes = base64Image.length * 0.75; // Base64 image size estimation
+    if (fileSizeInBytes > maxSizeInBytes) {
+      alert('Image size exceeds the limit of 20MB.');
+      return;
+    }
+
+    this.openAiService.analyzeImage(base64Image).subscribe(
+      (r: GridFromImageResponse[]) => {
         if (r.length) {
           console.log(r);
         }
-      }),
+      },
       (err: any) => {
         console.log(err);
-      };
+      }
+    );
   }
 }

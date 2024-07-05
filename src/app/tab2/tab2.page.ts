@@ -1,12 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  OnInit,
-  computed,
-  inject,
-} from '@angular/core';
+import { Component, DestroyRef, OnInit, computed, inject } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -25,6 +18,7 @@ import {
   IonListHeader,
   IonRadio,
   IonRadioGroup,
+  IonTabButton,
   IonTitle,
   IonToolbar,
   ModalController,
@@ -57,6 +51,7 @@ import { TirageLastNumbersComponent } from './tirage-last-numbers/tirage-last-nu
   styleUrls: ['tab2.page.scss'],
   standalone: true,
   imports: [
+    IonTabButton,
     IonFabButton,
     IonFab,
     IonButtons,
@@ -87,7 +82,6 @@ export class Tab2Page implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly modalcontroller = inject(ModalController);
   private readonly alertController = inject(AlertController);
-  private readonly cd = inject(ChangeDetectorRef);
 
   public showKeyboard = true;
 
@@ -126,7 +120,6 @@ export class Tab2Page implements OnInit {
     setTimeout(() => {
       this.isLoading = false;
     }, 350);
-    console.log('vie w enter');
   }
   public ngOnInit(): void {
     this.tirageNumbers$

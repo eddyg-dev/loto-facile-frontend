@@ -5,11 +5,12 @@
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
-    "start-local": "ng serve --proxy-config proxy.conf.json",
-    "start-prod": "ng serve --configuration production",
-    "build": "ng build",
+    "dev": "ng serve --proxy-config proxy.conf.json",
+    "dev-device": "ionic cap run android --device --external -l",
+    "prod": "ng serve --configuration production",
+    "build-dev": "ng build",
+    "build-prod": "ng build  --configuration production",
     "watch": "ng build --watch --configuration development",
-    "start-device": "ionic cap run android --device --external -l",
     "test": "ng test",
     "lint": "ng lint"
   },

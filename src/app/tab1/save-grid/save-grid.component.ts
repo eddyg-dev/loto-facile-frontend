@@ -271,17 +271,17 @@ export class SaveGridComponent implements OnInit {
   }
 
   async setFocus(element: IonInput, nextElement?: IonInput) {
-    const value = element.value as number;
-    if (!value) {
-      return;
-    } else {
-      if (!(value >= 1 && value <= 90)) {
-        element.writeValue(null);
-        return;
-      }
-      if (value >= 10 && value <= 90 && nextElement) {
-        await nextElement.setFocus();
-      }
-    }
+    // const value = element.value as number;
+    // if (!value) {
+    //   return;
+    // } else {
+    //   if (!(value >= 1 && value <= 90)) {
+    //     element.writeValue(null);
+    //     return;
+    //   }
+    //   if (value >= 10 && value <= 90 && nextElement) {
+    //     await nextElement.setFocus();
+    //   }
+    // }
   }
 }

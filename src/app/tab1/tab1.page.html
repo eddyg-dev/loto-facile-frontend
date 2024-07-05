@@ -6,7 +6,7 @@
     @if (segment==='carton') { @if ((grids$|async)?.length &&
     (grids$|async)!.length>1) {
     <ion-buttons slot="end">
-      <ion-button size="small" (click)="editMulitpleMode()">
+      <ion-button (click)="editMulitpleMode()">
         @if (isSelectableForEdit) { Annuler } @else {
         <ion-icon slot="icon-only" name="checkbox-outline" />
         }
@@ -39,11 +39,17 @@
 <ion-content class="ion-padding">
   @if(segment==='carton'){ @if (isSelectableForEdit) {
   <ion-item>
-    <ion-button (click)="editGrids('delete')">
+    <ion-button
+      (click)="editGrids('delete')"
+      [disabled]="!selectedGrids()?.length"
+    >
       <ion-icon slot="start" name="trash"></ion-icon>
       Supprimer
     </ion-button>
-    <ion-button (click)="editGrids('move')">
+    <ion-button
+      (click)="editGrids('move')"
+      [disabled]="!selectedGrids()?.length"
+    >
       <ion-icon slot="start" name="arrow-redo"></ion-icon>
       Déplacer
     </ion-button>
@@ -61,7 +67,12 @@
   } } } @if(segment==='category'){
   <app-categories (openSaveCategoryEvent)="openSaveCategoryModal($event)" />
   }
-  <ion-fab class="add-button" slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab
+    class="add-button"
+    slot="fixed"
+    [vertical]="(grids$|async)?.length?'bottom': 'center'"
+    [horizontal]="(grids$|async)?.length?'end': 'center'"
+  >
     <ion-fab-button (click)="openAddMenu()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

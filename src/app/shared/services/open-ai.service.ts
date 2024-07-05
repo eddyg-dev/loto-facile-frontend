@@ -10,15 +10,20 @@ import { environment } from 'src/environments/environment';
 export class OpenAiService {
   private readonly http = inject(HttpClient);
   private baseUrl = environment.baseUrl;
+
   public analyzeImage(
     base64Image: string
   ): Observable<GridFromImageResponse[]> {
-    // return this.http.get<GridFromImageResponse[]>(`${this.baseUrl}/test`, {});
+    return this.http.post<GridFromImageResponse[]>(`${this.baseUrl}/analyze`, {
+      base64Image,
+      fileType: 'image',
+    });
+  }
+
+  public analyzeFile(formData: FormData): Observable<GridFromImageResponse[]> {
     return this.http.post<GridFromImageResponse[]>(
-      `${this.baseUrl}/analyze-image`,
-      {
-        base64Image,
-      }
+      `${this.baseUrl}/analyze`,
+      formData
     );
   }
 }

@@ -102,7 +102,7 @@ ion-tab-bar {
 }
 
 .frame {
-  border: solid 1px darkslateblue;
+  border: solid lavender medium;
   color: darkslateblue;
   background: ghostwhite;
   padding: 1rem;
@@ -112,4 +112,8 @@ ion-tab-bar {
   align-items: center;
   justify-content: center;
   margin: 1rem auto;
+}
+
+.block {
+  display: block;
 }

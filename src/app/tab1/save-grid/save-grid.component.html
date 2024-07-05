@@ -1,13 +1,10 @@
 <ion-header mode="ios" collapse="fade">
   <ion-toolbar mode="ios" class="ion-no-border">
     <ion-buttons slot="start">
-      <ion-button color="medium" size="small" (click)="close()"
-        >Annuler</ion-button
-      >
+      <ion-button color="medium" (click)="close()">Annuler</ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
       <ion-button
-        size="small"
         color="success"
         [disabled]="!isGridValid()"
         (click)="confirm()"

@@ -10,8 +10,8 @@
     }@else {
     <span>N° {{ grid.numero }}</span>
     @if (isEditable) {
-    <ion-icon size="small" name="create" (click)="editGridEvent.emit(grid)" />
-    <ion-icon size="small" name="trash" (click)="deleteGridEvent.emit(grid)" />
+    <ion-icon name="create" (click)="editGridEvent.emit(grid)" />
+    <ion-icon name="trash" (click)="deleteGridEvent.emit(grid)" />
     } }
   </div>
   <div class="badges">
