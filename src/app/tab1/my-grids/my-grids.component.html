@@ -1,7 +1,7 @@
 @for (category of gridsByCategorie | keyvalue; track $index) {
-<div class="category frame animate__animated animate__zoomIn animate__faster">
+<div class="category animate__animated animate__zoomIn animate__faster">
   <div class="title">
-    <!-- <app-category-color [categoryId]="category.key" /> -->
+    <app-category-color [categoryId]="category.key" />
     <span class="name"
       >{{ getCategory(category.key)?.name | titlecase }} ({{
         gridsByCategorie[category.key].length

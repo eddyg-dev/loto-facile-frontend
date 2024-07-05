@@ -5,9 +5,7 @@
         >Annuler</ion-button
       >
     </ion-buttons>
-    <ion-title class="ion-text-center">{{
-      category ? "Modification catégorie" : "Nouvelle catégorie"
-    }}</ion-title>
+    <ion-title class="ion-text-center">Catégorie</ion-title>
     <ion-buttons slot="end">
       <ion-button
         size="small"
@@ -39,6 +37,7 @@
           formControlName="color"
           label="Couleur"
           placeholder="Choisir la couleur"
+          readonly
           (click)="openColorPalette(categoryForm.get('color')?.value)"
         >
         </ion-input>

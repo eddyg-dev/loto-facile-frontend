@@ -1,18 +1,24 @@
-.row {
-  justify-content: center;
+.keyboard-numbers {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.keyboard-header {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 1rem;
 }
 
 .number {
-  background: white;
-  font-size: 1rem;
-  height: 1.4rem;
-  border: solid 1px gray;
   border-radius: 4rem;
-  text-align: center;
+  padding: 0.2rem;
   font-weight: bold;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  font-weight: bold;
+  background: ghostwhite;
+  color: darkslateblue;
 
   &.disabled {
     background: lightgreen;

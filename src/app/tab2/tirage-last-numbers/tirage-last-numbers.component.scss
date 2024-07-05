@@ -2,19 +2,19 @@
   display: flex;
   flex-wrap: nowrap;
   overflow: scroll;
-  margin: 0.5rem auto;
+  margin: 2rem 0;
 
   .tirage-number {
-    font-weight: 600;
-    margin: 0.4rem;
-    font-size: 1.2rem;
-    border: solid 1px black;
+    font-weight: bold;
+    margin: 0.5rem;
+    font-size: 1.4rem;
     border-radius: 4rem;
-    padding: 0.4rem;
-    width: 2.4rem;
-    height: 2.4rem;
+    padding: 0.5rem;
     text-align: center;
+    color: lavender;
+    background: darkslateblue;
     &:last-child {
+      background: lavender;
       color: red;
     }
   }

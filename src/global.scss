@@ -29,20 +29,47 @@
 
 *,
 ion-label {
-  // font-family: monosspace !important;
+  font-family: monospace !important;
+}
+ion-title {
+  font-size: 1.6rem !important;
+  text-transform: uppercase;
+}
+
+ion-list-header {
+  font-size: 1.4rem !important;
+}
+
+ion-item {
+  font-size: 1.2rem !important;
 }
 
 ion-modal.autoheight {
   --height: auto;
 }
 
+ion-button {
+  background: ghostwhite !important;
+}
+
+ion-fab-button {
+  --border-radius: 15px;
+}
+
 ion-segment {
   margin: auto;
   width: 75%;
   ion-segment-button {
-    font-size: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: bold;
     text-transform: capitalize;
   }
+}
+
+ion-radio.tirage-type {
+  background: lavender;
+  color: darkslateblue;
+  font-weight: bold;
 }
 
 ion-button {
@@ -72,4 +99,17 @@ ion-tab-bar {
 
 .text-extra-big {
   font-size: 1.6rem;
+}
+
+.frame {
+  border: solid 1px darkslateblue;
+  color: darkslateblue;
+  background: ghostwhite;
+  padding: 1rem;
+  border-radius: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem auto;
 }

@@ -3,13 +3,8 @@
     <ion-title class="ion-text-center"
       >Mes {{segment==='carton' ? 'cartons':'catégories' }}
     </ion-title>
-    @if (segment==='carton') {
-    <ion-buttons slot="start">
-      <ion-button (click)="addGrid()">
-        <ion-icon slot="icon-only" name="add-circle" />
-      </ion-button>
-    </ion-buttons>
-    @if ((grids$|async)?.length && (grids$|async)!.length>1) {
+    @if (segment==='carton') { @if ((grids$|async)?.length &&
+    (grids$|async)!.length>1) {
     <ion-buttons slot="end">
       <ion-button size="small" (click)="editMulitpleMode()">
         @if (isSelectableForEdit) { Annuler } @else {
@@ -17,15 +12,7 @@
         }
       </ion-button>
     </ion-buttons>
-
-    } }@else if (segment==="category") {
-    <ion-buttons slot="start">
-      <ion-button (click)="openSaveCategoryModal()">
-        <ion-icon slot="icon-only" name="add-circle" />
-      </ion-button>
-    </ion-buttons>
-
-    }
+    } }
   </ion-toolbar>
 </ion-header>
 
@@ -37,9 +24,15 @@
   (ngModelChange)="segmentChange()"
 >
   <ion-segment-button value="carton">
-    <ion-label>Cartons</ion-label>
+    <div>
+      <ion-icon size="small" name="grid"></ion-icon>
+    </div>
+    <div>
+      <ion-label>Cartons</ion-label>
+    </div>
   </ion-segment-button>
   <ion-segment-button value="category">
+    <ion-icon size="small" name="library"></ion-icon>
     <ion-label>Catégories</ion-label>
   </ion-segment-button>
 </ion-segment>
@@ -68,4 +61,9 @@
   } } } @if(segment==='category'){
   <app-categories (openSaveCategoryEvent)="openSaveCategoryModal($event)" />
   }
+  <ion-fab class="add-button" slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button (click)="openAddMenu()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

@@ -14,6 +14,8 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
   IonFooter,
   IonHeader,
   IonIcon,
@@ -55,6 +57,8 @@ import { TirageLastNumbersComponent } from './tirage-last-numbers/tirage-last-nu
   styleUrls: ['tab2.page.scss'],
   standalone: true,
   imports: [
+    IonFabButton,
+    IonFab,
     IonButtons,
     IonHeader,
     IonContent,
@@ -303,11 +307,12 @@ export class Tab2Page implements OnInit {
   public originalOrder(): number {
     return 0;
   }
-  public unselectAll(): void {
-    this.isLoading = true;
-    this.store.dispatch(new UnselectAllGridsAction());
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 0);
-  }
+
+  // public unselectAll(): void {
+  //   this.isLoading = true;
+  //   this.store.dispatch(new UnselectAllGridsAction());
+  //   setTimeout(() => {
+  //     this.isLoading = false;
+  //   }, 0);
+  // }
 }

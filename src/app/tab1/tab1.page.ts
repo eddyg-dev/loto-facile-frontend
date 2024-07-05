@@ -14,6 +14,9 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonFab,
+  IonFabButton,
+  IonFabList,
   IonFooter,
   IonHeader,
   IonIcon,
@@ -55,6 +58,9 @@ import { SaveGridComponent } from './save-grid/save-grid.component';
   styleUrls: ['tab1.page.scss'],
   standalone: true,
   imports: [
+    IonFab,
+    IonFabList,
+    IonFabButton,
     IonIcon,
     IonButtons,
     IonSearchbar,
@@ -65,6 +71,7 @@ import { SaveGridComponent } from './save-grid/save-grid.component';
     IonToolbar,
     IonTitle,
     IonContent,
+    IonFabButton,
     MyGridsComponent,
     IonList,
     IonItem,
@@ -166,20 +173,20 @@ export class Tab1Page {
     this.isSelectableForEdit = !this.isSelectableForEdit;
   }
 
-  public async addGrid(): Promise<void> {
+  private async addGrid(): Promise<void> {
     const actionSheet = await this.actionSheetController.create({
       header: 'Ajouter un nouveau carton',
       keyboardClose: true,
       buttons: [
+        // {
+        //   text: 'Fichier PDF ou Excel',
+        //   icon: 'document-text-outline',
+        //   handler: () => {
+        //     this.addFileGrid();
+        //   },
+        // },
         {
-          text: 'Fichier PDF ou Excel',
-          icon: 'document-text-outline',
-          handler: () => {
-            this.addFileGrid();
-          },
-        },
-        {
-          text: 'Photo',
+          text: 'Photo (IA)',
           icon: 'camera-outline',
           handler: () => {
             this.openImportPhoto();
@@ -192,25 +199,15 @@ export class Tab1Page {
             this.addManualGrid();
           },
         },
+        {
+          text: 'Annuler',
+          role: 'destructive',
+          icon: 'close-outline',
+        },
       ],
     });
 
     await actionSheet.present();
-  }
-
-  splitGrid(text: string): string[][] {
-    // Supposons que la grille soit 3x3 pour l'exemple
-    const grid: string[][] = [];
-    let index = 0;
-    for (let i = 0; i < 3; i++) {
-      const row: string[] = [];
-      for (let j = 0; j < 3; j++) {
-        row.push(text[index]);
-        index++;
-      }
-      grid.push(row);
-    }
-    return grid;
   }
 
   private async addManualGrid(): Promise<void> {
@@ -275,7 +272,38 @@ export class Tab1Page {
       component: SaveCategoryComponent,
       animated: true,
       componentProps: { category },
+      backdropDismiss: true,
+      initialBreakpoint: 0.7,
     });
     await saveCategoryComponentModal.present();
+  }
+
+  public async openAddMenu(): Promise<void> {
+    const actionSheet = await this.actionSheetController.create({
+      keyboardClose: true,
+      buttons: [
+        {
+          text: 'Ajouter un carton',
+          icon: 'grid-outline',
+          handler: () => {
+            this.addGrid();
+          },
+        },
+        {
+          text: 'Ajouter une catégorie',
+          icon: 'library-outline',
+          handler: () => {
+            this.openSaveCategoryModal();
+          },
+        },
+        {
+          text: 'Annuler',
+          role: 'destructive',
+          icon: 'close-outline',
+        },
+      ],
+    });
+
+    await actionSheet.present();
   }
 }

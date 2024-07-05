@@ -3,6 +3,9 @@
 
 /** Ionic CSS Variables **/
 :root {
+  --ion-background-color: ghostwhite;
+  --ion-text-color: darkslateblue;
+
   --ion-color-primary: #502274;
   --ion-color-primary-rgb: 80, 34, 116;
   --ion-color-primary-contrast: #ffffff;
@@ -45,7 +48,7 @@
   --ion-color-danger-shade: #ad000d;
   --ion-color-danger-tint: #cb1a27;
 
-  --ion-color-light: #eeb4b3;
+  --ion-color-light: whitesmoke;
   --ion-color-light-rgb: 238, 180, 179;
   --ion-color-light-contrast: #000000;
   --ion-color-light-contrast-rgb: 0, 0, 0;

@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
+  Output,
   Signal,
   inject,
 } from '@angular/core';
@@ -56,6 +58,10 @@ import { TirageState } from 'src/app/store/tirage/tirage.state';
 export class NinetyKeyboardComponent {
   private readonly modalController = inject(ModalController);
   private readonly alertController = inject(AlertController);
+
+  @Output() public hideKeyboard = new EventEmitter();
+  @Output() public demarquer = new EventEmitter();
+  @Output() public endTirage = new EventEmitter();
 
   @Select(TirageState.getTirageNumbers)
   tirageNumbers$!: Observable<number[]>;
