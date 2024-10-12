@@ -10,5 +10,4 @@ export interface Grid {
   isDoubleQuine: boolean;
   isCartonPlein: boolean;
   categoryId: string;
-  ss;
 }
