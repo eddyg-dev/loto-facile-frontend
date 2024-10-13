@@ -4,31 +4,38 @@
       <ion-button color="medium" (click)="close()">Annuler</ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button color="medium" [disabled]="!categoryId" (click)="validate()"
-        >Valider</ion-button
-      >
+      <ion-button color="medium" [disabled]="!categoryId" (click)="validate()">
+        Valider
+      </ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Photo</ion-title>
+    <ion-title class="ion-text-center">Importer un fichier</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content class="ion-padding" [fullscreen]="true">
+  <ion-button (click)="openImportInfo()">
+    <ion-icon slot="start" name="information-circle-outline"></ion-icon>
+    Infos sur les fichiers supportés
+  </ion-button>
+
   <ion-button (click)="selectPhoto()">
     <ion-icon slot="start" name="camera-outline"></ion-icon>
     Sélectionner une photo
   </ion-button>
 
-  <input
-    type="file"
-    accept=".pdf, .csv, image/*"
-    (change)="onFileSelected($event)"
-    id="fileInput"
-  />
+  <ion-item>
+    <input
+      type="file"
+      accept=".pdf, .csv, .xlsx, image/*"
+      (change)="onFileSelected($event)"
+    />
+  </ion-item>
 
   <ion-item>
     <ion-label>Catégorie</ion-label>
     <ion-select
       mode="ios"
-      placeholder="Catégorie"
+      placeholder="Sélectionner une catégorie"
       [(ngModel)]="categoryId"
       (ngModelChange)="update()"
       interface="popover"
@@ -36,16 +43,17 @@
       <ion-select-option
         *ngFor="let category of categories$ | async"
         [value]="category.id"
-        >{{ category.name }}</ion-select-option
       >
+        {{ category.name }}
+      </ion-select-option>
     </ion-select>
   </ion-item>
-  @if (categoryId) {
+
   <app-my-grids
+    *ngIf="newGrids.length"
     [grids]="newGrids"
     [isEditable]="false"
     [isSelectableForPlay]="false"
     [displayBadges]="false"
-  />
-  }
+  ></app-my-grids>
 </ion-content>

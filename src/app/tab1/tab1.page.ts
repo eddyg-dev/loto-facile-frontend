@@ -48,7 +48,6 @@ import { GridState } from '../store/grids/grids.state';
 import { NinetyKeyboardComponent } from '../tab2/ninety-keyboard/ninety-keyboard.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SaveCategoryComponent } from './categories/save-category/save-category.component';
-import { ImportFileComponent } from './import-file/import-file.component';
 import { ImportPhotoComponent } from './import-photo/import-photo.component';
 import { MyGridsComponent } from './my-grids/my-grids.component';
 import { SaveGridComponent } from './save-grid/save-grid.component';
@@ -83,7 +82,6 @@ import { SaveGridComponent } from './save-grid/save-grid.component';
     IonLabel,
     FormsModule,
     CategoriesComponent,
-    ImportFileComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -224,13 +222,6 @@ export class Tab1Page {
   private async openImportPhoto(): Promise<void> {
     const modal = await this.modalController.create({
       component: ImportPhotoComponent,
-    });
-    modal.present();
-  }
-
-  private async addFileGrid(): Promise<void> {
-    const modal = await this.modalController.create({
-      component: ImportFileComponent,
     });
     modal.present();
   }

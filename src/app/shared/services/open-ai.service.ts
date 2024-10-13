@@ -20,9 +20,10 @@ export class OpenAiService {
     });
   }
 
+  // Nouvelle méthode pour l'analyse de fichiers (PDF, CSV, Excel)
   public analyzeFile(formData: FormData): Observable<GridFromImageResponse[]> {
     return this.http.post<GridFromImageResponse[]>(
-      `${this.baseUrl}/analyze`,
+      `${this.baseUrl}/analyze-file`,
       formData
     );
   }
