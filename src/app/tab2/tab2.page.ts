@@ -242,6 +242,7 @@ export class Tab2Page implements OnInit {
     this.store.dispatch(new UnselectAllGridsAction());
     this.store.dispatch(new SetTirageModeAction(TirageMode.INITIAL));
     this.isDisplayGrids = false;
+    // this.showKeyboard = true;
   }
 
   public async demarquer(): Promise<void> {

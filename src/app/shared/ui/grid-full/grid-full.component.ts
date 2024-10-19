@@ -90,8 +90,6 @@ export class GridFullComponent implements OnInit, OnChanges {
   });
 
   public ngOnInit(): void {
-    console.log('this.isSelectableForEdit ', this.isSelectableForEdit);
-
     this.isTirageInProgess = !this.isSelectableForPlay && !this.isEditable;
     if (this.isTirageInProgess || this.displayBadges) {
       this.tirageNumbers$
@@ -130,8 +128,6 @@ export class GridFullComponent implements OnInit, OnChanges {
           );
         });
     } else if (this.isSelectableForEdit) {
-      console.log('aa');
-
       this.formGroup.patchValue({
         isSelected: this.grid.isSelectedForEdit,
       });

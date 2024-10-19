@@ -6,8 +6,10 @@ import { AlertController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
+  IonCol,
   IonContent,
   IonFooter,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonInput,
@@ -15,10 +17,12 @@ import {
   IonLabel,
   IonList,
   IonListHeader,
+  IonRow,
   IonSelect,
   IonSelectOption,
   IonTitle,
   IonToolbar,
+  ModalController,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -26,8 +30,8 @@ import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { GridFromImageResponse } from 'src/app/data/models/grid-from-image-response';
 import { OpenAiService } from 'src/app/shared/services/open-ai.service';
+import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.component';
 import { CategoryState } from 'src/app/store/category/category.state';
-import { AddGridsAction } from 'src/app/store/grids/grids.actions';
 import { MyGridsComponent } from '../my-grids/my-grids.component';
 
 @Component({
@@ -53,16 +57,21 @@ import { MyGridsComponent } from '../my-grids/my-grids.component';
     FormsModule,
     AsyncPipe,
     MyGridsComponent,
+    IonCol,
+    IonGrid,
+    IonRow,
+    GridFullComponent,
   ],
-  templateUrl: './import-photo.component.html',
-  styleUrls: ['./import-photo.component.scss'],
+  templateUrl: './import-ai.component.html',
+  styleUrls: ['./import-ai.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ImportPhotoComponent {
+export class ImportAIComponent {
   private readonly alertController = inject(AlertController);
+  private readonly modalcontroller = inject(ModalController);
   private readonly store = inject(Store);
   private readonly openAiService = inject(OpenAiService);
-  newGrids: Grid[] = [];
+  tempGrids: Grid[] = [];
 
   fileSizeLimit = 20; // Limite de taille de fichier en MB
 
@@ -74,57 +83,42 @@ export class ImportPhotoComponent {
   public update(): void {}
 
   public close(): void {
-    // Ferme la modale
+    this.modalcontroller.dismiss();
   }
 
   public validate(): void {
-    if (this.newGrids.length) {
-      this.store.dispatch(new AddGridsAction(this.newGrids)).subscribe(() => {
-        // Fermer la modale ou gérer la validation
-      });
-    }
+    // if (this.tempGrids.length) {
+    //   this.store.dispatch(new AddGridsAction(this.tempGrids)).subscribe(() => {
+    //     // Fermer la modale ou gérer la validation
+    //   });
+    // }
   }
 
-  public async openImportInfo(): Promise<void> {
-    const alert = await this.alertController.create({
-      animated: true,
-      header: 'Infos sur les imports',
-      message: 'Veuillez importer un fichier CSV, Excel ou une image.',
-    });
-    await alert.present();
-  }
-
-  public async selectPhoto(source?: CameraSource): Promise<void> {
+  // Gestion de la capture d'image avec la caméra
+  public async selectPhoto(): Promise<void> {
     const photo = await Camera.getPhoto({
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Base64,
-      source: source ?? CameraSource.Photos,
+      source: CameraSource.Camera,
     });
 
     const base64Image = photo.base64String as string;
 
-    // Vérification du type d'image
-    const mimeType = photo.format === 'jpeg' ? 'image/jpeg' : 'image/png';
-    const allowedTypes = ['image/jpeg', 'image/png'];
-    if (!allowedTypes.includes(mimeType)) {
-      alert('Only JPEG and PNG images are accepted.');
-      return;
-    }
+    // Envoyer l'image pour analyse
+    this.analyzeImage(base64Image);
+  }
 
-    // Vérification de la taille de l'image
-    const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 20MB
-    const fileSizeInBytes = base64Image.length * 0.75; // Estimation de la taille de l'image en Base64
-    if (fileSizeInBytes > maxSizeInBytes) {
-      alert('Image size exceeds the limit of 20MB.');
-      return;
-    }
-
+  // Méthode pour analyser une image encodée en base64
+  private analyzeImage(base64Image: string): void {
     this.openAiService.analyzeImage(base64Image).subscribe(
-      (r: GridFromImageResponse[]) => {
-        if (r.length) {
-          console.log(r);
-        }
+      (gridsResponse: GridFromImageResponse[]) => {
+        console.log(gridsResponse);
+
+        // if (r.length) {
+        //   this.tempGrids = r.map((grid) => this.mapResponseToGrid(grid));
+        //   console.log('Grids:', this.tempGrids);
+        // }
       },
       (err: any) => {
         console.log(err);
@@ -132,24 +126,11 @@ export class ImportPhotoComponent {
     );
   }
 
-  // Méthode pour importer et analyser un fichier CSV, Excel ou PDF
+  // Méthode pour analyser un fichier (CSV, Excel ou PDF)
   public async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-
-      // Vérification du type de fichier
-      const allowedTypes = [
-        'application/pdf',
-        'text/csv',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // Excel (xlsx)
-        'image/jpeg',
-        'image/png',
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        alert('Seuls les fichiers PDF, CSV, Excel et images sont acceptés.');
-        return;
-      }
 
       // Vérification de la taille du fichier
       const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 20MB
@@ -161,25 +142,28 @@ export class ImportPhotoComponent {
       const formData = new FormData();
       formData.append('file', file);
 
-      let fileType = 'csv'; // Définir un type par défaut
+      // Détecter le type de fichier
+      let fileType = '';
       if (file.type === 'application/pdf') {
         fileType = 'pdf';
       } else if (file.type.includes('spreadsheetml.sheet')) {
         fileType = 'excel';
+      } else if (file.type === 'text/csv') {
+        fileType = 'csv';
       } else if (file.type.includes('image')) {
         fileType = 'image';
       }
 
       formData.append('fileType', fileType);
 
-      // Envoyer le fichier au service pour analyse
+      // Envoyer le fichier pour analyse
       this.openAiService.analyzeFile(formData).subscribe(
         (response: GridFromImageResponse[]) => {
           if (response.length) {
-            this.newGrids = response.map((grid) =>
+            this.tempGrids = response.map((grid) =>
               this.mapResponseToGrid(grid)
             );
-            console.log('Grids:', this.newGrids);
+            console.log('Grids:', this.tempGrids);
           }
         },
         (err: any) => {

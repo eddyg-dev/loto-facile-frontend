@@ -10,7 +10,6 @@ export const exitTirageGuard: CanDeactivateFn<unknown> = async () => {
   const store = inject(Store);
 
   const tirageMode = store.selectSnapshot(TirageState.getTirageMode);
-  console.log('a ', tirageMode);
   if (tirageMode === TirageMode.IN_PROGRESS) {
     const alert = await alertController.create({
       animated: true,

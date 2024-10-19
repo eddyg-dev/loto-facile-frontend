@@ -2,30 +2,45 @@
 // http://ionicframework.com/docs/theming/
 
 /** Ionic CSS Variables **/
-:root {
-  --ion-background-color: ghostwhite;
-  --ion-text-color: darkslateblue;
+// background champagne
+// #fbeed2
 
-  --ion-color-primary: #502274;
-  --ion-color-primary-rgb: 80, 34, 116;
+// blue foncé
+// #25505f
+// ≈ Blue Dianne
+
+// bleu gris
+// #96b3b7
+// ≈ Gull Gray
+
+// bleu brillant
+// #61c6d3
+// ≈
+
+:root {
+  --ion-background-color: #fbeed2;
+  --ion-text-color: #25505f;
+
+  --ion-color-primary: #25505f;
+  --ion-color-primary-rgb: 37, 80, 95;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #461e66;
-  --ion-color-primary-tint: #623882;
+  --ion-color-primary-shade: #214654;
+  --ion-color-primary-tint: #3b626f;
 
-  --ion-color-secondary: #eeb4b3;
-  --ion-color-secondary-rgb: 238, 180, 179;
+  --ion-color-secondary: #96b3b7;
+  --ion-color-secondary-rgb: 150, 179, 183;
   --ion-color-secondary-contrast: #000000;
   --ion-color-secondary-contrast-rgb: 0, 0, 0;
-  --ion-color-secondary-shade: #d19e9e;
-  --ion-color-secondary-tint: #f0bcbb;
+  --ion-color-secondary-shade: #849ea1;
+  --ion-color-secondary-tint: #a1bbbe;
 
-  --ion-color-tertiary: #c179b9;
-  --ion-color-tertiary-rgb: 193, 121, 185;
+  --ion-color-tertiary: #96b3b7;
+  --ion-color-tertiary-rgb: 150, 179, 183;
   --ion-color-tertiary-contrast: #000000;
   --ion-color-tertiary-contrast-rgb: 0, 0, 0;
-  --ion-color-tertiary-shade: #aa6aa3;
-  --ion-color-tertiary-tint: #c786c0;
+  --ion-color-tertiary-shade: #849ea1;
+  --ion-color-tertiary-tint: #a1bbbe;
 
   --ion-color-success: #a42cd6;
   --ion-color-success-rgb: 164, 44, 214;
@@ -233,5 +248,24 @@ html {
    * For more information on dynamic font scaling, visit the documentation:
    * https://ionicframework.com/docs/layout/dynamic-font-scaling
    */
-  --ion-dynamic-font: var(--ion-default-dynamic-font);
+  --ion-dynamic-font: var(
+    --ion-default-dynamic-font
+  ); /* Appliquer Comic Neue à tout le texte */
+  body,
+  ion-app {
+    font-family: "Comic Neue", sans-serif;
+  }
+
+  /* Styles supplémentaires pour certains composants */
+  ion-title {
+    font-family: "Comic Neue", sans-serif;
+    font-weight: 700; /* Gras pour les titres */
+  }
+
+  ion-button,
+  ion-label,
+  p {
+    font-family: "Comic Neue", sans-serif;
+    font-weight: 400; /* Normal pour les boutons et paragraphes */
+  }
 }

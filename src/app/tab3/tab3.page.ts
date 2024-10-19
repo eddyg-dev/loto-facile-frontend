@@ -87,10 +87,10 @@ export class Tab3Page {
   }
 
   public openFacebookPage(): void {
-    console.log('openFacebookPage');
+    // console.log('openFacebookPage');
   }
 
   public sendMail(): void {
-    console.log('sendMail');
+    // console.log('sendMail');
   }
 }

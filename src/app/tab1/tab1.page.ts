@@ -48,7 +48,7 @@ import { GridState } from '../store/grids/grids.state';
 import { NinetyKeyboardComponent } from '../tab2/ninety-keyboard/ninety-keyboard.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SaveCategoryComponent } from './categories/save-category/save-category.component';
-import { ImportPhotoComponent } from './import-photo/import-photo.component';
+import { ImportAIComponent } from './import-ai/import-ai.component';
 import { MyGridsComponent } from './my-grids/my-grids.component';
 import { SaveGridComponent } from './save-grid/save-grid.component';
 
@@ -175,7 +175,7 @@ export class Tab1Page {
     this.isSelectableForEdit = !this.isSelectableForEdit;
   }
 
-  private async addGrid(): Promise<void> {
+  public async addGrid(): Promise<void> {
     const actionSheet = await this.actionSheetController.create({
       header: 'Ajouter un nouveau carton',
       keyboardClose: true,
@@ -188,8 +188,8 @@ export class Tab1Page {
         //   },
         // },
         {
-          text: 'Photo (IA)',
-          icon: 'camera-outline',
+          text: 'Photo ou Fichier (IA)',
+          icon: 'diamond-outline',
           handler: () => {
             this.openImportPhoto();
           },
@@ -221,7 +221,7 @@ export class Tab1Page {
 
   private async openImportPhoto(): Promise<void> {
     const modal = await this.modalController.create({
-      component: ImportPhotoComponent,
+      component: ImportAIComponent,
     });
     modal.present();
   }
@@ -271,34 +271,5 @@ export class Tab1Page {
       initialBreakpoint: 0.7,
     });
     await saveCategoryComponentModal.present();
-  }
-
-  public async openAddMenu(): Promise<void> {
-    const actionSheet = await this.actionSheetController.create({
-      keyboardClose: true,
-      buttons: [
-        {
-          text: 'Ajouter un carton',
-          icon: 'grid-outline',
-          handler: () => {
-            this.addGrid();
-          },
-        },
-        {
-          text: 'Ajouter une catégorie',
-          icon: 'library-outline',
-          handler: () => {
-            this.openSaveCategoryModal();
-          },
-        },
-        {
-          text: 'Annuler',
-          role: 'destructive',
-          icon: 'close-outline',
-        },
-      ],
-    });
-
-    await actionSheet.present();
   }
 }

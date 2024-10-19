@@ -55,6 +55,12 @@
     </ion-button>
   </ion-item>
   } @if (grids$ |async; as grids) { @if (!isLoading) {
+
+  <ion-button (click)="addGrid()" size="small">
+    <ion-icon slot="start" name="add"></ion-icon>
+    Ajouter un carton
+  </ion-button>
+
   <app-my-grids
     [isEditable]="true"
     [isSelectableForPlay]="false"
@@ -65,16 +71,10 @@
     (deleteGridEvent)="deleteGrid($event)"
   />
   } } } @if(segment==='category'){
+  <ion-button (click)="openSaveCategoryModal()" size="small">
+    <ion-icon slot="start" name="add"></ion-icon>
+    Ajouter une catégorie
+  </ion-button>
   <app-categories (openSaveCategoryEvent)="openSaveCategoryModal($event)" />
   }
-  <ion-fab
-    class="add-button"
-    slot="fixed"
-    [vertical]="(grids$|async)?.length?'bottom': 'center'"
-    [horizontal]="(grids$|async)?.length?'end': 'center'"
-  >
-    <ion-fab-button (click)="openAddMenu()">
-      <ion-icon name="add"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>

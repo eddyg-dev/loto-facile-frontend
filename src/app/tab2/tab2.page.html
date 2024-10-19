@@ -70,7 +70,7 @@
     [grids]="selectedGrids()!"
     [displayBadges]="true"
   ></app-my-grids>
-  } } } @if(!showKeyboard){
+  } } } @if(!showKeyboard &&(tirageMode$|async) === TirageMode.IN_PROGRESS){
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="showKeyboard=true">
       <ion-icon name="keypad"></ion-icon>

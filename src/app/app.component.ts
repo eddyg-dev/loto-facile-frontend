@@ -13,6 +13,8 @@ import {
   closeOutline,
   create,
   cube,
+  diamondOutline,
+  documentAttachOutline,
   documentTextOutline,
   ellipse,
   grid,
@@ -91,6 +93,8 @@ export class AppComponent {
       help,
       closeOutline,
       gridOutline,
+      diamondOutline,
+      documentAttachOutline,
     });
   }
 }

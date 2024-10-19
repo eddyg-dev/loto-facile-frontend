@@ -1,0 +1,91 @@
+<ion-header mode="ios" collapse="fade">
+  <ion-toolbar mode="ios" class="ion-no-border">
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="close()">Annuler</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <!-- Bloc pour Prendre une photo -->
+      <ion-col size="6">
+        <ion-button
+          expand="block"
+          size="large"
+          color="primary"
+          (click)="selectPhoto()"
+          class="button-block"
+        >
+          <div class="button-content">
+            <ion-icon name="camera-outline" style="font-size: 48px"></ion-icon>
+            <span class="button-label">Prendre une photo</span>
+          </div>
+        </ion-button>
+      </ion-col>
+
+      <!-- Bloc pour Importer un fichier -->
+      <ion-col size="6">
+        <ion-button
+          expand="block"
+          size="large"
+          color="secondary"
+          (click)="fileInput.click()"
+          class="button-block"
+        >
+          <div class="button-content">
+            <ion-icon
+              name="document-attach-outline"
+              style="font-size: 48px"
+            ></ion-icon>
+            <span class="button-label">Importer un fichier</span>
+          </div>
+        </ion-button>
+
+        <!-- Input caché pour le fichier, déclenché par le bouton ci-dessus -->
+        <input
+          type="file"
+          accept=".pdf, .csv, .xlsx, image/*"
+          (change)="onFileSelected($event)"
+          hidden
+          #fileInput
+        />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-item>
+    <ion-label>Catégorie</ion-label>
+    <ion-select
+      mode="ios"
+      placeholder="Sélectionner une catégorie"
+      [(ngModel)]="categoryId"
+      (ngModelChange)="update()"
+      interface="popover"
+    >
+      <ion-select-option
+        *ngFor="let category of categories$ | async"
+        [value]="category.id"
+      >
+        {{ category.name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+  @for (grid of tempGrids; track $index) {
+  <app-grid-full
+    [grid]="grid"
+    [isSelectableForPlay]="false"
+    [isSelectableForEdit]="false"
+    [isEditable]="false"
+    [displayBadges]="false"
+  />
+  }
+  <!-- <app-my-grids
+    *ngIf="tempGrids.length"
+    [grids]="tempGrids"
+    [isEditable]="false"
+    [isSelectableForPlay]="false"
+    [displayBadges]="false"
+  ></app-my-grids> -->
+</ion-content>

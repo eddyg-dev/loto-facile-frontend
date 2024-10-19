@@ -27,10 +27,27 @@
 @import "theme/variables.scss";
 @import "../node_modules/animate.css/animate.min.css";
 
+/* Appliquer Comic Neue à tout le texte */
 *,
-ion-label {
-  font-family: monospace !important;
+body,
+ion-app,
+ion-button {
+  font-family: "Comic Neue", sans-serif !important;
 }
+
+/* Styles supplémentaires pour certains composants */
+ion-title {
+  font-family: "Comic Neue", sans-serif !important;
+  font-weight: 700; /* Gras pour les titres */
+}
+
+ion-button,
+ion-label,
+p {
+  font-family: "Comic Neue", sans-serif !important;
+  font-weight: 400; /* Normal pour les boutons et paragraphes */
+}
+
 ion-title {
   font-size: 1.6rem !important;
   text-transform: uppercase;
@@ -102,10 +119,10 @@ ion-tab-bar {
 }
 
 .frame {
-  border: solid lavender medium;
-  color: darkslateblue;
-  background: ghostwhite;
-  padding: 1rem;
+  border: solid #25505f medium;
+  color: #25505f;
+  background: whitesmoke;
+  padding: 0.5rem;
   border-radius: 1rem;
   font-weight: bold;
   display: flex;

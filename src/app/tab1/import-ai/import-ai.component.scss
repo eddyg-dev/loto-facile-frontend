@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.button-block {
+  height: 150px;
+  --border-radius: 15px;
+  --padding-start: 15px;
+  --padding-end: 15px;
+  --font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.button-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-label {
+  margin-top: 8px; /* Espace entre l'icône et le texte */
+  font-size: 16px; /* Taille du texte sous l'icône */
+}
+
+ion-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

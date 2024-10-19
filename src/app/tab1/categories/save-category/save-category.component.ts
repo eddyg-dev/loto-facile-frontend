@@ -115,7 +115,6 @@ export class SaveCategoryComponent implements OnInit {
       isDeletable:
         this.category && this.category.isDeletable === false ? false : true,
     };
-    console.log(newCat);
 
     this.store.dispatch(
       this.category
