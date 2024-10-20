@@ -17,7 +17,6 @@ import { CategoryState } from './app/store/category/category.state';
 import { GridState } from './app/store/grids/grids.state';
 import { TirageState } from './app/store/tirage/tirage.state';
 import { environment } from './environments/environment';
-
 if (environment.production) {
   enableProdMode();
 }

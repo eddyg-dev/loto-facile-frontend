@@ -1,8 +1,6 @@
 <ion-header mode="ios" collapse="fade">
   <ion-toolbar mode="ios" class="ion-no-border">
-    <ion-title class="ion-text-center"
-      >Mes {{segment==='carton' ? 'cartons':'catégories' }}
-    </ion-title>
+    <ion-title class="ion-text-center">LOTO FACILE </ion-title>
     @if (segment==='carton') { @if ((grids$|async)?.length &&
     (grids$|async)!.length>1) {
     <ion-buttons slot="end">
@@ -44,21 +42,21 @@
       [disabled]="!selectedGrids()?.length"
     >
       <ion-icon slot="start" name="trash"></ion-icon>
-      Supprimer
+      SUPPRIMER
     </ion-button>
     <ion-button
       (click)="editGrids('move')"
       [disabled]="!selectedGrids()?.length"
     >
       <ion-icon slot="start" name="arrow-redo"></ion-icon>
-      Déplacer
+      DEPLACER
     </ion-button>
   </ion-item>
   } @if (grids$ |async; as grids) { @if (!isLoading) {
 
   <ion-button (click)="addGrid()" size="small">
     <ion-icon slot="start" name="add"></ion-icon>
-    Ajouter un carton
+    AJOUTER UN CARTON
   </ion-button>
 
   <app-my-grids
@@ -73,7 +71,7 @@
   } } } @if(segment==='category'){
   <ion-button (click)="openSaveCategoryModal()" size="small">
     <ion-icon slot="start" name="add"></ion-icon>
-    Ajouter une catégorie
+    AJOUTER UNE CATEGORIE
   </ion-button>
   <app-categories (openSaveCategoryEvent)="openSaveCategoryModal($event)" />
   }

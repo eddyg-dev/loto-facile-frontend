@@ -45,7 +45,12 @@ ion-button,
 ion-label,
 p {
   font-family: "Comic Neue", sans-serif !important;
-  font-weight: 400; /* Normal pour les boutons et paragraphes */
+  font-weight: bold !important; /* Normal pour les boutons et paragraphes */
+}
+
+ion-button {
+  letter-spacing: 0.1rem !important;
+  text-transform: uppercase !important;
 }
 
 ion-title {
@@ -63,10 +68,6 @@ ion-item {
 
 ion-modal.autoheight {
   --height: auto;
-}
-
-ion-button {
-  background: ghostwhite !important;
 }
 
 ion-fab-button {
@@ -87,10 +88,6 @@ ion-radio.tirage-type {
   background: lavender;
   color: darkslateblue;
   font-weight: bold;
-}
-
-ion-button {
-  text-transform: capitalize;
 }
 
 ion-tab-bar {
@@ -123,7 +120,7 @@ ion-tab-bar {
   color: #25505f;
   background: whitesmoke;
   padding: 0.5rem;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   font-weight: bold;
   display: flex;
   align-items: center;
@@ -133,4 +130,36 @@ ion-tab-bar {
 
 .block {
   display: block;
+}
+
+.gap-1 {
+  gap: 0.5rem;
+}
+.gap-2 {
+  gap: 1rem;
+}
+.gap-3 {
+  gap: 1.5rem;
+}
+.gap-4 {
+  gap: 2rem;
+}
+
+.w-100 {
+  width: 100%;
+}
+.flex {
+  display: block;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.align-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
 }
