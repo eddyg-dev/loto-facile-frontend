@@ -1,5 +1,10 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { AlertController } from '@ionic/angular';
@@ -20,6 +25,7 @@ import {
   IonRow,
   IonSelect,
   IonSelectOption,
+  IonSkeletonText,
   IonTitle,
   IonToolbar,
   ModalController,
@@ -60,6 +66,7 @@ import { MyGridsComponent } from '../my-grids/my-grids.component';
     IonCol,
     IonGrid,
     IonRow,
+    IonSkeletonText,
     GridFullComponent,
   ],
   templateUrl: './import-ai.component.html',
@@ -68,10 +75,12 @@ import { MyGridsComponent } from '../my-grids/my-grids.component';
 })
 export class ImportAIComponent {
   private readonly alertController = inject(AlertController);
+  private readonly cdr = inject(ChangeDetectorRef);
   private readonly modalcontroller = inject(ModalController);
   private readonly store = inject(Store);
   private readonly openAiService = inject(OpenAiService);
   tempGrids: Grid[] = [];
+  isImporting = false;
 
   fileSizeLimit = 20; // Limite de taille de fichier en MB
 
@@ -100,7 +109,7 @@ export class ImportAIComponent {
       quality: 90,
       allowEditing: true,
       resultType: CameraResultType.Base64,
-      source: CameraSource.Camera,
+      source: CameraSource.Photos,
     });
 
     const base64Image = photo.base64String as string;
@@ -111,17 +120,18 @@ export class ImportAIComponent {
 
   // Méthode pour analyser une image encodée en base64
   private analyzeImage(base64Image: string): void {
+    this.isImporting = true;
+    this.cdr.markForCheck();
     this.openAiService.analyzeImage(base64Image).subscribe(
       (gridsResponse: GridFromImageResponse[]) => {
-        console.log(gridsResponse);
-
-        // if (r.length) {
-        //   this.tempGrids = r.map((grid) => this.mapResponseToGrid(grid));
-        //   console.log('Grids:', this.tempGrids);
-        // }
+        this.actualizeTempGrids(gridsResponse);
+        this.isImporting = false;
+        this.cdr.markForCheck();
       },
       (err: any) => {
         console.log(err);
+        this.isImporting = false;
+        this.cdr.markForCheck();
       }
     );
   }
@@ -157,19 +167,39 @@ export class ImportAIComponent {
       formData.append('fileType', fileType);
 
       // Envoyer le fichier pour analyse
+      this.isImporting = true;
+
       this.openAiService.analyzeFile(formData).subscribe(
-        (response: GridFromImageResponse[]) => {
-          if (response.length) {
-            this.tempGrids = response.map((grid) =>
-              this.mapResponseToGrid(grid)
-            );
-            console.log('Grids:', this.tempGrids);
-          }
+        (gridsResponse: GridFromImageResponse[]) => {
+          this.actualizeTempGrids(gridsResponse);
+          this.isImporting = false;
+          this.cdr.markForCheck();
         },
         (err: any) => {
           console.error(err);
+          this.isImporting = false;
+          this.cdr.markForCheck();
         }
       );
+    }
+  }
+
+  private actualizeTempGrids(gridsResponse: any) {
+    console.log('gridsResponse', gridsResponse);
+    console.log('gridsResponse[0]', gridsResponse[0]);
+
+    const gridsResponseRandom = gridsResponse?.length
+      ? gridsResponse
+      : gridsResponse[Object.keys(gridsResponse)[0]]?.length
+      ? gridsResponse[Object.keys(gridsResponse)[0]]
+      : [];
+    if (gridsResponseRandom?.length) {
+      this.tempGrids = gridsResponseRandom.map((grid: GridFromImageResponse) =>
+        this.mapResponseToGrid(grid)
+      );
+      console.log('tempGrids', this.tempGrids);
+
+      this.cdr.detectChanges();
     }
   }
 

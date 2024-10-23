@@ -39,7 +39,9 @@
               name="document-attach-outline"
               style="font-size: 48px"
             ></ion-icon>
-            <span class="button-label">Importer un fichier</span>
+            <span class="button-label"
+              >Importer un fichier (PDF, CSV, XLSX)</span
+            >
           </div>
         </ion-button>
 
@@ -54,6 +56,28 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  @if (isImporting) {
+
+  <ion-skeleton-text
+    [animated]="true"
+    style="width: 100%; height: 50px"
+  ></ion-skeleton-text>
+  <ion-skeleton-text
+    [animated]="true"
+    style="width: 100%; height: 50px"
+  ></ion-skeleton-text>
+  <div class="ion-text-center">Analyse IA du fichier en cours</div>
+  <div class="ion-text-center">Veuillez patienter...</div>
+  <ion-skeleton-text
+    [animated]="true"
+    style="width: 100%; height: 50px"
+  ></ion-skeleton-text>
+  <ion-skeleton-text
+    [animated]="true"
+    style="width: 100%; height: 50px"
+  ></ion-skeleton-text>
+  } @if (tempGrids.length) {
 
   <ion-item>
     <ion-label>Catégorie</ion-label>
@@ -77,15 +101,8 @@
     [grid]="grid"
     [isSelectableForPlay]="false"
     [isSelectableForEdit]="false"
-    [isEditable]="false"
+    [isEditable]="true"
     [displayBadges]="false"
   />
-  }
-  <!-- <app-my-grids
-    *ngIf="tempGrids.length"
-    [grids]="tempGrids"
-    [isEditable]="false"
-    [isSelectableForPlay]="false"
-    [displayBadges]="false"
-  ></app-my-grids> -->
+  } }
 </ion-content>

@@ -1,6 +1,7 @@
 import {
   add,
   addCircle,
+  arrowBackCircleOutline,
   arrowRedo,
   book,
   bowlingBall,
@@ -315,4 +316,5 @@ export const icons = {
   gridOutline,
   diamondOutline,
   documentAttachOutline,
+  arrowBackCircleOutline,
 };
