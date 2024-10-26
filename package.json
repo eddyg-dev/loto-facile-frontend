@@ -36,6 +36,7 @@
     "@ngxs/storage-plugin": "^3.8.2",
     "@ngxs/store": "^3.8.2",
     "animate.css": "^4.1.1",
+    "cordova-plugin-purchase": "^13.11.1",
     "ionicons": "^7.2.1",
     "rxjs": "^7.5.0",
     "tslib": "^2.3.0",

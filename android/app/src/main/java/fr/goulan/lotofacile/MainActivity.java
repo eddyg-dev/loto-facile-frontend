@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package fr.goulan.lotofacile;
 
 import com.getcapacitor.BridgeActivity;
 

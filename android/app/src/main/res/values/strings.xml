@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">loto-facile</string>
     <string name="title_activity_main">loto-facile</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">fr.goulan.lotofacile</string>
+    <string name="custom_url_scheme">fr.goulan.lotofacile</string>
 </resources>
