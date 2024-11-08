@@ -12,6 +12,8 @@
     @if (isEditable) {
     <ion-icon name="create" (click)="editGridEvent.emit(grid)" />
     <ion-icon name="trash" (click)="deleteGridEvent.emit(grid)" />
+    } @if (isTemp) {
+    <ion-icon name="trash" (click)="deleteTempGrid.emit(indexTemp)" />
     } }
   </div>
   @if (displayBadges) {

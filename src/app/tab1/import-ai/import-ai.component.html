@@ -3,6 +3,16 @@
     <ion-buttons slot="start">
       <ion-button color="medium" (click)="close()">Annuler</ion-button>
     </ion-buttons>
+    @if (tempGrids.length && categoryId) {
+    <ion-buttons slot="end">
+      <ion-button
+        color="medium"
+        [disabled]="!tempGrids.length"
+        (click)="validate()"
+        >Valider l'import</ion-button
+      >
+    </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
@@ -15,7 +25,7 @@
           expand="block"
           size="large"
           color="primary"
-          (click)="selectPhoto()"
+          (click)="selectPhotoPremium()"
           class="button-block"
         >
           <div class="button-content">
@@ -49,7 +59,7 @@
         <input
           type="file"
           accept=".pdf, .csv, .xlsx, image/*"
-          (change)="onFileSelected($event)"
+          (change)="onFileSelectedPremium($event)"
           hidden
           #fileInput
         />
@@ -96,13 +106,19 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
-  @for (grid of tempGrids; track $index) {
-  <app-grid-full
-    [grid]="grid"
-    [isSelectableForPlay]="false"
-    [isSelectableForEdit]="false"
-    [isEditable]="true"
-    [displayBadges]="false"
-  />
-  } }
+  <div class="parent">
+    @for (grid of tempGrids; track $index) {
+    <app-grid-full
+      [grid]="grid"
+      [isSelectableForPlay]="false"
+      [isSelectableForEdit]="false"
+      [isEditable]="false"
+      [displayBadges]="false"
+      [isTemp]="true"
+      [indexTemp]="$index"
+      (deleteTempGrid)="deleteTempGrid($index)"
+    />
+    }
+  </div>
+  }
 </ion-content>

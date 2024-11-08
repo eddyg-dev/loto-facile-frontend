@@ -7,12 +7,14 @@ import {
 } from '@ionic/angular/standalone';
 
 import { provideHttpClient } from '@angular/common/http';
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { StateKey } from './app/data/enum/state-key.enum';
+import { InAppPurchaseService } from './app/shared/services/in-app-purchase.service';
 import { CategoryState } from './app/store/category/category.state';
 import { GridState } from './app/store/grids/grids.state';
 import { TirageState } from './app/store/tirage/tirage.state';
@@ -34,5 +36,7 @@ bootstrapApplication(AppComponent, {
         key: [StateKey.Grids, StateKey.Tirage, StateKey.Category],
       })
     ),
+    InAppPurchase2,
+    InAppPurchaseService,
   ],
 });

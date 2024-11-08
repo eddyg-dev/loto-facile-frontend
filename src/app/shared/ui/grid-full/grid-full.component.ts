@@ -67,9 +67,12 @@ export class GridFullComponent implements OnInit, OnChanges {
   @Input({ required: true }) public isSelectableForPlay!: boolean;
   @Input() public isSelectableForEdit?: boolean;
   @Input({ required: true }) public isEditable!: boolean;
+  @Input() public isTemp = false;
+  @Input() public indexTemp?: number;
   @Input({ required: true }) public displayBadges!: boolean;
   @Output() public editGridEvent = new EventEmitter<Grid>();
   @Output() public deleteGridEvent = new EventEmitter<Grid>();
+  @Output() public deleteTempGrid = new EventEmitter<number>();
   public gridFull?: GridFull;
 
   public backgroundColor = CategoryColor.Red;

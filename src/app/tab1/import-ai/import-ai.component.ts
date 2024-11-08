@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
 import { AlertController } from '@ionic/angular';
 import {
   IonButton,
@@ -35,9 +36,12 @@ import { Observable } from 'rxjs';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { GridFromImageResponse } from 'src/app/data/models/grid-from-image-response';
+import { InAppPurchaseService } from 'src/app/shared/services/in-app-purchase.service';
 import { OpenAiService } from 'src/app/shared/services/open-ai.service';
 import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.component';
+import { isGridFromPhotoValid } from 'src/app/shared/utils/import.utils';
 import { CategoryState } from 'src/app/store/category/category.state';
+import { AddGridsAction } from 'src/app/store/grids/grids.actions';
 import { MyGridsComponent } from '../my-grids/my-grids.component';
 
 @Component({
@@ -78,7 +82,9 @@ export class ImportAIComponent {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly modalcontroller = inject(ModalController);
   private readonly store = inject(Store);
+  private readonly purchaseService = inject(InAppPurchaseService);
   private readonly openAiService = inject(OpenAiService);
+  private readonly iap = inject(InAppPurchase2);
   tempGrids: Grid[] = [];
   isImporting = false;
 
@@ -96,13 +102,25 @@ export class ImportAIComponent {
   }
 
   public validate(): void {
-    // if (this.tempGrids.length) {
-    //   this.store.dispatch(new AddGridsAction(this.tempGrids)).subscribe(() => {
-    //     // Fermer la modale ou gérer la validation
-    //   });
-    // }
+    if (this.tempGrids.length) {
+      this.tempGrids = this.tempGrids.map((grid) => ({
+        ...grid,
+        categoryId: this.categoryId ?? '',
+      }));
+
+      this.store.dispatch(new AddGridsAction(this.tempGrids)).subscribe(() => {
+        this.close();
+      });
+    }
   }
 
+  public selectPhotoPremium(): void {
+    if (this.purchaseService.isPremiumUser$.value) {
+      this.selectPhoto();
+    } else {
+      this.showPremiumAlert();
+    }
+  }
   // Gestion de la capture d'image avec la caméra
   public async selectPhoto(): Promise<void> {
     const photo = await Camera.getPhoto({
@@ -137,6 +155,33 @@ export class ImportAIComponent {
   }
 
   // Méthode pour analyser un fichier (CSV, Excel ou PDF)
+  public async onFileSelectedPremium(event: Event): Promise<void> {
+    if (this.purchaseService.isPremiumUser$.value) {
+      this.onFileSelected(event);
+    } else {
+      this.showPremiumAlert();
+    }
+  }
+
+  private async showPremiumAlert(): Promise<void> {
+    const alert = await this.alertController.create({
+      animated: true,
+      header: 'LOTO FACILE PREMIUM',
+      message: `Cette fonctionnalité est réservée aux utilisateurs premium. Souhaitez-vous essayer gratuitement pendant 1 mois ?`,
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+        },
+        {
+          text: 'Oui',
+          role: 'cancel',
+        },
+      ],
+    });
+    await alert.present();
+  }
+
   public async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -153,6 +198,17 @@ export class ImportAIComponent {
       formData.append('file', file);
 
       // Détecter le type de fichier
+
+      if (
+        [
+          'application/pdf',
+          'text/csv',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ].includes(file.type)
+      ) {
+        alert("Le fichier n'est pas supporté");
+      }
+
       let fileType = '';
       if (file.type === 'application/pdf') {
         fileType = 'pdf';
@@ -185,22 +241,24 @@ export class ImportAIComponent {
   }
 
   private actualizeTempGrids(gridsResponse: any) {
-    console.log('gridsResponse', gridsResponse);
-    console.log('gridsResponse[0]', gridsResponse[0]);
-
     const gridsResponseRandom = gridsResponse?.length
       ? gridsResponse
       : gridsResponse[Object.keys(gridsResponse)[0]]?.length
       ? gridsResponse[Object.keys(gridsResponse)[0]]
       : [];
     if (gridsResponseRandom?.length) {
-      this.tempGrids = gridsResponseRandom.map((grid: GridFromImageResponse) =>
-        this.mapResponseToGrid(grid)
-      );
-      console.log('tempGrids', this.tempGrids);
+      const newTempGrids = gridsResponseRandom
+        .filter((g: GridFromImageResponse) => isGridFromPhotoValid(g))
+        .map((grid: GridFromImageResponse) => this.mapResponseToGrid(grid));
 
+      this.tempGrids = [...this.tempGrids, ...newTempGrids];
       this.cdr.detectChanges();
     }
+  }
+
+  deleteTempGrid(index: number): void {
+    this.tempGrids = this.tempGrids.filter((g, i) => i !== index);
+    this.cdr.detectChanges();
   }
 
   private mapResponseToGrid(grid: GridFromImageResponse): Grid {
@@ -216,5 +274,33 @@ export class ImportAIComponent {
       isCartonPlein: false,
       categoryId: this.categoryId ?? '',
     };
+  }
+
+  private async purchaseSubscription(): Promise<void> {
+    try {
+      const product =
+        this.iap.products.byId[this.purchaseService.premiumProductId]; // Récupérer le produit
+
+      if (product) {
+        const purchase = await this.iap.order(
+          this.purchaseService.premiumProductId
+        ); // Démarrer l'achat
+
+        // Gestion du succès de l'achat
+        await purchase
+          .then(async () => {
+            await this.purchaseService.setPremiumAccess(true); // Activer l'accès premium
+          })
+          .catch((err: any) => {
+            console.error("Erreur lors de l'achat", err);
+          }); // Finaliser l'achat
+        console.log('Achat réussi', purchase);
+      } else {
+        alert('Produit non trouvé.');
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'achat", error);
+      alert("Une erreur s'est produite lors de l'achat. Veuillez réessayer.");
+    }
   }
 }
