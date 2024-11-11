@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   AlertController,
@@ -20,6 +21,7 @@ import {
 import { Store } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { Message } from '../data/enum/message.enum';
+import { InAppPurchaseService } from '../shared/services/in-app-purchase.service';
 import { ResetCategoriesAction } from '../store/category/category.actions';
 import { DeleteAllGridsAction } from '../store/grids/grids.actions';
 import { ClearTirageAction } from '../store/tirage/tirage.actions';
@@ -46,12 +48,16 @@ import { DicoLotoComponent } from './dico-loto/dico-loto.component';
     IonFooter,
     IonToggle,
     IonButtons,
+    AsyncPipe,
   ],
 })
 export class Tab3Page {
   private store = inject(Store);
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
+  private purchaseService = inject(InAppPurchaseService);
+
+  public isPremium = this.purchaseService.isPremiumUser$;
 
   public version = environment.version;
 
@@ -92,5 +98,13 @@ export class Tab3Page {
 
   public sendMail(): void {
     // console.log('sendMail');
+  }
+
+  public unsubscribe(): void {
+    // CdvPurchase.store.cancel();
+  }
+
+  public upgradeToPremium(): void {
+    this.purchaseService.upgradeToPremium();
   }
 }

@@ -7,7 +7,6 @@ import {
 } from '@ionic/angular/standalone';
 
 import { provideHttpClient } from '@angular/common/http';
-import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
@@ -36,7 +35,6 @@ bootstrapApplication(AppComponent, {
         key: [StateKey.Grids, StateKey.Tirage, StateKey.Category],
       })
     ),
-    InAppPurchase2,
     InAppPurchaseService,
   ],
 });

@@ -34,6 +34,7 @@ import {
   notifications,
   options,
   pencilOutline,
+  person,
   refresh,
   square,
   squareOutline,
@@ -276,6 +277,7 @@ export const stragies: string[] = [
 
 export const icons = {
   triangle,
+  person,
   ellipse,
   square,
   squareOutline,

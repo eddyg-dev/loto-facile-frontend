@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { InAppPurchase2 } from '@ionic-native/in-app-purchase-2/ngx';
 import { AlertController } from '@ionic/angular';
 import {
   IonButton,
@@ -43,6 +42,9 @@ import { isGridFromPhotoValid } from 'src/app/shared/utils/import.utils';
 import { CategoryState } from 'src/app/store/category/category.state';
 import { AddGridsAction } from 'src/app/store/grids/grids.actions';
 import { MyGridsComponent } from '../my-grids/my-grids.component';
+
+import 'cordova-plugin-purchase';
+declare var CdvPurchase: any;
 
 @Component({
   selector: 'app-import-file',
@@ -84,7 +86,6 @@ export class ImportAIComponent {
   private readonly store = inject(Store);
   private readonly purchaseService = inject(InAppPurchaseService);
   private readonly openAiService = inject(OpenAiService);
-  private readonly iap = inject(InAppPurchase2);
   tempGrids: Grid[] = [];
   isImporting = false;
 
@@ -125,9 +126,9 @@ export class ImportAIComponent {
   public async selectPhoto(): Promise<void> {
     const photo = await Camera.getPhoto({
       quality: 90,
-      allowEditing: true,
+      allowEditing: false,
       resultType: CameraResultType.Base64,
-      source: CameraSource.Photos,
+      source: CameraSource.Prompt,
     });
 
     const base64Image = photo.base64String as string;
@@ -175,7 +176,7 @@ export class ImportAIComponent {
         },
         {
           text: 'Oui',
-          role: 'cancel',
+          handler: () => this.purchaseService.upgradeToPremium(),
         },
       ],
     });
@@ -186,7 +187,6 @@ export class ImportAIComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
-
       // Vérification de la taille du fichier
       const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 20MB
       if (file.size > maxSizeInBytes) {
@@ -274,33 +274,5 @@ export class ImportAIComponent {
       isCartonPlein: false,
       categoryId: this.categoryId ?? '',
     };
-  }
-
-  private async purchaseSubscription(): Promise<void> {
-    try {
-      const product =
-        this.iap.products.byId[this.purchaseService.premiumProductId]; // Récupérer le produit
-
-      if (product) {
-        const purchase = await this.iap.order(
-          this.purchaseService.premiumProductId
-        ); // Démarrer l'achat
-
-        // Gestion du succès de l'achat
-        await purchase
-          .then(async () => {
-            await this.purchaseService.setPremiumAccess(true); // Activer l'accès premium
-          })
-          .catch((err: any) => {
-            console.error("Erreur lors de l'achat", err);
-          }); // Finaliser l'achat
-        console.log('Achat réussi', purchase);
-      } else {
-        alert('Produit non trouvé.');
-      }
-    } catch (error) {
-      console.error("Erreur lors de l'achat", error);
-      alert("Une erreur s'est produite lors de l'achat. Veuillez réessayer.");
-    }
   }
 }

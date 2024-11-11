@@ -15,18 +15,7 @@
       ></ion-icon>
       <ion-label>Le Dico Loto </ion-label>
     </ion-item>
-    <ion-list-header mode="ios">Options</ion-list-header>
-    <!-- <ion-item>
-      <ion-icon
-        color="primary"
-        aria-hidden="true"
-        name="notifications"
-        slot="start"
-      ></ion-icon>
-      <ion-toggle>
-        <ion-label>Notifications</ion-label>
-      </ion-toggle>
-    </ion-item> -->
+    <ion-list-header mode="ios">Données</ion-list-header>
     <ion-item>
       <ion-icon
         color="primary"
@@ -71,6 +60,23 @@
       <ion-button fill="outline" (click)="sendMail()">
         <ion-icon name="mail-outline" />
       </ion-button>
+    </ion-item>
+    <ion-list-header mode="ios">Profil</ion-list-header>
+    <ion-item>
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="person"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Votre profil</ion-label>
+      @if (isPremium | async) {
+      <ion-button color="success" (click)="upgradeToPremium()"
+        >PREMIUM</ion-button
+      >
+      } @else {
+      <ion-button color="secondary">BASIC</ion-button>
+      }
     </ion-item>
   </ion-list>
 </ion-content>
