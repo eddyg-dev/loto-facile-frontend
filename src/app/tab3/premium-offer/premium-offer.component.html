@@ -1,0 +1,81 @@
+<ion-header mode="ios">
+  <ion-toolbar mode="ios" class="ion-no-border">
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="close()">Retour</ion-button>
+    </ion-buttons>
+    <ion-title>Premium</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding" [fullscreen]="true">
+  <!-- Section de présentation -->
+  <div class="premium-header ion-text-center">
+    <ion-icon name="star" color="warning" style="font-size: 48px"></ion-icon>
+    <h1>Découvrez les Fonctionnalités Premium</h1>
+    <p>
+      Boostez votre expérience et gagnez du temps grâce à des outils avancés.
+    </p>
+  </div>
+
+  <!-- Liste des fonctionnalités -->
+  <ion-list lines="none">
+    <ion-item>
+      <ion-icon slot="start" name="camera-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h2>Importez depuis une photo</h2>
+        <p>
+          Analysez automatiquement plusieurs cartons à partir d'une simple
+          photo.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon
+        slot="start"
+        name="document-attach-outline"
+        color="secondary"
+      ></ion-icon>
+      <ion-label>
+        <h2>Importez des fichiers</h2>
+        <p>
+          Chargez vos fichiers (PDF, CSV, XLSX) pour une importation rapide et
+          précise.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="rocket-outline" color="success"></ion-icon>
+      <ion-label>
+        <h2>Analyse IA avancée</h2>
+        <p>
+          Optimisez vos données grâce à une intelligence artificielle
+          performante.
+        </p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon slot="start" name="sparkles-outline" color="medium"></ion-icon>
+      <ion-label>
+        <h2>Nouvelles fonctionnalités Premium</h2>
+        <p>Profitez en avant-première des nouvelles fonctionnalités Premium.</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <!-- Section CTA -->
+  <div class="cta-section ion-text-center">
+    <ion-button
+      expand="block"
+      size="large"
+      color="primary"
+      (click)="upgradeToPremium()"
+    >
+      <ion-icon slot="start" name="gift-outline"></ion-icon>
+      Essayer gratuitement pendant 1 mois
+    </ion-button>
+    <p>Pas d'engagement, résiliez à tout moment.</p>
+  </div>
+</ion-content>

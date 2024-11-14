@@ -1,5 +1,6 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { Browser } from '@capacitor/browser';
 import {
   AlertController,
   IonButton,
@@ -26,6 +27,7 @@ import { ResetCategoriesAction } from '../store/category/category.actions';
 import { DeleteAllGridsAction } from '../store/grids/grids.actions';
 import { ClearTirageAction } from '../store/tirage/tirage.actions';
 import { DicoLotoComponent } from './dico-loto/dico-loto.component';
+import { PremiumOfferComponent } from './premium-offer/premium-offer.component';
 
 @Component({
   selector: 'app-tab3',
@@ -53,11 +55,14 @@ import { DicoLotoComponent } from './dico-loto/dico-loto.component';
 })
 export class Tab3Page {
   private store = inject(Store);
+
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
   private purchaseService = inject(InAppPurchaseService);
 
   public isPremium = this.purchaseService.isPremiumUser$;
+
+  public contactEmail = environment.email;
 
   public version = environment.version;
 
@@ -92,19 +97,35 @@ export class Tab3Page {
     await modal.present();
   }
 
-  public openFacebookPage(): void {
-    // console.log('openFacebookPage');
+  public async openFacebookPage(): Promise<void> {
+    await Browser.open({
+      url: environment.facebookPageUrl,
+    });
   }
 
-  public sendMail(): void {
-    // console.log('sendMail');
+  public async openWhatsapp(): Promise<void> {
+    const message = 'Bonjour, j’ai une question concernant votre application !';
+    const url = `${environment.whatsappUrl}?text=${message}`;
+    await Browser.open({ url });
   }
 
   public unsubscribe(): void {
     // CdvPurchase.store.cancel();
   }
 
-  public upgradeToPremium(): void {
-    this.purchaseService.upgradeToPremium();
+  public async clickOnFormula(): Promise<void> {
+    if (this.purchaseService.isPremiumUser$.value) {
+      const modal = await this.modalController.create({
+        animated: true,
+        component: PremiumOfferComponent,
+      });
+      await modal.present();
+    } else {
+      const modal = await this.modalController.create({
+        animated: true,
+        component: PremiumOfferComponent,
+      });
+      await modal.present();
+    }
   }
 }

@@ -1,6 +1,54 @@
-<!-- <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
-<ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
-<ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
-<ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
-<ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text> -->
-<ion-spinner name="lines-sharp" />
+<svg
+  width="200"
+  height="200"
+  viewBox="0 0 400 400"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Boules du boulier -->
+  <g id="balls">
+    <circle cx="160" cy="150" r="15" fill="#ff9999" />
+    <circle cx="200" cy="150" r="15" fill="#99ccff" />
+    <circle cx="240" cy="150" r="15" fill="#ffff99" />
+    <circle cx="160" cy="200" r="15" fill="#99ff99" />
+    <circle cx="200" cy="200" r="15" fill="#ffcc99" />
+    <circle cx="240" cy="200" r="15" fill="#cc99ff" />
+  </g>
+
+  <!-- Animation -->
+  <style>
+    @keyframes bounce {
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(25px);
+      }
+    }
+
+    #balls circle:nth-child(1) {
+      animation: bounce 0.6s infinite ease-in-out;
+      animation-delay: 0s;
+    }
+    #balls circle:nth-child(2) {
+      animation: bounce 0.6s infinite ease-in-out;
+      animation-delay: 0.1s;
+    }
+    #balls circle:nth-child(3) {
+      animation: bounce 0.6s infinite ease-in-out;
+      animation-delay: 0.2s;
+    }
+    #balls circle:nth-child(4) {
+      animation: bounce 0.6s infinite ease-in-out;
+      animation-delay: 0.3s;
+    }
+    #balls circle:nth-child(5) {
+      animation: bounce 0.6s infinite ease-in-out;
+      animation-delay: 0.4s;
+    }
+    #balls circle:nth-child(6) {
+      animation: bounce 0.6s infinite ease-in-out;
+      animation-delay: 0.5s;
+    }
+  </style>
+</svg>

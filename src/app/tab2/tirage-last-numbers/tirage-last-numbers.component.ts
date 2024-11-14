@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewChecked,
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   Signal,
-  computed,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Select } from '@ngxs/store';
@@ -18,13 +19,26 @@ import { TirageState } from 'src/app/store/tirage/tirage.state';
   styleUrl: './tirage-last-numbers.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TirageLastNumbersComponent {
+export class TirageLastNumbersComponent implements AfterViewChecked {
   @Select(TirageState.getTirageNumbers)
   tirageNumbers$!: Observable<number[]>;
 
-  private tirageNumbersSignal: Signal<number[] | undefined> = toSignal(
+  public tirageNumbersSignal: Signal<number[] | undefined> = toSignal(
     this.tirageNumbers$
   );
 
-  lastTirageNumber = computed(() => this.tirageNumbersSignal()?.slice(-7));
+  constructor(private elementRef: ElementRef) {}
+
+  ngAfterViewChecked() {
+    this.scrollToRight();
+  }
+
+  private scrollToRight(): void {
+    try {
+      const element = this.elementRef.nativeElement;
+      element.scrollLeft = element.scrollWidth;
+    } catch (err) {
+      console.error('Erreur lors du défilement:', err);
+    }
+  }
 }

@@ -1,15 +1,22 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
-import { RouteReuseStrategy, provideRouter } from '@angular/router';
+import { provideRouter, RouteReuseStrategy } from '@angular/router';
 import {
   IonicRouteStrategy,
   provideIonicAngular,
 } from '@ionic/angular/standalone';
 
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HttpEvent,
+  HttpHandlerFn,
+  HttpRequest,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { AppComponent } from './app/app.component';
 import { routes } from './app/app.routes';
 import { StateKey } from './app/data/enum/state-key.enum';
@@ -27,7 +34,7 @@ bootstrapApplication(AppComponent, {
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptors([apiKeyInterceptor])),
     importProvidersFrom(
       NgxsModule.forRoot([GridState, TirageState, CategoryState]),
       NgxsReduxDevtoolsPluginModule.forRoot(),
@@ -38,3 +45,14 @@ bootstrapApplication(AppComponent, {
     InAppPurchaseService,
   ],
 });
+
+export function apiKeyInterceptor(
+  req: HttpRequest<unknown>,
+  next: HttpHandlerFn
+): Observable<HttpEvent<unknown>> {
+  const apiKey = environment.apiKey;
+  const clonedReq = req.clone({
+    headers: req.headers.set('x-api-key', apiKey),
+  });
+  return next(clonedReq);
+}

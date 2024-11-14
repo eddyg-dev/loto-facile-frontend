@@ -17,11 +17,34 @@
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
+  <div class="premium-info ion-text-center">
+    @if (!tempGrids.length) {
+    <ion-icon name="star" color="warning" style="font-size: 24px"></ion-icon>
+    <p>
+      Ces fonctionnalités <strong>Premium</strong> vous permettent d'importer
+      automatiquement plusieurs cartons à partir d'une <strong>photo</strong> ou
+      d'un <strong>fichier</strong>. Gagnez du temps et assurez-vous d'une
+      analyse rapide et précise.
+    </p>
+    } @else {
+    <p>
+      Seuls les cartons bien détectés par l'IA sont visibles.
+      <br />
+      Veuillez bien vérifier les cartons avant de valider.
+    </p>
+    <p>
+      Si des cartons sont mal détectés, vous pouvez toujours les ajouter ou
+      modifier manuellement.
+      <br />
+    </p>
+    }
+  </div>
   <ion-grid>
     <ion-row>
       <!-- Bloc pour Prendre une photo -->
       <ion-col size="6">
         <ion-button
+          [disabled]="isImporting()"
           expand="block"
           size="large"
           color="primary"
@@ -30,7 +53,7 @@
         >
           <div class="button-content">
             <ion-icon name="camera-outline" style="font-size: 48px"></ion-icon>
-            <span class="button-label">Prendre une photo</span>
+            <span class="button-label">Prendre ou choisir une photo</span>
           </div>
         </ion-button>
       </ion-col>
@@ -38,10 +61,11 @@
       <!-- Bloc pour Importer un fichier -->
       <ion-col size="6">
         <ion-button
+          [disabled]="isImporting()"
           expand="block"
           size="large"
           color="secondary"
-          (click)="fileInput.click()"
+          (click)="onFileInputClick()"
           class="button-block"
         >
           <div class="button-content">
@@ -59,7 +83,7 @@
         <input
           type="file"
           accept=".pdf, .csv, .xlsx, image/*"
-          (change)="onFileSelectedPremium($event)"
+          (change)="onFileSelected($event)"
           hidden
           #fileInput
         />
@@ -67,28 +91,16 @@
     </ion-row>
   </ion-grid>
 
-  @if (isImporting) {
-
-  <ion-skeleton-text
-    [animated]="true"
-    style="width: 100%; height: 50px"
-  ></ion-skeleton-text>
-  <ion-skeleton-text
-    [animated]="true"
-    style="width: 100%; height: 50px"
-  ></ion-skeleton-text>
+  @if (isImporting()) {
+  <app-page-loader />
   <div class="ion-text-center">Analyse IA du fichier en cours</div>
   <div class="ion-text-center">Veuillez patienter...</div>
-  <ion-skeleton-text
-    [animated]="true"
-    style="width: 100%; height: 50px"
-  ></ion-skeleton-text>
-  <ion-skeleton-text
-    [animated]="true"
-    style="width: 100%; height: 50px"
-  ></ion-skeleton-text>
-  } @if (tempGrids.length) {
+  <div class="ion-text-center">
+    Ce processus peut prendre quelques secondes...
+  </div>
+  <app-page-loader />
 
+  } @if (tempGrids.length && !isImporting()) {
   <ion-item>
     <ion-label>Catégorie</ion-label>
     <ion-select
@@ -106,6 +118,10 @@
       </ion-select-option>
     </ion-select>
   </ion-item>
+  <ion-button (click)="openSaveCategoryModal()" size="small">
+    <ion-icon slot="start" name="add"></ion-icon>
+    AJOUTER UNE CATEGORIE
+  </ion-button>
   <div class="parent">
     @for (grid of tempGrids; track $index) {
     <app-grid-full

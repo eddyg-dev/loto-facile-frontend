@@ -27,6 +27,9 @@
     <ion-badge [color]="gridFull?.isCartonPlein ? 'success' : 'danger'">
       3Q
     </ion-badge>
+    <ion-badge color="warning">
+      {{ gridFull?.remainingNumbers }} restants
+    </ion-badge>
   </div>
   } @for (row of [0, 1, 2]; track indexRow; let indexRow = $index) {
   <div class="row">

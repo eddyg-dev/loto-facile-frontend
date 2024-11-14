@@ -26,6 +26,21 @@
       <ion-label>Données par défaut</ion-label>
       <ion-button (click)="resetAllDatas()">Reset</ion-button>
     </ion-item>
+    <ion-list-header mode="ios">Profil</ion-list-header>
+    <ion-item [button]="true" (click)="clickOnFormula()">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="person"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Votre formule</ion-label>
+      @if (isPremium | async) {
+      <ion-button color="success">PREMIUM</ion-button>
+      } @else {
+      <ion-button color="secondary">BASIC</ion-button>
+      }
+    </ion-item>
     <ion-list-header mode="ios">A propos</ion-list-header>
     <ion-item>
       <ion-icon
@@ -57,26 +72,15 @@
       <ion-button fill="outline" (click)="openFacebookPage()">
         <ion-icon name="logo-facebook" />
       </ion-button>
-      <ion-button fill="outline" (click)="sendMail()">
+      <ion-button
+        href="mailto:{{contactEmail}}?subject=Support%20LotoFacile&body=Bonjour%2C%20j%27ai%20une%20question%20concernant%20votre%20application."
+        fill="outline"
+      >
         <ion-icon name="mail-outline" />
       </ion-button>
-    </ion-item>
-    <ion-list-header mode="ios">Profil</ion-list-header>
-    <ion-item>
-      <ion-icon
-        color="primary"
-        aria-hidden="true"
-        name="person"
-        slot="start"
-      ></ion-icon>
-      <ion-label>Votre profil</ion-label>
-      @if (isPremium | async) {
-      <ion-button color="success" (click)="upgradeToPremium()"
-        >PREMIUM</ion-button
-      >
-      } @else {
-      <ion-button color="secondary">BASIC</ion-button>
-      }
+      <ion-button fill="outline" (click)="openWhatsapp()">
+        <ion-icon name="logo-whatsapp" />
+      </ion-button>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -2,7 +2,16 @@
   display: flex;
   flex-wrap: nowrap;
   overflow: scroll;
-  margin: 2rem 0;
+  margin: 1rem 0;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  -ms-overflow-x: hidden;
+  scrollbar-width: none;
 
   .tirage-number {
     font-weight: bold;

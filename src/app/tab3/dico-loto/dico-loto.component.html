@@ -7,14 +7,14 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-accordion-group>
-    <ion-accordion value="first">
+  <ion-accordion-group [value]="['expressions']">
+    <ion-accordion value="expressions">
       <ion-item slot="header" color="light">
         <ion-label>Les expressions par numéro</ion-label>
       </ion-item>
       <div class="ion-padding" slot="content">
         @for (dicoNumber of dicoNumbers; track $index) {
-        <ion-item class="animate__animated animate__bounceIn" [button]="true">
+        <ion-item class="animate__animated animate__bounceIn">
           <ion-label>
             <h2>{{ $index + 1 }}</h2>
             <p>{{ dicoNumber }}</p>

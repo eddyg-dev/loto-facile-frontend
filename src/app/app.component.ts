@@ -1,11 +1,6 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  AlertController,
-  IonApp,
-  IonRouterOutlet,
-  Platform,
-} from '@ionic/angular/standalone';
+import { IonApp, IonRouterOutlet, Platform } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { icons } from './data/constants/app.constants';
 import { InAppPurchaseService } from './shared/services/in-app-purchase.service';
@@ -20,15 +15,11 @@ declare var CdvPurchase: any;
   imports: [IonApp, IonRouterOutlet],
 })
 export class AppComponent {
-  isPremiumUser: boolean = false;
   store?: CdvPurchase.Store;
 
-  // products: IAPProduct[] = [];
   constructor(
     private platform: Platform,
-    private alertController: AlertController,
-    private purchaseService: InAppPurchaseService,
-    private ref: ChangeDetectorRef
+    private purchaseService: InAppPurchaseService
   ) {
     addIcons(icons);
     this.setPremiumAccess(false);
@@ -48,19 +39,10 @@ export class AppComponent {
           },
         ]);
 
-        this.store?.products.forEach((product: any) => {
-          console.log(`Product ID: ${product.id}`);
-          console.log(`Owned: ${product.owned}`);
-          console.log(`Title: ${product.title}`);
-        });
-
         this.store
           .when()
-          .productUpdated(() => {
-            console.log('productUpdated');
-          })
+          .productUpdated(() => {})
           .approved((transaction) => {
-            console.log('approved', transaction);
             if (
               transaction.products.find(
                 (p: any) => p.id === this.purchaseService.premiumProductId
@@ -71,24 +53,18 @@ export class AppComponent {
             transaction.verify();
           })
           .verified((receipt) => {
-            console.log('verified', receipt);
             receipt.finish();
           });
 
         this.store
           .initialize([CdvPurchase.Platform.GOOGLE_PLAY])
-          .then(() => {
-            // console.log('store products', JSON.stringify(this.store?.products));
-          })
-          .catch((err: any) => {
-            // console.error('store initialize error', err);
-          });
+          .then(() => {})
+          .catch((err: any) => {});
       }
     });
   }
 
   private async setPremiumAccess(isPremium: boolean) {
-    console.log('setPremiumAccess', isPremium);
     await this.purchaseService.setPremiumAccess(isPremium);
   }
 }

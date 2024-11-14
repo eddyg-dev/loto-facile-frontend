@@ -27,6 +27,7 @@ import {
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { CategoryColor } from 'src/app/data/enum/category-color.enum';
+import { TirageType } from 'src/app/data/enum/tirage-type.enum';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { GridFull, TirageNumber } from 'src/app/data/models/grid-full';
@@ -58,12 +59,33 @@ export class GridFullComponent implements OnInit, OnChanges {
     if (changes['isSelectableForEdit']) {
       this.ngOnInit();
     }
+    if (changes['tirageType']) {
+      this.tirageNumbers$.subscribe((tirageNumbers) => {
+        this.gridFull = gridToGridFull(
+          this.grid,
+          tirageNumbers,
+          this.tirageType
+        );
+
+        const newGrid = {
+          ...this.grid,
+          isQuine: this.gridFull.isQuine,
+          isDoubleQuine: this.gridFull.isDoubleQuine,
+          isCartonPlein: this.gridFull.isCartonPlein,
+          remainingNumbers: this.gridFull.remainingNumbers,
+        };
+
+        this.store.dispatch(new EditGridAction(newGrid));
+        this.cd$.detectChanges();
+      });
+    }
   }
   private readonly store = inject(Store);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef$ = inject(DestroyRef);
   private readonly cd$ = inject(ChangeDetectorRef);
   @Input() public grid!: Grid;
+  @Input() public tirageType!: TirageType;
   @Input({ required: true }) public isSelectableForPlay!: boolean;
   @Input() public isSelectableForEdit?: boolean;
   @Input({ required: true }) public isEditable!: boolean;
@@ -94,27 +116,6 @@ export class GridFullComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     this.isTirageInProgess = !this.isSelectableForPlay && !this.isEditable;
-    if (this.isTirageInProgess || this.displayBadges) {
-      this.tirageNumbers$
-        .pipe(takeUntilDestroyed(this.destroyRef$))
-        .subscribe((tirageNumbers) => {
-          this.gridFull = gridToGridFull(this.grid, tirageNumbers);
-          const newGrid = {
-            ...this.grid,
-            isQuine: this.gridFull.isQuine,
-            isDoubleQuine: this.gridFull.isDoubleQuine,
-            isCartonPlein: this.gridFull.isCartonPlein,
-          };
-
-          this.store.dispatch(
-            new EditGridAction({
-              ...newGrid,
-            })
-          );
-          this.cd$.detectChanges();
-        });
-    }
-    this.gridFull = gridToGridFull(this.grid);
 
     if (this.isSelectableForPlay) {
       this.formGroup.patchValue({

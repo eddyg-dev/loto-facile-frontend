@@ -29,6 +29,7 @@ import {
   logoFacebook,
   logoInstagram,
   logoTiktok,
+  logoWhatsapp,
   mail,
   mailOutline,
   notifications,
@@ -36,6 +37,8 @@ import {
   pencilOutline,
   person,
   refresh,
+  rocketOutline,
+  sparklesOutline,
   square,
   squareOutline,
   squareSharp,
@@ -276,6 +279,9 @@ export const stragies: string[] = [
 ];
 
 export const icons = {
+  logoWhatsapp,
+  rocketOutline,
+  sparklesOutline,
   triangle,
   person,
   ellipse,

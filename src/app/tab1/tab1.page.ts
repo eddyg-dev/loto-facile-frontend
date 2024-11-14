@@ -188,11 +188,12 @@ export class Tab1Page {
         //   },
         // },
         {
-          text: 'Photo ou Fichier (IA)',
+          text: 'Photo ou Fichier (IA) [Premium]',
           icon: 'diamond-outline',
           handler: () => {
             this.openImportPhoto();
           },
+          cssClass: 'premium-option', // Ajouter une classe pour un style distinct
         },
         {
           text: 'Manuellement',
@@ -224,6 +225,9 @@ export class Tab1Page {
       component: ImportAIComponent,
     });
     modal.present();
+    modal.onDidDismiss().then(() => {
+      this.cd$.detectChanges();
+    });
   }
 
   public async editGrid(grid: Grid): Promise<void> {
@@ -255,6 +259,7 @@ export class Tab1Page {
           text: 'Oui',
           handler: () => {
             this.store.dispatch(new DeleteGridAction(grid.id!));
+            this.cd$.detectChanges();
           },
         },
       ],

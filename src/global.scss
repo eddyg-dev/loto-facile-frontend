@@ -163,3 +163,14 @@ ion-tab-bar {
 .justify-center {
   justify-content: center;
 }
+
+.premium-option {
+  color: var(--ion-color-success) !important;
+}
+
+.premium-option::after {
+  content: " ★";
+  color: var(--ion-color-warning);
+  font-size: 12px;
+  vertical-align: middle;
+}

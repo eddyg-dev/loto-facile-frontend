@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
   OnInit,
@@ -73,6 +74,7 @@ import { v4 as guid } from 'uuid';
 export class SaveGridComponent implements OnInit {
   private readonly store = inject(Store);
   private readonly modalController = inject(ModalController);
+  private readonly cdr = inject(ChangeDetectorRef);
   @Input() grid?: Grid;
 
   public categories$: Observable<Category[]> = this.store.select(
@@ -131,6 +133,7 @@ export class SaveGridComponent implements OnInit {
       this.store.dispatch(new AddGridsAction([{ ...newGrid, id: guid() }]));
     }
     this.close(newGrid);
+    this.cdr.detectChanges();
   }
 
   private createGrid(): Grid {

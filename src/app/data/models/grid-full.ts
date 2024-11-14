@@ -14,6 +14,7 @@ export interface GridFull {
   isQuine: boolean;
   isDoubleQuine: boolean;
   isCartonPlein: boolean;
+  remainingNumbers: number;
 }
 
 export interface TirageNumber {

@@ -8,6 +8,7 @@ import {
   Output,
   Signal,
   inject,
+  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -26,6 +27,7 @@ import {
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { TirageType } from 'src/app/data/enum/tirage-type.enum';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
@@ -64,7 +66,9 @@ export class MyGridsComponent {
   private readonly store = inject(Store);
   private readonly cd = inject(ChangeDetectorRef);
   private _grids!: Grid[];
-  public isLoading = false;
+  public isLoading = signal(false);
+
+  @Input() public tirageType!: TirageType;
   @Output() public editGridEvent = new EventEmitter<Grid>();
   @Output() public deleteGridEvent = new EventEmitter<Grid>();
 
@@ -95,7 +99,11 @@ export class MyGridsComponent {
 
   private setGridsByCategory(grids: Grid[]) {
     this.gridsByCategorie = {};
-    grids.forEach((grid) => {
+    const sortedGrids = grids.sort((a, b) => {
+      return (a as any).remainingNumbers - (b as any).remainingNumbers;
+    });
+
+    sortedGrids.forEach((grid) => {
       if (!this.gridsByCategorie[grid.categoryId]) {
         this.gridsByCategorie[grid.categoryId] = [grid];
       } else {
@@ -111,7 +119,7 @@ export class MyGridsComponent {
 
   public selectAllCategoryChange(isChecked: boolean, id: string): void {
     if (this.isSelectableForPlay || this.isSelectableForEdit) {
-      this.isLoading = true;
+      this.isLoading.set(true);
       this.gridsByCategorie[id].forEach((grid) => {
         this.store.dispatch(
           new EditGridAction({
@@ -122,7 +130,7 @@ export class MyGridsComponent {
         );
       });
       setTimeout(() => {
-        this.isLoading = false;
+        this.isLoading.set(false);
         this.cd.detectChanges();
       }, 500);
     }

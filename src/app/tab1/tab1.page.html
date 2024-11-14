@@ -39,17 +39,19 @@
   <ion-item>
     <ion-button
       (click)="editGrids('delete')"
+      color="secondary"
       [disabled]="!selectedGrids()?.length"
     >
       <ion-icon slot="start" name="trash"></ion-icon>
-      SUPPRIMER
+      Supprimer
     </ion-button>
     <ion-button
       (click)="editGrids('move')"
+      color="tertiary"
       [disabled]="!selectedGrids()?.length"
     >
       <ion-icon slot="start" name="arrow-redo"></ion-icon>
-      DEPLACER
+      Déplacer
     </ion-button>
   </ion-item>
   } @if (grids$ |async; as grids) { @if (!isLoading) {

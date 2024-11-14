@@ -221,5 +221,5 @@ export function isGridFromPhotoValid(
 }
 
 export function getAllNumbers(quines: number[][]): number[] {
-  return quines.reduce((acc, current) => acc.concat(current), []);
+  return quines ? quines.reduce((acc, current) => acc.concat(current), []) : [];
 }

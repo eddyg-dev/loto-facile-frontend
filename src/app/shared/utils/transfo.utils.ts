@@ -1,3 +1,4 @@
+import { TirageType } from 'src/app/data/enum/tirage-type.enum';
 import { Grid } from 'src/app/data/models/grid';
 import {
   GridFull,
@@ -5,7 +6,11 @@ import {
   TirageNumber,
 } from 'src/app/data/models/grid-full';
 
-export function gridToGridFull(grid: Grid, tirageNumbers?: number[]): GridFull {
+export function gridToGridFull(
+  grid: Grid,
+  tirageNumbers?: number[],
+  tirageType?: TirageType
+): GridFull {
   const gridNumbers: GridFullNumber[] = [];
   grid.quines.forEach((quine, index) => {
     quine.forEach((tirageNumber) => {
@@ -36,6 +41,70 @@ export function gridToGridFull(grid: Grid, tirageNumbers?: number[]): GridFull {
   const isDoubleQuine =
     (isQuine1 && isQuine2) || (isQuine2 && isQuine3) || (isQuine1 && isQuine3);
   const isCartonPlein = isQuine1 && isQuine2 && isQuine3;
+
+  let remainingNumbers = 0;
+  if (tirageType) {
+    switch (tirageType) {
+      case TirageType.Quine:
+        if (!isQuine) {
+          const numbersInQuine1 = getNumbersInQuine(matrix[0]);
+          const numbersInQuine2 = getNumbersInQuine(matrix[1]);
+          const numbersInQuine3 = getNumbersInQuine(matrix[2]);
+
+          const drawedInQuine1 = getDrawedNumbersCount([matrix[0]]);
+          const drawedInQuine2 = getDrawedNumbersCount([matrix[1]]);
+          const drawedInQuine3 = getDrawedNumbersCount([matrix[2]]);
+
+          const remainingByQuine = [
+            numbersInQuine1 - drawedInQuine1,
+            numbersInQuine2 - drawedInQuine2,
+            numbersInQuine3 - drawedInQuine3,
+          ];
+
+          remainingNumbers = Math.min(...remainingByQuine.filter((n) => n > 0));
+        }
+        break;
+
+      case TirageType.Double_Quine:
+        if (!isDoubleQuine) {
+          const completedQuines = [isQuine1, isQuine2, isQuine3].filter(
+            (q) => q
+          ).length;
+          const remainingByQuine = [
+            getNumbersInQuine(matrix[0]) - getDrawedNumbersCount([matrix[0]]),
+            getNumbersInQuine(matrix[1]) - getDrawedNumbersCount([matrix[1]]),
+            getNumbersInQuine(matrix[2]) - getDrawedNumbersCount([matrix[2]]),
+          ];
+
+          if (completedQuines === 1) {
+            remainingNumbers = Math.min(
+              ...remainingByQuine.filter((n) => n > 0)
+            );
+          } else {
+            const sortedRemaining = remainingByQuine
+              .filter((n) => n > 0)
+              .sort((a, b) => a - b);
+            remainingNumbers =
+              sortedRemaining.length >= 2
+                ? sortedRemaining[0] + sortedRemaining[1]
+                : sortedRemaining[0] || 0;
+          }
+        }
+        break;
+
+      case TirageType.Carton_Plein:
+        if (!isCartonPlein) {
+          const remainingByQuine = [
+            getNumbersInQuine(matrix[0]) - getDrawedNumbersCount([matrix[0]]),
+            getNumbersInQuine(matrix[1]) - getDrawedNumbersCount([matrix[1]]),
+            getNumbersInQuine(matrix[2]) - getDrawedNumbersCount([matrix[2]]),
+          ];
+          remainingNumbers = remainingByQuine.reduce((a, b) => a + b, 0);
+        }
+        break;
+    }
+  }
+
   let gridFull: GridFull = {
     numero: grid.numero,
     categoryId: grid.categoryId,
@@ -46,6 +115,7 @@ export function gridToGridFull(grid: Grid, tirageNumbers?: number[]): GridFull {
     isQuine,
     isDoubleQuine,
     isCartonPlein,
+    remainingNumbers,
   };
 
   return gridFull;
@@ -70,4 +140,20 @@ export function initMatrix(): TirageNumber[][] {
 
 export function getSpecifiDizaine(number: number): number {
   return number === 90 ? 8 : Math.floor(number / 10);
+}
+
+function getNumbersInQuine(quine: TirageNumber[]): number {
+  return quine.filter((n) => n.number !== 0).length;
+}
+
+function getDrawedNumbersCount(quines: TirageNumber[][]): number {
+  let count = 0;
+  for (const quine of quines) {
+    for (const number of quine) {
+      if (number.number !== 0 && number.isDrawed) {
+        count++;
+      }
+    }
+  }
+  return count;
 }
