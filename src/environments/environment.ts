@@ -10,6 +10,8 @@ export const environment = {
   whatsappUrl: 'https://wa.me/33615173154',
   email: 'eddyg.dev@gmail.com',
   apiKey: '1234567890',
+  playstore:
+    'https://play.google.com/store/apps/details?id=fr.goulan.lotofacile',
 };
 
 /*

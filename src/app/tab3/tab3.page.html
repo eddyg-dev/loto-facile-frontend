@@ -52,7 +52,7 @@
       <ion-label>Version</ion-label>
       <ion-note slot="end">[{{version}}]</ion-note>
     </ion-item>
-    <ion-item [button]="true">
+    <ion-item [button]="true" (click)="evaluateApp()">
       <ion-icon
         color="primary"
         aria-hidden="true"

@@ -14,14 +14,17 @@ export class OpenAiService {
   public analyzeImage(
     base64Image: string
   ): Observable<GridFromImageResponse[]> {
+    console.log(this.baseUrl);
+    
     return this.http.post<GridFromImageResponse[]>(`${this.baseUrl}/analyze`, {
       base64Image,
       fileType: 'image',
     });
   }
-
+  
   // Nouvelle méthode pour l'analyse de fichiers (PDF, CSV, Excel)
   public analyzeFile(formData: FormData): Observable<GridFromImageResponse[]> {
+    console.log(this.baseUrl);
     return this.http.post<GridFromImageResponse[]>(
       `${this.baseUrl}/analyze-file`,
       formData

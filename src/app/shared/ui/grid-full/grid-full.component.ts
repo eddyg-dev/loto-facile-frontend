@@ -59,25 +59,8 @@ export class GridFullComponent implements OnInit, OnChanges {
     if (changes['isSelectableForEdit']) {
       this.ngOnInit();
     }
-    if (changes['tirageType']) {
-      this.tirageNumbers$.subscribe((tirageNumbers) => {
-        this.gridFull = gridToGridFull(
-          this.grid,
-          tirageNumbers,
-          this.tirageType
-        );
-
-        const newGrid = {
-          ...this.grid,
-          isQuine: this.gridFull.isQuine,
-          isDoubleQuine: this.gridFull.isDoubleQuine,
-          isCartonPlein: this.gridFull.isCartonPlein,
-          remainingNumbers: this.gridFull.remainingNumbers,
-        };
-
-        this.store.dispatch(new EditGridAction(newGrid));
-        this.cd$.detectChanges();
-      });
+    if (changes['tirageType'] || changes['grid']) {
+      this.updateGridFull();
     }
   }
   private readonly store = inject(Store);
@@ -115,6 +98,8 @@ export class GridFullComponent implements OnInit, OnChanges {
   });
 
   public ngOnInit(): void {
+    console.log('this.grid ', this.grid);
+
     this.isTirageInProgess = !this.isSelectableForPlay && !this.isEditable;
 
     if (this.isSelectableForPlay) {
@@ -157,5 +142,22 @@ export class GridFullComponent implements OnInit, OnChanges {
 
   public getCategory(id: string): Category | undefined {
     return this.categoriesSignal()?.find((c) => id === c.id);
+  }
+
+  private updateGridFull(): void {
+    this.tirageNumbers$.subscribe((tirageNumbers) => {
+      this.gridFull = gridToGridFull(this.grid, tirageNumbers, this.tirageType);
+
+      const newGrid = {
+        ...this.grid,
+        isQuine: this.gridFull.isQuine,
+        isDoubleQuine: this.gridFull.isDoubleQuine,
+        isCartonPlein: this.gridFull.isCartonPlein,
+        remainingNumbers: this.gridFull.remainingNumbers,
+      };
+
+      this.store.dispatch(new EditGridAction(newGrid));
+      this.cd$.detectChanges();
+    });
   }
 }

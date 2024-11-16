@@ -177,6 +177,7 @@ export class ImportAIComponent {
       },
       (err: any) => {
         this.presentToast(Message.Import_Error);
+        console.log(err);
         this.isImporting.set(false);
         this.cdr.markForCheck();
       }
@@ -267,9 +268,8 @@ export class ImportAIComponent {
           this.cdr.markForCheck();
         },
         (err: any) => {
-          this.presentToast(
-            "Une erreur est survenue lors de l'analyse du fichier"
-          );
+          this.presentToast(Message.Import_Error);
+          console.log(err);
           this.isImporting.set(false);
           this.cdr.markForCheck();
         }
@@ -313,6 +313,7 @@ export class ImportAIComponent {
       if (newTempGrids?.length) {
         this.tempGrids = [...this.tempGrids, ...newTempGrids];
         this.cdr.detectChanges();
+        console.log('this.tempGrids ', this.tempGrids);
       } else {
         this.presentToast(Message.Import_Error);
       }

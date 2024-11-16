@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://192.168.1.25:3000",
+    "target": "https://loto-facile-backend.onrender.com",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

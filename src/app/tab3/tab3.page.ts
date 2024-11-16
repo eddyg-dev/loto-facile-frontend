@@ -128,4 +128,8 @@ export class Tab3Page {
       await modal.present();
     }
   }
+
+  public async evaluateApp(): Promise<void> {
+    await Browser.open({ url: environment.playstore });
+  }
 }
