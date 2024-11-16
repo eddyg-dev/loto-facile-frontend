@@ -23,6 +23,7 @@ import { Store } from '@ngxs/store';
 import { environment } from 'src/environments/environment';
 import { Message } from '../data/enum/message.enum';
 import { InAppPurchaseService } from '../shared/services/in-app-purchase.service';
+import { VersionService } from '../shared/services/version.service';
 import { ResetCategoriesAction } from '../store/category/category.actions';
 import { DeleteAllGridsAction } from '../store/grids/grids.actions';
 import { ClearTirageAction } from '../store/tirage/tirage.actions';
@@ -59,6 +60,7 @@ export class Tab3Page {
   private alertController = inject(AlertController);
   private modalController = inject(ModalController);
   private purchaseService = inject(InAppPurchaseService);
+  private versionService = inject(VersionService);
 
   public isPremium = this.purchaseService.isPremiumUser$;
 
@@ -129,7 +131,7 @@ export class Tab3Page {
     }
   }
 
-  public async evaluateApp(): Promise<void> {
-    await Browser.open({ url: environment.playstore });
+  public async openUpdate(): Promise<void> {
+    await this.versionService.openUpdate();
   }
 }

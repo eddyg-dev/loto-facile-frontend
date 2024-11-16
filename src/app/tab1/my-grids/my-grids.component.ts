@@ -5,8 +5,10 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
   Output,
   Signal,
+  SimpleChanges,
   inject,
   signal,
 } from '@angular/core';
@@ -62,7 +64,12 @@ import { EditGridAction } from 'src/app/store/grids/grids.actions';
   styleUrl: './my-grids.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MyGridsComponent {
+export class MyGridsComponent implements OnChanges {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['grids']) {
+      this.setGridsByCategory(changes['grids'].currentValue);
+    }
+  }
   private readonly store = inject(Store);
   private readonly cd = inject(ChangeDetectorRef);
   private _grids!: Grid[];

@@ -180,13 +180,6 @@ export class Tab1Page {
       header: 'Ajouter un nouveau carton',
       keyboardClose: true,
       buttons: [
-        // {
-        //   text: 'Fichier PDF ou Excel',
-        //   icon: 'document-text-outline',
-        //   handler: () => {
-        //     this.addFileGrid();
-        //   },
-        // },
         {
           text: 'Photo ou Fichier (IA) [Premium]',
           icon: 'diamond-outline',
@@ -227,6 +220,7 @@ export class Tab1Page {
     modal.present();
     modal.onDidDismiss().then(() => {
       this.cd$.detectChanges();
+      console.log('dismissed');
     });
   }
 

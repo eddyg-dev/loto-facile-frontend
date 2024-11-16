@@ -42,6 +42,15 @@
       }
     </ion-item>
     <ion-list-header mode="ios">A propos</ion-list-header>
+    <ion-item [button]="true" (click)="openUpdate()">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="star"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Evaluez-nous</ion-label>
+    </ion-item>
     <ion-item>
       <ion-icon
         color="primary"
@@ -52,15 +61,16 @@
       <ion-label>Version</ion-label>
       <ion-note slot="end">[{{version}}]</ion-note>
     </ion-item>
-    <ion-item [button]="true" (click)="evaluateApp()">
+    <ion-item [button]="true" (click)="openUpdate()" [button]="true">
       <ion-icon
         color="primary"
         aria-hidden="true"
-        name="star"
+        name="refresh"
         slot="start"
       ></ion-icon>
-      <ion-label>Evaluez-nous</ion-label>
+      <ion-label>Mise à jour</ion-label>
     </ion-item>
+    <ion-list-header mode="ios">Contact / Questions / Idées</ion-list-header>
     <ion-item [button]="true">
       <ion-icon
         color="primary"

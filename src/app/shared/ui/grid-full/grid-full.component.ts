@@ -59,7 +59,7 @@ export class GridFullComponent implements OnInit, OnChanges {
     if (changes['isSelectableForEdit']) {
       this.ngOnInit();
     }
-    if (changes['tirageType'] || changes['grid']) {
+    if (changes['tirageType']) {
       this.updateGridFull();
     }
   }
@@ -99,6 +99,7 @@ export class GridFullComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     console.log('this.grid ', this.grid);
+    this.updateGridFull();
 
     this.isTirageInProgess = !this.isSelectableForPlay && !this.isEditable;
 
