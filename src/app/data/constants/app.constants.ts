@@ -23,6 +23,7 @@ import {
   hourglass,
   imageOutline,
   informationCircle,
+  informationCircleOutline,
   keypad,
   library,
   libraryOutline,
@@ -327,4 +328,5 @@ export const icons = {
   diamondOutline,
   documentAttachOutline,
   arrowBackCircleOutline,
+  informationCircleOutline,
 };

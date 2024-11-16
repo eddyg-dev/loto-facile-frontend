@@ -42,42 +42,73 @@
   <ion-grid>
     <ion-row>
       <!-- Bloc pour Prendre une photo -->
-      <ion-col size="6">
-        <ion-button
-          [disabled]="isImporting()"
-          expand="block"
-          size="large"
-          color="primary"
-          (click)="selectPhotoPremium()"
-          class="button-block"
-        >
-          <div class="button-content">
-            <ion-icon name="camera-outline" style="font-size: 48px"></ion-icon>
-            <span class="button-label">Prendre ou choisir une photo</span>
-          </div>
-        </ion-button>
+      <ion-col class="column-info" size="6">
+        <div class="button-container">
+          <ion-button
+            [disabled]="isImporting()"
+            expand="block"
+            size="large"
+            color="primary"
+            (click)="selectPhotoPremium()"
+            class="button-block"
+          >
+            <div class="button-content">
+              <ion-icon
+                name="camera-outline"
+                style="font-size: 48px"
+              ></ion-icon>
+              <span class="button-label">Prendre ou choisir une photo</span>
+            </div>
+          </ion-button>
+          <ion-button
+            class="info-button"
+            fill="clear"
+            size="small"
+            color="light"
+            (click)="presentPhotoInfo()"
+          >
+            <ion-icon
+              name="information-circle-outline"
+              style="font-size: 24px"
+            ></ion-icon>
+          </ion-button>
+        </div>
       </ion-col>
 
       <!-- Bloc pour Importer un fichier -->
-      <ion-col size="6">
-        <ion-button
-          [disabled]="isImporting()"
-          expand="block"
-          size="large"
-          color="secondary"
-          (click)="onFileInputClick()"
-          class="button-block"
-        >
-          <div class="button-content">
+      <ion-col class="column-info" size="6">
+        <div class="button-container">
+          <ion-button
+            [disabled]="isImporting()"
+            expand="block"
+            size="large"
+            color="secondary"
+            (click)="onFileInputClick()"
+            class="button-block"
+          >
+            <div class="button-content">
+              <ion-icon
+                name="document-attach-outline"
+                style="font-size: 48px"
+              ></ion-icon>
+              <span class="button-label"
+                >Importer un fichier (PDF, CSV, XLSX)</span
+              >
+            </div>
+          </ion-button>
+          <ion-button
+            class="info-button"
+            fill="clear"
+            size="small"
+            color="medium"
+            (click)="presentFileInfo()"
+          >
             <ion-icon
-              name="document-attach-outline"
-              style="font-size: 48px"
+              name="information-circle-outline"
+              style="font-size: 24px"
             ></ion-icon>
-            <span class="button-label"
-              >Importer un fichier (PDF, CSV, XLSX)</span
-            >
-          </div>
-        </ion-button>
+          </ion-button>
+        </div>
 
         <!-- Input caché pour le fichier, déclenché par le bouton ci-dessus -->
         <input

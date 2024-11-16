@@ -136,6 +136,7 @@ export class ImportAIComponent {
       this.showPremiumAlert();
     }
   }
+
   // Gestion de la capture d'image avec la caméra
   public async selectPhoto(): Promise<void> {
     const photo = await Camera.getPhoto({
@@ -349,5 +350,37 @@ export class ImportAIComponent {
       initialBreakpoint: 0.7,
     });
     await saveCategoryComponentModal.present();
+  }
+
+  async presentPhotoInfo(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Import par Photo (caméra ou galerie)',
+      message:
+        'Pour un meilleur résultat :\n\n' +
+        '• Prenez la photo dans un environnement bien éclairé\n' +
+        '• Assurez-vous que les cartons soient bien visibles et lisibles\n' +
+        '• Évitez les reflets et les ombres\n' +
+        '• Cadrez au plus près des cartons\n' +
+        '• Vous pouvez importer plusieurs cartons en une seule photo',
+      cssClass: 'custom-alert',
+      buttons: ['Compris'],
+    });
+    await alert.present();
+  }
+
+  async presentFileInfo(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Import de Fichiers',
+      message:
+        'Formats acceptés :\n\n' +
+        '• PDF : document contenant vos cartons\n' +
+        '• CSV : fichier texte avec les numéros séparés par des virgules\n' +
+        '• XLSX : fichier Excel avec vos cartons\n\n' +
+        `Taille maximale : ${this.fileSizeLimit}MB\n\n` +
+        "L'IA analysera automatiquement le contenu pour extraire les cartons.",
+      cssClass: 'custom-alert',
+      buttons: ['Compris'],
+    });
+    await alert.present();
   }
 }

@@ -174,3 +174,9 @@ ion-tab-bar {
   font-size: 12px;
   vertical-align: middle;
 }
+
+.custom-alert {
+  .alert-message {
+    white-space: pre-line !important;
+  }
+}
