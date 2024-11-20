@@ -1,5 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, computed, inject } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import {
@@ -109,87 +116,101 @@ export class Tab2Page implements OnInit {
   public TirageType = TirageType;
   public TirageMode = TirageMode;
 
-  isLoading = false;
-  isDisplayGrids = false;
+  public isLoading = signal(false);
+  public isDisplayGrids = signal(false);
 
   public tirageTypeFormcontrol = this.fb.control(TirageType.Quine);
 
   ionViewDidEnter() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.reinitPage();
     setTimeout(() => {
-      this.isLoading = false;
+      this.isLoading.set(false);
     }, 350);
   }
   public ngOnInit(): void {
+    this.tirageTypeFormcontrol.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe(() => {
+        const tirage = this.store.selectSnapshot(TirageState.getTirageNumbers);
+        if (tirage.length > 0) {
+          const lastNumber = tirage[tirage.length - 1];
+          this.checkWinningGrids(tirage, lastNumber);
+        }
+      });
+
     this.tirageNumbers$
       .pipe(skip(1), delay(250), takeUntilDestroyed(this.destroyRef$))
       .subscribe((tirage) => {
         const lastNumber = tirage[tirage.length - 1];
-        switch (this.tirageTypeFormcontrol.value) {
-          case TirageType.Quine:
-            const winGridsQuine = this.gridsSignal()?.filter(
-              (g) =>
-                g.isSelectedForPlay &&
-                ((g.isQuine && !this.isAlreadyWinFirstQuine(g)) ||
-                  (g.isDoubleQuine && !this.isAlreadyWinSecondQuine(g)) ||
-                  (g.isCartonPlein && !this.isAlreadyWinThirdQuine(g)))
-            );
-
-            if (winGridsQuine?.length) {
-              this.openWinModal(lastNumber, TirageType.Quine, winGridsQuine);
-
-              winGridsQuine.forEach((winGrid) => {
-                if (winGrid.isCartonPlein) {
-                  this.store.dispatch(
-                    new SetWinThirdQuineAction(
-                      winGridsQuine.map((w) => winGrid.id as string)
-                    )
-                  );
-                } else if (winGrid.isDoubleQuine) {
-                  this.store.dispatch(
-                    new SetWinSecondQuineAction(
-                      winGridsQuine.map((w) => winGrid.id as string)
-                    )
-                  );
-                } else if (winGrid.isQuine) {
-                  this.store.dispatch(
-                    new SetWinFirstQuineAction(
-                      winGridsQuine.map((w) => winGrid.id as string)
-                    )
-                  );
-                }
-              });
-            }
-            break;
-          case TirageType.Double_Quine:
-            const winGridsDoubleQuine = this.gridsSignal()?.filter(
-              (g) => g.isSelectedForPlay && g.isDoubleQuine
-            );
-            if (winGridsDoubleQuine?.length) {
-              this.openWinModal(
-                lastNumber,
-                TirageType.Double_Quine,
-                winGridsDoubleQuine
-              );
-            }
-            break;
-          case TirageType.Carton_Plein:
-            const winGridsCartonPlein = this.gridsSignal()?.filter(
-              (g) => g.isSelectedForPlay && g.isCartonPlein
-            );
-            if (winGridsCartonPlein?.length) {
-              this.openWinModal(
-                lastNumber,
-                TirageType.Carton_Plein,
-                winGridsCartonPlein
-              );
-            }
-            break;
-          default:
-            break;
-        }
+        this.checkWinningGrids(tirage, lastNumber);
       });
+  }
+
+  private checkWinningGrids(tirage: number[], lastNumber: number): void {
+    switch (this.tirageTypeFormcontrol.value) {
+      case TirageType.Quine:
+        const winGridsQuine = this.gridsSignal()?.filter(
+          (g) =>
+            g.isSelectedForPlay &&
+            ((g.isQuine && !this.isAlreadyWinFirstQuine(g)) ||
+              (g.isDoubleQuine && !this.isAlreadyWinSecondQuine(g)) ||
+              (g.isCartonPlein && !this.isAlreadyWinThirdQuine(g)))
+        );
+
+        if (winGridsQuine?.length) {
+          this.openWinModal(lastNumber, TirageType.Quine, winGridsQuine);
+
+          winGridsQuine.forEach((winGrid) => {
+            if (winGrid.isCartonPlein) {
+              this.store.dispatch(
+                new SetWinThirdQuineAction(
+                  winGridsQuine.map((w) => winGrid.id as string)
+                )
+              );
+            } else if (winGrid.isDoubleQuine) {
+              this.store.dispatch(
+                new SetWinSecondQuineAction(
+                  winGridsQuine.map((w) => winGrid.id as string)
+                )
+              );
+            } else if (winGrid.isQuine) {
+              this.store.dispatch(
+                new SetWinFirstQuineAction(
+                  winGridsQuine.map((w) => winGrid.id as string)
+                )
+              );
+            }
+          });
+        }
+        break;
+      case TirageType.Double_Quine:
+        const winGridsDoubleQuine = this.gridsSignal()?.filter(
+          (g) => g.isSelectedForPlay && g.isDoubleQuine
+        );
+        if (winGridsDoubleQuine?.length) {
+          this.openWinModal(
+            lastNumber,
+            TirageType.Double_Quine,
+            winGridsDoubleQuine
+          );
+        }
+        break;
+      case TirageType.Carton_Plein:
+        const winGridsCartonPlein = this.gridsSignal()?.filter(
+          (g) => g.isSelectedForPlay && g.isCartonPlein
+        );
+        if (winGridsCartonPlein?.length) {
+          this.openWinModal(
+            lastNumber,
+            TirageType.Carton_Plein,
+            winGridsCartonPlein
+          );
+        }
+        break;
+      default:
+        break;
+    }
   }
 
   private isAlreadyWinFirstQuine(grid: Grid): boolean {
@@ -241,7 +262,7 @@ export class Tab2Page implements OnInit {
   private reinitPage(): void {
     this.store.dispatch(new UnselectAllGridsAction());
     this.store.dispatch(new SetTirageModeAction(TirageMode.INITIAL));
-    this.isDisplayGrids = false;
+    this.isDisplayGrids.set(false);
     // this.showKeyboard = true;
   }
 
@@ -274,7 +295,7 @@ export class Tab2Page implements OnInit {
   ): Promise<void> {
     const modal = await this.modalcontroller.create({
       component: MyGridsModalComponent,
-      showBackdrop: false,
+      showBackdrop: true,
       componentProps: {
         grids: [...gridsToDisplay],
         isSelectable: false,
@@ -287,7 +308,7 @@ export class Tab2Page implements OnInit {
       },
       breakpoints: [0.9],
       initialBreakpoint: 0.9,
-      backdropDismiss: false,
+      backdropDismiss: true,
     });
 
     modal.onDidDismiss().then((res: any) => {

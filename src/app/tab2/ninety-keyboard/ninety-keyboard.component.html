@@ -8,17 +8,16 @@
     Démarquer
   </ion-button>
   }
-  <ion-button size="small" color="danger" fill="outline" (click)="endTirage.emit()">
-    <ion-icon name="hourglass"></ion-icon>
-    Terminer la partie
-  </ion-button>
 </div>
-
-
 
 <div class="keyboard-numbers">
   @for (n of numbers; track $index) {
-  <div class="number" [class.disabled]="isInTirage(n + 1)" [class.last]="isLast(n + 1)" (click)="addTirage(n + 1)">
+  <div
+    class="number"
+    [class.disabled]="isInTirage(n + 1)"
+    [class.last]="isLast(n + 1)"
+    (click)="addTirage(n + 1)"
+  >
     {{ n + 1 }}
   </div>
   }

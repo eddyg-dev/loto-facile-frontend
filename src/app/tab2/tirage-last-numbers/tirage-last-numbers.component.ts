@@ -4,11 +4,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  inject,
   Signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { TirageService } from 'src/app/shared/services/tirage.service';
 import { TirageState } from 'src/app/store/tirage/tirage.state';
 
 @Component({
@@ -20,6 +22,7 @@ import { TirageState } from 'src/app/store/tirage/tirage.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TirageLastNumbersComponent implements AfterViewChecked {
+  private readonly tirageService = inject(TirageService);
   @Select(TirageState.getTirageNumbers)
   tirageNumbers$!: Observable<number[]>;
 
@@ -40,5 +43,9 @@ export class TirageLastNumbersComponent implements AfterViewChecked {
     } catch (err) {
       console.error('Erreur lors du défilement:', err);
     }
+  }
+
+  public deleteNumber(number: number): void {
+    this.tirageService.confirmDeleteNumber(number);
   }
 }

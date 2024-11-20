@@ -4,6 +4,19 @@
   width: auto;
   justify-content: center;
   padding: 0.5rem 0.2rem;
+
+  &.small {
+    zoom: 0.8;
+  }
+  &.medium {
+    zoom: 1;
+  }
+  &.large {
+    zoom: 1.2;
+  }
+  &.extraLarge {
+    zoom: 1.4;
+  }
 }
 
 .title {

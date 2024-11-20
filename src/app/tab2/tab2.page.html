@@ -1,5 +1,17 @@
 <ion-header mode="ios" collapse="fade">
   <ion-toolbar mode="ios" class="ion-no-border">
+    @if ((tirageMode$|async) === TirageMode.IN_PROGRESS) {
+    <ion-buttons slot="start">
+      <ion-button
+        size="small"
+        fill="outline"
+        color="danger"
+        (click)="endTirage()"
+      >
+        Fin de partie <ion-icon name="hourglass"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    }
     <ion-title class="ion-text-center">Tirage </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -15,15 +27,15 @@
   } @else { @if ((tirageMode$|async) === TirageMode.INITIAL) {
   <div class="frame animate__animated animate__zoomIn animate__faster">
     <p>Choisissiez vos cartons pour ce nouveau tirage</p>
-    @if (!isDisplayGrids) {
-    <ion-button size="small" (click)="isDisplayGrids=true">
+    @if (!isDisplayGrids()) {
+    <ion-button size="small" (click)="isDisplayGrids.set(true)">
       Choisir
     </ion-button>
     } @else {
     <ion-button
       size="small"
       (click)="startTirage()"
-      [disabled]="!selectedGrids()?.length"
+      [disabled]="!selectedGrids()?.length || isLoading()"
     >
       Commencer le tirage
     </ion-button>
@@ -32,7 +44,6 @@
   } @else if ((tirageMode$|async) === TirageMode.IN_PROGRESS) {
 
   <!-- Quine / double quine / carton plein -->
-
   <div>
     <ion-radio-group
       class="tirage-type-group animate__animated animate__zoomIn animate__faster"
@@ -50,8 +61,8 @@
   }
 
   <!-- GRIDS -->
-  @if (isDisplayGrids) { @if ((tirageMode$|async) === TirageMode.INITIAL &&
-  !isLoading) {
+  @if (isDisplayGrids()) { @if ((tirageMode$|async) === TirageMode.INITIAL &&
+  !isLoading()) {
   <app-my-grids
     [isSelectableForPlay]="true"
     [isEditable]="false"
@@ -87,10 +98,9 @@
   <app-ninety-keyboard
     (hideKeyboard)="showKeyboard=false"
     (demarquer)="demarquer()"
-    (endTirage)="endTirage()"
   />
 </ion-footer>
-} @if (isLoading) {
+} @if (isLoading()) {
 <ion-content class="ion-padding">
   <app-page-loader />
 </ion-content>

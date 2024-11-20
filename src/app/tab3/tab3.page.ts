@@ -99,6 +99,14 @@ export class Tab3Page {
     await modal.present();
   }
 
+  public async openLotoRules(): Promise<void> {
+    const modal = await this.modalController.create({
+      animated: true,
+      component: DicoLotoComponent,
+    });
+    await modal.present();
+  }
+
   public async openFacebookPage(): Promise<void> {
     await Browser.open({
       url: environment.facebookPageUrl,
@@ -116,13 +124,7 @@ export class Tab3Page {
   }
 
   public async clickOnFormula(): Promise<void> {
-    if (this.purchaseService.isPremiumUser$.value) {
-      const modal = await this.modalController.create({
-        animated: true,
-        component: PremiumOfferComponent,
-      });
-      await modal.present();
-    } else {
+    if (!this.purchaseService.isPremiumUser$.value) {
       const modal = await this.modalController.create({
         animated: true,
         component: PremiumOfferComponent,

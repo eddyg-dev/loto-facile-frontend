@@ -1,5 +1,8 @@
 @for (number of tirageNumbersSignal(); track $index) {
-<span class="tirage-number animate__animated animate__bounce">
+<span
+  class="tirage-number animate__animated animate__bounce"
+  (click)="deleteNumber(number)"
+>
   {{ number }}
 </span>
 }

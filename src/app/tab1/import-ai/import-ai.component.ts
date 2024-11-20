@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -48,6 +48,7 @@ import { MyGridsComponent } from '../my-grids/my-grids.component';
 
 import 'cordova-plugin-purchase';
 import { Message } from 'src/app/data/enum/message.enum';
+import { ToastService } from 'src/app/shared/services/toast.service';
 import { PageLoaderComponent } from 'src/app/shared/ui/page-loader/page-loader.component';
 import { PremiumOfferComponent } from 'src/app/tab3/premium-offer/premium-offer.component';
 import { environment } from 'src/environments/environment';
@@ -95,7 +96,7 @@ export class ImportAIComponent {
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly modalcontroller = inject(ModalController);
-  private readonly toastController = inject(ToastController);
+  private readonly toastService = inject(ToastService);
   private readonly store = inject(Store);
   private readonly purchaseService = inject(InAppPurchaseService);
   private readonly openAiService = inject(OpenAiService);
@@ -167,7 +168,7 @@ export class ImportAIComponent {
     }
   }
 
-  private analyzeImage(base64Image: string): void {
+  private async analyzeImage(base64Image: string): Promise<void> {
     this.isImporting.set(true);
     this.cdr.markForCheck();
     this.openAiService.analyzeImage(base64Image).subscribe(
@@ -176,22 +177,13 @@ export class ImportAIComponent {
         this.isImporting.set(false);
         this.cdr.markForCheck();
       },
-      (err: any) => {
-        this.presentToast(Message.Import_Error);
+      async (err: any) => {
+        await this.toastService.presentToast(Message.Import_Error);
         console.log(err);
         this.isImporting.set(false);
         this.cdr.markForCheck();
       }
     );
-  }
-
-  private async presentToast(message: string): Promise<void> {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      color: 'danger',
-    });
-    await toast.present();
   }
 
   private async showPremiumAlert(): Promise<void> {
@@ -228,7 +220,9 @@ export class ImportAIComponent {
       // Vérification de la taille du fichier
       const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 20MB
       if (file.size > maxSizeInBytes) {
-        this.presentToast('La taille du fichier dépasse la limite de 20MB.');
+        await this.toastService.presentToast(
+          'La taille du fichier dépasse la limite de 20MB.'
+        );
         return;
       }
 
@@ -242,7 +236,7 @@ export class ImportAIComponent {
           'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ].includes(file.type)
       ) {
-        this.presentToast("Le fichier n'est pas supporté");
+        await this.toastService.presentToast("Le fichier n'est pas supporté");
         return;
       }
 
@@ -268,8 +262,8 @@ export class ImportAIComponent {
           this.isImporting.set(false);
           this.cdr.markForCheck();
         },
-        (err: any) => {
-          this.presentToast(Message.Import_Error);
+        async (err: any) => {
+          await this.toastService.presentToast(Message.Import_Error);
           console.log(err);
           this.isImporting.set(false);
           this.cdr.markForCheck();
@@ -295,7 +289,7 @@ export class ImportAIComponent {
     await alert.present();
   }
 
-  private actualizeTempGrids(gridsResponse: any) {
+  private async actualizeTempGrids(gridsResponse: any): Promise<void> {
     let gridsResponseRandom = gridsResponse?.length
       ? gridsResponse
       : gridsResponse[Object.keys(gridsResponse)[0]]?.length
@@ -316,7 +310,7 @@ export class ImportAIComponent {
         this.cdr.detectChanges();
         console.log('this.tempGrids ', this.tempGrids);
       } else {
-        this.presentToast(Message.Import_Error);
+        await this.toastService.presentToast(Message.Import_Error);
       }
     }
   }

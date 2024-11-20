@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { GridNumberFontSize } from 'src/app/data/enum/grid-number-font-size.enum';
 import { StateKey } from 'src/app/data/enum/state-key.enum';
 import { Grid } from 'src/app/data/models/grid';
+import { Preferences } from 'src/app/data/models/preference';
 import {
   AddGridsAction,
   DeleteAllGridsAction,
@@ -9,17 +11,22 @@ import {
   DeleteGridsAction,
   EditGridAction,
   EditGridsAction,
+  EditPreferencesAction,
   UnselectAllGridsAction,
 } from './grids.actions';
 
 export interface GridStateModel {
   grids: Grid[];
+  preferences: Preferences;
 }
 
 @State({
   name: StateKey.Grids,
   defaults: {
     grids: [],
+    preferences: {
+      gridNumberFontSize: GridNumberFontSize.Small,
+    },
   },
 })
 @Injectable()
@@ -27,6 +34,10 @@ export class GridState {
   @Selector()
   static getGrids(state: GridStateModel): Grid[] {
     return state.grids;
+  }
+  @Selector()
+  static getPreferences(state: GridStateModel): Preferences {
+    return state.preferences;
   }
 
   @Action(AddGridsAction)
@@ -100,7 +111,7 @@ export class GridState {
   }
 
   @Action(DeleteGridAction)
-  deleteCategory(
+  deleteGrid(
     context: StateContext<GridStateModel>,
     action: DeleteGridAction
   ): void {
@@ -112,6 +123,16 @@ export class GridState {
     newGrids.splice(index, 1);
     context.patchState({
       grids: [...newGrids],
+    });
+  }
+
+  @Action(EditPreferencesAction)
+  editPreferences(
+    context: StateContext<GridStateModel>,
+    action: EditPreferencesAction
+  ): void {
+    context.patchState({
+      preferences: { ...context.getState().preferences, ...action.preferences },
     });
   }
 }

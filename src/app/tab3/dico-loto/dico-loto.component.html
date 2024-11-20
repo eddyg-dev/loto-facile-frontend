@@ -3,11 +3,85 @@
     <ion-buttons slot="start">
       <ion-button (click)="close()" color="medium">Fermer</ion-button>
     </ion-buttons>
-    <ion-title class="ion-text-center">Le Dico Loto</ion-title>
+    <ion-title class="ion-text-center">Le Loto</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-accordion-group [value]="['expressions']">
+  <ion-accordion-group>
+    <ion-accordion value="regles">
+      <ion-item slot="header" color="light">
+        <ion-label>Les règles du Loto traditionnel</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <h2>Le matériel nécessaire</h2>
+            <p>
+              • Des cartons de loto : chaque carton contient 15 numéros répartis
+              sur 3 lignes (5 numéros par ligne)
+            </p>
+            <p>• Les numéros sur chaque carton sont disposés aléatoirement</p>
+            <p>• 90 boules numérotées de 1 à 90 pour le tirage</p>
+            <p>• Un boulier ou un sac pour effectuer le tirage</p>
+            <p>• Des jetons ou des haricots pour marquer les numéros</p>
+
+            <h2 class="ion-padding-top">Préparation du jeu</h2>
+            <p>• Désigner un animateur qui sera chargé du tirage</p>
+            <p>
+              • Distribuer les cartons aux joueurs (possibilité d'en acheter
+              plusieurs)
+            </p>
+            <p>
+              • Définir les lots pour chaque type de gain (quine, double quine,
+              carton plein)
+            </p>
+            <p>• S'assurer que chaque joueur a de quoi marquer ses numéros</p>
+
+            <h2 class="ion-padding-top">Déroulement détaillé</h2>
+            <p>• L'animateur mélange bien les boules avant de commencer</p>
+            <p>• Il tire les numéros un par un et les annonce clairement</p>
+            <p>
+              • Il répète chaque numéro et peut utiliser les expressions
+              traditionnelles
+            </p>
+            <p>
+              • Les joueurs vérifient leurs cartons et marquent les numéros
+              sortis
+            </p>
+            <p>• L'animateur note ou garde de côté les numéros déjà tirés</p>
+
+            <h2 class="ion-padding-top">Les différents gains</h2>
+            <p>• Quine : Une ligne horizontale complète (5 numéros)</p>
+            <p>
+              • Double Quine : Deux lignes horizontales complètes (10 numéros)
+            </p>
+            <p>• Carton plein : Les trois lignes complètes (15 numéros)</p>
+
+            <h2 class="ion-padding-top">Règles importantes</h2>
+            <p>• Il faut crier "Quine!" dès qu'on complète une ligne</p>
+            <p>
+              • L'animateur doit arrêter le tirage dès qu'un joueur crie
+              "Quine!"
+            </p>
+            <p>
+              • Les numéros du gagnant sont vérifiés un par un par l'animateur
+            </p>
+            <p>• En cas d'erreur, le jeu reprend où il s'était arrêté</p>
+            <p>
+              • Si plusieurs joueurs gagnent en même temps, le lot est partagé
+            </p>
+
+            <h2 class="ion-padding-top">Conseils pratiques</h2>
+            <p>• Bien écouter les numéros annoncés</p>
+            <p>• Vérifier régulièrement qu'on n'a pas manqué de numéros</p>
+            <p>• Ne pas hésiter à demander la répétition d'un numéro</p>
+            <p>• Garder le silence pendant les tirages pour bien entendre</p>
+            <p>• S'amuser avant tout, le loto est un jeu convivial!</p>
+          </ion-label>
+        </ion-item>
+      </div>
+    </ion-accordion>
+
     <ion-accordion value="expressions">
       <ion-item slot="header" color="light">
         <ion-label>Les expressions par numéro</ion-label>
@@ -21,6 +95,76 @@
           </ion-label>
         </ion-item>
         }
+      </div>
+    </ion-accordion>
+
+    <ion-accordion value="conditions">
+      <ion-item slot="header" color="light">
+        <ion-label>Conditions d'utilisation</ion-label>
+      </ion-item>
+      <div class="ion-padding" slot="content">
+        <ion-item>
+          <ion-label class="ion-text-wrap">
+            <h2>Responsabilité de l'utilisateur</h2>
+            <p>
+              • L'utilisateur doit impérativement vérifier que l'utilisation de
+              cette application est autorisée lors de sa partie de loto (en
+              ligne ou en présentiel)
+            </p>
+            <p>
+              • Il est de votre responsabilité de vous conformer aux règles
+              établies par l'organisateur de votre partie de loto
+            </p>
+            <p>
+              • En cas de doute, veuillez consulter l'organisateur avant
+              d'utiliser l'application
+            </p>
+
+            <h2 class="ion-padding-top">Décharge de responsabilité</h2>
+            <p>
+              • Cette application est fournie uniquement comme un outil d'aide
+              et d'apprentissage
+            </p>
+            <p>
+              • Les développeurs de l'application déclinent toute responsabilité
+              en cas :
+            </p>
+            <p class="ion-padding-start">- D'utilisation non autorisée</p>
+            <p class="ion-padding-start">
+              - De tricherie ou tentative de tricherie
+            </p>
+            <p class="ion-padding-start">
+              - De conflit avec les organisateurs ou autres joueurs
+            </p>
+            <p class="ion-padding-start">
+              - De perte de gains ou d'exclusion d'une partie
+            </p>
+
+            <h2 class="ion-padding-top">Utilisation éthique</h2>
+            <p>
+              • L'application doit être utilisée dans un esprit de fair-play
+            </p>
+            <p>
+              • Elle ne doit pas servir à obtenir un avantage déloyal sur les
+              autres joueurs
+            </p>
+            <p>• Nous encourageons une pratique respectueuse du jeu de loto</p>
+
+            <h2 class="ion-padding-top">Mentions légales</h2>
+            <p>
+              • Cette application n'est pas associée aux organisateurs officiels
+              de loto
+            </p>
+            <p>
+              • Les expressions et contenus sont fournis à titre informatif
+              uniquement
+            </p>
+            <p>
+              • Nous nous réservons le droit de modifier ces conditions à tout
+              moment
+            </p>
+          </ion-label>
+        </ion-item>
       </div>
     </ion-accordion>
   </ion-accordion-group>

@@ -9,6 +9,7 @@ import {
   checkboxOutline,
   close,
   closeOutline,
+  cogOutline,
   create,
   cube,
   diamondOutline,
@@ -16,6 +17,7 @@ import {
   documentTextOutline,
   downloadOutline,
   ellipse,
+  giftOutline,
   grid,
   gridOutline,
   help,
@@ -49,6 +51,7 @@ import {
   triangle,
 } from 'ionicons/icons';
 import { CategoryColor } from '../enum/category-color.enum';
+import { CategoryId } from '../enum/category-id.enum';
 import { TirageType } from '../enum/tirage-type.enum';
 import { Category } from '../models/category';
 import { TirageParams } from '../models/tirage-params';
@@ -75,22 +78,16 @@ export const tirageTypeParams: { [key in TirageType]: TirageParams } = {
 
 export const defaultCategories: Category[] = [
   {
-    id: '0',
+    id: CategoryId.Loto,
     color: CategoryColor.Red,
     name: 'Loto',
     isDeletable: false,
   },
   {
-    id: '1',
-    color: CategoryColor.Green,
-    name: 'Bingo',
-    isDeletable: false,
-  },
-  {
-    id: '2',
+    id: CategoryId.Other,
     color: CategoryColor.Black,
-    name: 'Autre',
-    isDeletable: true,
+    name: 'Autres',
+    isDeletable: false,
   },
 ];
 
@@ -329,4 +326,6 @@ export const icons = {
   documentAttachOutline,
   arrowBackCircleOutline,
   informationCircleOutline,
+  giftOutline,
+  cogOutline,
 };

@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'fr.goulan.lotofacile',
-  appName: 'loto-facile',
+  appName: 'Loto Facile',
   webDir: 'www',
 };
 

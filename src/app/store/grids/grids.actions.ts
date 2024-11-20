@@ -1,4 +1,5 @@
 import { Grid } from 'src/app/data/models/grid';
+import { Preferences } from 'src/app/data/models/preference';
 
 export class GetGridsAction {
   static readonly type = '[Grids] Get Grids';
@@ -33,4 +34,9 @@ export class EditGridAction {
 
 export class UnselectAllGridsAction {
   static readonly type = '[Grids] Uneselect All Grids';
+}
+
+export class EditPreferencesAction {
+  static readonly type = '[Grids] Edit Preferences';
+  constructor(public preferences: Partial<Preferences>) {}
 }

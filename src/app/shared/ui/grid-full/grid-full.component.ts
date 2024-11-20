@@ -5,13 +5,14 @@ import {
   Component,
   DestroyRef,
   EventEmitter,
+  HostBinding,
+  inject,
   Input,
   OnChanges,
   OnInit,
   Output,
   Signal,
   SimpleChanges,
-  inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -25,14 +26,17 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { CategoryColor } from 'src/app/data/enum/category-color.enum';
+import { GridNumberFontSize } from 'src/app/data/enum/grid-number-font-size.enum';
 import { TirageType } from 'src/app/data/enum/tirage-type.enum';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
 import { GridFull, TirageNumber } from 'src/app/data/models/grid-full';
+import { Preferences } from 'src/app/data/models/preference';
 import { CategoryState } from 'src/app/store/category/category.state';
 import { EditGridAction } from 'src/app/store/grids/grids.actions';
+import { GridState } from 'src/app/store/grids/grids.state';
 import { TirageState } from 'src/app/store/tirage/tirage.state';
 import { gridToGridFull } from '../../utils/transfo.utils';
 
@@ -92,6 +96,21 @@ export class GridFullComponent implements OnInit, OnChanges {
 
   @Select(TirageState.getTirageNumbers)
   tirageNumbers$!: Observable<number[]>;
+
+  @Select(GridState.getPreferences)
+  preferences$!: Observable<Preferences>;
+
+  @HostBinding('class')
+  public get gridNumberFontSizeClass(): string {
+    return `${this.zoomGridSignal() ?? GridNumberFontSize.Medium} zoom-grid`;
+  }
+
+  public zoomGridSignal: Signal<GridNumberFontSize | undefined> = toSignal(
+    this.preferences$.pipe(
+      filter((p) => p !== undefined),
+      map((p) => p.zoomGrid)
+    )
+  );
 
   public formGroup = this.fb.group({
     isSelected: false,

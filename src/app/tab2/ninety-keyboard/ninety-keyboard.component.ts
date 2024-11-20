@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
-  AlertController,
   IonButton,
   IonButtons,
   IonCol,
@@ -25,11 +24,8 @@ import {
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Message } from 'src/app/data/enum/message.enum';
-import {
-  AddNumberTirageAction,
-  DeleteNumberTirageAction,
-} from 'src/app/store/tirage/tirage.actions';
+import { TirageService } from 'src/app/shared/services/tirage.service';
+import { AddNumberTirageAction } from 'src/app/store/tirage/tirage.actions';
 import { TirageState } from 'src/app/store/tirage/tirage.state';
 
 @Component({
@@ -57,11 +53,10 @@ import { TirageState } from 'src/app/store/tirage/tirage.state';
 })
 export class NinetyKeyboardComponent {
   private readonly modalController = inject(ModalController);
-  private readonly alertController = inject(AlertController);
+  private readonly tirageService = inject(TirageService);
 
   @Output() public hideKeyboard = new EventEmitter();
   @Output() public demarquer = new EventEmitter();
-  @Output() public endTirage = new EventEmitter();
 
   @Select(TirageState.getTirageNumbers)
   tirageNumbers$!: Observable<number[]>;
@@ -77,24 +72,7 @@ export class NinetyKeyboardComponent {
     if (!this.isInTirage(number)) {
       this.store.dispatch(new AddNumberTirageAction(number));
     } else {
-      const alert = await this.alertController.create({
-        animated: true,
-        header: 'Annulation',
-        message: `${Message.Cancel_Number} ${number} ?`,
-        buttons: [
-          {
-            text: 'Non',
-            role: 'cancel',
-          },
-          {
-            text: 'Oui',
-            handler: () => {
-              this.store.dispatch(new DeleteNumberTirageAction(number));
-            },
-          },
-        ],
-      });
-      await alert.present();
+      await this.tirageService.confirmDeleteNumber(number);
     }
   }
 

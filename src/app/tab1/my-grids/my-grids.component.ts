@@ -139,7 +139,7 @@ export class MyGridsComponent implements OnChanges {
       setTimeout(() => {
         this.isLoading.set(false);
         this.cd.detectChanges();
-      }, 500);
+      }, 250);
     }
   }
 }

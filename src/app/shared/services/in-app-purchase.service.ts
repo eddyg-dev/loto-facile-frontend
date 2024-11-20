@@ -20,6 +20,7 @@ export class InAppPurchaseService {
       (p: any) => p.id === this.premiumProductId
     );
     const offer = product?.offers[0];
+
     if (offer) {
       CdvPurchase.store.order(offer).then(
         (product: any) => {

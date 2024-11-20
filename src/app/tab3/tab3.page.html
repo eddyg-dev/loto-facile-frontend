@@ -13,8 +13,9 @@
         name="book"
         slot="start"
       ></ion-icon>
-      <ion-label>Le Dico Loto </ion-label>
+      <ion-label>Règles et Guide du Loto</ion-label>
     </ion-item>
+
     <ion-list-header mode="ios">Données</ion-list-header>
     <ion-item>
       <ion-icon
@@ -40,6 +41,15 @@
       } @else {
       <ion-button color="secondary">BASIC</ion-button>
       }
+    </ion-item>
+    <ion-item [button]="true">
+      <ion-icon
+        color="primary"
+        aria-hidden="true"
+        name="cog-outline"
+        slot="start"
+      ></ion-icon>
+      <ion-label>Vos préférences</ion-label>
     </ion-item>
     <ion-list-header mode="ios">A propos</ion-list-header>
     <ion-item [button]="true" (click)="openUpdate()">
