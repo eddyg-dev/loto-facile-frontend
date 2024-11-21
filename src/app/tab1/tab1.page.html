@@ -3,7 +3,7 @@
     <ion-title class="ion-text-center">LOTO FACILE </ion-title>
     @if (segment==='carton') { @if ((grids$|async)?.length &&
     (grids$|async)!.length>1) {
-    <ion-buttons slot="end">
+    <ion-buttons slot="start">
       <ion-button (click)="editMulitpleMode()">
         @if (isSelectableForEdit) { Annuler } @else {
         <ion-icon slot="icon-only" name="checkbox-outline" />
@@ -11,6 +11,11 @@
       </ion-button>
     </ion-buttons>
     } }
+    <ion-buttons slot="end">
+      <ion-button (click)="openPreferences()">
+        <ion-icon slot="icon-only" name="cog-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

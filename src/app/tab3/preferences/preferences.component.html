@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Préférences</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-item>
+      <ion-label>Taille des numéros dans la grille</ion-label>
+      <ion-select
+        [(ngModel)]="zoomGrid"
+        slot="end"
+        cancelText="Annuler"
+        (ionChange)="onZoomGridChange($event)"
+      >
+        <ion-select-option [value]="gridNumberFontSizeEnum.Small">
+          Petit
+        </ion-select-option>
+        <ion-select-option [value]="gridNumberFontSizeEnum.Medium">
+          Moyen
+        </ion-select-option>
+        <ion-select-option [value]="gridNumberFontSizeEnum.Large">
+          Grand
+        </ion-select-option>
+        <ion-select-option [value]="gridNumberFontSizeEnum.ExtraLarge">
+          Très grand
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

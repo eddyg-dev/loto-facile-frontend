@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class InAppPurchaseService {
-  public premiumProductId = 'lotofacilepremium';
+  public premiumProductId = 'lfpremium';
 
   public isPremiumUser$ = new BehaviorSubject<boolean>(false);
 

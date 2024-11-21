@@ -25,7 +25,7 @@ export interface GridStateModel {
   defaults: {
     grids: [],
     preferences: {
-      gridNumberFontSize: GridNumberFontSize.Small,
+      zoomGrid: GridNumberFontSize.Small,
     },
   },
 })

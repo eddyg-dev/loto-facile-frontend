@@ -29,6 +29,7 @@ import { DeleteAllGridsAction } from '../store/grids/grids.actions';
 import { ClearTirageAction } from '../store/tirage/tirage.actions';
 import { DicoLotoComponent } from './dico-loto/dico-loto.component';
 import { PremiumOfferComponent } from './premium-offer/premium-offer.component';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 @Component({
   selector: 'app-tab3',
@@ -131,6 +132,14 @@ export class Tab3Page {
       });
       await modal.present();
     }
+  }
+
+  public async openPreferences(): Promise<void> {
+    const modal = await this.modalController.create({
+      animated: true,
+      component: PreferencesComponent,
+    });
+    await modal.present();
   }
 
   public async openUpdate(): Promise<void> {

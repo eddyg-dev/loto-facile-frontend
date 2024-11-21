@@ -46,6 +46,7 @@ import {
 } from '../store/grids/grids.actions';
 import { GridState } from '../store/grids/grids.state';
 import { NinetyKeyboardComponent } from '../tab2/ninety-keyboard/ninety-keyboard.component';
+import { PreferencesComponent } from '../tab3/preferences/preferences.component';
 import { CategoriesComponent } from './categories/categories.component';
 import { SaveCategoryComponent } from './categories/save-category/save-category.component';
 import { ImportAIComponent } from './import-ai/import-ai.component';
@@ -270,5 +271,13 @@ export class Tab1Page {
       initialBreakpoint: 0.7,
     });
     await saveCategoryComponentModal.present();
+  }
+
+  public async openPreferences(): Promise<void> {
+    const modal = await this.modalController.create({
+      animated: true,
+      component: PreferencesComponent,
+    });
+    await modal.present();
   }
 }

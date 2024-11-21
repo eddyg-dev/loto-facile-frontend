@@ -35,6 +35,7 @@
       placeholder="Catégorie"
       [(ngModel)]="category"
       interface="popover"
+      cancelText="Annuler"
     >
       <ion-select-option
         *ngFor="let category of categories$ | async"

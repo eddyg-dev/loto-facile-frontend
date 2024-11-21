@@ -61,7 +61,7 @@ export class AppComponent {
         this.store.register([
           {
             id: this.purchaseService.premiumProductId,
-            type: CdvPurchase.ProductType.PAID_SUBSCRIPTION,
+            type: CdvPurchase.ProductType.NON_CONSUMABLE,
             platform: CdvPurchase.Platform.GOOGLE_PLAY,
           },
         ]);

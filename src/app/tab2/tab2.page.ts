@@ -31,7 +31,7 @@ import {
   ModalController,
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
-import { Observable, delay, skip } from 'rxjs';
+import { Observable, delay, distinctUntilChanged, skip } from 'rxjs';
 import { Message } from '../data/enum/message.enum';
 import { TirageMode } from '../data/enum/tirage-mode.enum';
 import { TirageType } from '../data/enum/tirage-type.enum';
@@ -49,6 +49,7 @@ import {
 import { TirageState } from '../store/tirage/tirage.state';
 import { MyGridsModalComponent } from '../tab1/my-grids/my-grids-modal/my-grids-modal.component';
 import { MyGridsComponent } from '../tab1/my-grids/my-grids.component';
+import { PreferencesComponent } from '../tab3/preferences/preferences.component';
 import { NinetyKeyboardComponent } from './ninety-keyboard/ninety-keyboard.component';
 import { TirageLastNumbersComponent } from './tirage-last-numbers/tirage-last-numbers.component';
 
@@ -130,7 +131,7 @@ export class Tab2Page implements OnInit {
   }
   public ngOnInit(): void {
     this.tirageTypeFormcontrol.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .pipe(distinctUntilChanged(), takeUntilDestroyed(this.destroyRef$))
       .subscribe(() => {
         const tirage = this.store.selectSnapshot(TirageState.getTirageNumbers);
         if (tirage.length > 0) {
@@ -286,6 +287,14 @@ export class Tab2Page implements OnInit {
       ],
     });
     await alert.present();
+  }
+
+  public async openPreferences(): Promise<void> {
+    const modal = await this.modalcontroller.create({
+      animated: true,
+      component: PreferencesComponent,
+    });
+    await modal.present();
   }
 
   private async openWinModal(

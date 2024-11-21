@@ -190,7 +190,7 @@ export class ImportAIComponent {
     const alert = await this.alertController.create({
       animated: true,
       header: 'LOTO FACILE PREMIUM',
-      message: `Cette fonctionnalité est réservée aux utilisateurs premium. Souhaitez-vous essayer gratuitement pendant 1 mois ?`,
+      message: `Cette fonctionnalité est réservée aux utilisateurs premium. Souhaitez-vous passer à la version Premium ?`,
       buttons: [
         {
           text: 'Non',

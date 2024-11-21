@@ -47,6 +47,7 @@ export class CategoryState {
     action: AddCategoryAction
   ): void {
     context.patchState({
+      ...context.getState(),
       categories: [...context.getState().categories, action.category],
     });
   }
@@ -62,6 +63,7 @@ export class CategoryState {
     );
     newCategories[categoryIndex] = { ...action.category };
     context.patchState({
+      ...context.getState(),
       categories: [...newCategories],
     });
   }
@@ -78,6 +80,7 @@ export class CategoryState {
     const newCats = [...context.getState().categories];
     newCats.splice(index, 1);
     context.patchState({
+      ...context.getState(),
       categories: [...newCats],
     });
 
@@ -94,6 +97,7 @@ export class CategoryState {
     action: ResetCategoriesAction
   ): void {
     context.patchState({
+      ...context.getState(),
       categories: [...defaultCategories],
     });
   }

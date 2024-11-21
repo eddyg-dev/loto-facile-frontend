@@ -26,7 +26,7 @@ import {
   IonLabel,
 } from '@ionic/angular/standalone';
 import { Select, Store } from '@ngxs/store';
-import { filter, map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { CategoryColor } from 'src/app/data/enum/category-color.enum';
 import { GridNumberFontSize } from 'src/app/data/enum/grid-number-font-size.enum';
 import { TirageType } from 'src/app/data/enum/tirage-type.enum';
@@ -84,6 +84,7 @@ export class GridFullComponent implements OnInit, OnChanges {
   @Output() public deleteTempGrid = new EventEmitter<number>();
   public gridFull?: GridFull;
 
+  public gridNumberFontSizeEnum = GridNumberFontSize;
   public backgroundColor = CategoryColor.Red;
   public isTirageInProgess = false;
   public categories$: Observable<Category[]> = this.store.select(
@@ -100,17 +101,16 @@ export class GridFullComponent implements OnInit, OnChanges {
   @Select(GridState.getPreferences)
   preferences$!: Observable<Preferences>;
 
+  private preferencesSignal: Signal<Preferences | undefined> = toSignal(
+    this.preferences$
+  );
+
   @HostBinding('class')
   public get gridNumberFontSizeClass(): string {
-    return `${this.zoomGridSignal() ?? GridNumberFontSize.Medium} zoom-grid`;
+    const gridNumberFontSize =
+      this.preferencesSignal()?.zoomGrid ?? GridNumberFontSize.ExtraLarge;
+    return `${gridNumberFontSize}`;
   }
-
-  public zoomGridSignal: Signal<GridNumberFontSize | undefined> = toSignal(
-    this.preferences$.pipe(
-      filter((p) => p !== undefined),
-      map((p) => p.zoomGrid)
-    )
-  );
 
   public formGroup = this.fb.group({
     isSelected: false,
@@ -118,6 +118,10 @@ export class GridFullComponent implements OnInit, OnChanges {
 
   public ngOnInit(): void {
     console.log('this.grid ', this.grid);
+    const gridNumberFontSize =
+      this.preferencesSignal()?.zoomGrid ?? GridNumberFontSize.Large;
+
+    console.log('gridNumberFontSize', gridNumberFontSize);
     this.updateGridFull();
 
     this.isTirageInProgess = !this.isSelectableForPlay && !this.isEditable;
