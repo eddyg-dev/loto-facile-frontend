@@ -36,8 +36,9 @@ export class AppComponent {
     this.registerProducts();
   }
 
-  private checkForUpdate(): void {
+  private async checkForUpdate(): Promise<void> {
     this.versionService.needUpdate().subscribe(({ needUpdate }) => {
+      console.log('needUpdate ', needUpdate);
       if (needUpdate) {
         this.presentUpdateAlert();
       }
@@ -48,6 +49,7 @@ export class AppComponent {
     const alert = await this.modalController.create({
       component: UpdateAlertComponent,
       backdropDismiss: false,
+      showBackdrop: true,
       initialBreakpoint: 0.5,
     });
     await alert.present();

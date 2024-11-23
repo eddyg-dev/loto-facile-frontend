@@ -1,22 +1,32 @@
+@if(hasHeader){
 <div class="keyboard-header">
-  <ion-button fill="outline" size="small" (click)="hideKeyboard.emit()">
+  <!-- <ion-button fill="outline" size="small" (click)="hideKeyboard.emit()">
     <ion-icon name="keypad"></ion-icon>
     <span> Cacher clavier </span>
-  </ion-button>
+  </ion-button> -->
   @if ((tirageNumbers$|async)?.length) {
   <ion-button size="small" fill="outline" (click)="demarquer.emit()">
     Démarquer
   </ion-button>
   }
+  <ion-button
+    size="small"
+    fill="outline"
+    color="danger"
+    (click)="endTirage.emit()"
+  >
+    Fin de partie <ion-icon name="hourglass"></ion-icon>
+  </ion-button>
 </div>
+}
 
 <div class="keyboard-numbers">
   @for (n of numbers; track $index) {
   <div
     class="number"
-    [class.disabled]="isInTirage(n + 1)"
+    [class.disabled]="isDisabled(n + 1)"
     [class.last]="isLast(n + 1)"
-    (click)="addTirage(n + 1)"
+    (click)="onClickNumber(n + 1)"
   >
     {{ n + 1 }}
   </div>

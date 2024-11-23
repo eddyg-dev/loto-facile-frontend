@@ -1,17 +1,5 @@
 <ion-header mode="ios" collapse="fade">
   <ion-toolbar mode="ios" class="ion-no-border">
-    @if ((tirageMode$|async) === TirageMode.IN_PROGRESS) {
-    <ion-buttons slot="start">
-      <ion-button
-        size="small"
-        fill="outline"
-        color="danger"
-        (click)="endTirage()"
-      >
-        Fin de partie <ion-icon name="hourglass"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-    }
     <ion-title class="ion-text-center">Tirage </ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="openPreferences()">
@@ -101,8 +89,13 @@
 @if ((tirageMode$|async) === TirageMode.IN_PROGRESS && showKeyboard ) {
 <ion-footer class="keyboard-footer animate__animated animate__jackInTheBox">
   <app-ninety-keyboard
+    [hasHeader]="true"
+    [isManual]="false"
+    [values]="[]"
     (hideKeyboard)="showKeyboard=false"
     (demarquer)="demarquer()"
+    (clickOnNumber)="addTirage($event)"
+    (endTirage)="endTirage()"
   />
 </ion-footer>
 } @if (isLoading()) {

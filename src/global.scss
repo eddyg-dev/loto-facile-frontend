@@ -145,13 +145,54 @@ ion-tab-bar {
   gap: 2rem;
 }
 
+.w-10 {
+  width: 10%;
+}
+.w-20 {
+  width: 20%;
+}
+.w-25 {
+  width: 25%;
+}
+.w-30 {
+  width: 30%;
+}
+.w-40 {
+  width: 40%;
+}
+.w-50 {
+  width: 50%;
+}
+.w-60 {
+  width: 60%;
+}
+.w-70 {
+  width: 70%;
+}
+.w-75 {
+  width: 75%;
+}
+
+.w-80 {
+  width: 80%;
+}
+.w-90 {
+  width: 90%;
+}
 .w-100 {
   width: 100%;
 }
+
 .flex {
-  display: block;
+  display: flex;
 }
 
+.align-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
 .flex-col {
   display: flex;
   flex-direction: column;
@@ -164,19 +205,38 @@ ion-tab-bar {
   justify-content: center;
 }
 
-.premium-option {
-  color: var(--ion-color-success) !important;
-}
-
-.premium-option::after {
-  content: " ★";
-  color: var(--ion-color-warning);
-  font-size: 12px;
-  vertical-align: middle;
+.justify-space-between {
+  justify-content: space-between;
 }
 
 .custom-alert {
   .alert-message {
     white-space: pre-line !important;
   }
+}
+
+.m-1 {
+  margin: 0.5rem;
+}
+.m-2 {
+  margin: 1rem;
+}
+.m-3 {
+  margin: 1.5rem;
+}
+.m-4 {
+  margin: 2rem;
+}
+
+.p-1 {
+  padding: 0.5rem;
+}
+.p-2 {
+  padding: 1rem;
+}
+.p-3 {
+  padding: 1.5rem;
+}
+.p-4 {
+  padding: 2rem;
 }

@@ -64,7 +64,7 @@ export class PreferencesComponent implements OnInit {
   }
   ngOnInit(): void {
     this.preferences$.subscribe((preferences) => {
-      this.zoomGrid = preferences?.zoomGrid ?? GridNumberFontSize.Small;
+      this.zoomGrid = preferences?.zoomGrid ?? GridNumberFontSize.Medium;
     });
   }
 

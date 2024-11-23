@@ -3,22 +3,12 @@
     <ion-buttons slot="start">
       <ion-button color="medium" (click)="close()">Annuler</ion-button>
     </ion-buttons>
-    @if (tempGrids.length && categoryId) {
-    <ion-buttons slot="end">
-      <ion-button
-        color="medium"
-        [disabled]="!tempGrids.length"
-        (click)="validate()"
-        >Valider l'import</ion-button
-      >
-    </ion-buttons>
-    }
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding" [fullscreen]="true">
   <div class="premium-info ion-text-center">
-    @if (!tempGrids.length) {
+    @if (!purchaseService.isPremiumUser$.value && !tempGrids.length) {
     <ion-icon name="star" color="warning" style="font-size: 24px"></ion-icon>
     <p>
       Ces fonctionnalités <strong>Premium</strong> vous permettent d'importer
@@ -26,7 +16,7 @@
       d'un <strong>fichier</strong>. Gagnez du temps et assurez-vous d'une
       analyse rapide et précise. Fonctionne avec n'importe quel type de Loto.
     </p>
-    } @else {
+    } @else { @if (!tempGrids.length) {
     <p>
       Seuls les cartons bien détectés par l'IA sont visibles.
       <br />
@@ -37,7 +27,7 @@
       modifier manuellement.
       <br />
     </p>
-    }
+    } }
   </div>
   <ion-grid>
     <ion-row>
@@ -132,40 +122,67 @@
   <app-page-loader />
 
   } @if (tempGrids.length && !isImporting()) {
-  <ion-item>
-    <ion-label>Catégorie</ion-label>
-    <ion-select
-      mode="ios"
-      placeholder="Sélectionner une catégorie"
-      [(ngModel)]="categoryId"
-      (ngModelChange)="update()"
-      interface="popover"
-      cancelText="Annuler"
-    >
-      <ion-select-option
-        *ngFor="let category of categories$ | async"
-        [value]="category.id"
+  <div class="flex align-center justify-center m-1 gap-2">
+    @if (categoryId) {
+    <app-category-color [categoryId]="categoryId"></app-category-color>
+    }
+    <ion-item>
+      <ion-select
+        mode="ios"
+        placeholder="Catégorie"
+        [(ngModel)]="categoryId"
+        (ngModelChange)="update()"
+        interface="popover"
+        cancelText="Annuler"
       >
-        {{ category.name }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
-  <ion-button (click)="openSaveCategoryModal()" size="small">
-    <ion-icon slot="start" name="add"></ion-icon>
-    AJOUTER UNE CATEGORIE
-  </ion-button>
+        <ion-select-option
+          *ngFor="let category of categories$ | async"
+          [value]="category.id"
+        >
+          {{ category.name }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-button (click)="openSaveCategoryModal()" size="small" fill="clear">
+      <ion-icon slot="start" name="add"></ion-icon>
+    </ion-button>
+    @if (tempGrids.length) {
+    <ion-button
+      size="small"
+      [disabled]="!tempGrids.length || !categoryId"
+      (click)="validate()"
+      color="success"
+      >Valider</ion-button
+    >
+    }
+  </div>
   <div class="parent">
+    <p>
+      Voici les cartons qui seront importés lors de la validation. Vous pourrez
+      toujours modifier leurs numéros et changer leur catégorie ultérieurement
+      depuis votre liste de cartons.
+    </p>
     @for (grid of tempGrids; track $index) {
-    <app-grid-full
-      [grid]="grid"
-      [isSelectableForPlay]="false"
-      [isSelectableForEdit]="false"
-      [isEditable]="false"
-      [displayBadges]="false"
-      [isTemp]="true"
-      [indexTemp]="$index"
-      (deleteTempGrid)="deleteTempGrid($index)"
-    />
+    <div class="flex align-center justify-center gap-1">
+      <div class="w-50">
+        <app-grid-full
+          [grid]="grid"
+          [isSelectableForPlay]="false"
+          [isSelectableForEdit]="false"
+          [isEditable]="false"
+          [displayBadges]="false"
+          [isTemp]="false"
+          [indexTemp]="$index"
+          (deleteTempGrid)="deleteTempGrid($index)"
+        />
+      </div>
+      <div class="flex">
+        <ion-chip (click)="deleteTempGrid($index)">
+          <ion-icon name="trash" color="primary"></ion-icon>
+          <ion-label>Ne pas importer</ion-label>
+        </ion-chip>
+      </div>
+    </div>
     }
   </div>
   }

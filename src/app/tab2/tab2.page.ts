@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  Signal,
   computed,
   inject,
   signal,
@@ -36,10 +37,12 @@ import { Message } from '../data/enum/message.enum';
 import { TirageMode } from '../data/enum/tirage-mode.enum';
 import { TirageType } from '../data/enum/tirage-type.enum';
 import { Grid } from '../data/models/grid';
+import { TirageService } from '../shared/services/tirage.service';
 import { PageLoaderComponent } from '../shared/ui/page-loader/page-loader.component';
 import { UnselectAllGridsAction } from '../store/grids/grids.actions';
 import { GridState } from '../store/grids/grids.state';
 import {
+  AddNumberTirageAction,
   ClearTirageAction,
   SetTirageModeAction,
   SetWinFirstQuineAction,
@@ -90,6 +93,7 @@ export class Tab2Page implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly modalcontroller = inject(ModalController);
   private readonly alertController = inject(AlertController);
+  private readonly tirageService = inject(TirageService);
 
   public showKeyboard = true;
 
@@ -105,6 +109,10 @@ export class Tab2Page implements OnInit {
   winSecondQuine$!: Observable<string[]>;
   @Select(TirageState.getWinThirdQuine)
   winThirdQuine$!: Observable<string[]>;
+
+  private tirageNumbersSignal: Signal<number[]> = toSignal(
+    this.tirageNumbers$
+  ) as Signal<number[]>;
 
   private gridsSignal = toSignal(this.grids$);
   private winFirstQuineSignal = toSignal(this.winFirstQuine$);
@@ -212,6 +220,18 @@ export class Tab2Page implements OnInit {
       default:
         break;
     }
+  }
+
+  public async addTirage(number: number): Promise<void> {
+    if (!this.isInTirage(number)) {
+      this.store.dispatch(new AddNumberTirageAction(number));
+    } else {
+      await this.tirageService.confirmDeleteNumber(number);
+    }
+  }
+
+  public isInTirage(number: number): boolean {
+    return this.tirageNumbersSignal().includes(number)!;
   }
 
   private isAlreadyWinFirstQuine(grid: Grid): boolean {

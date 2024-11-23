@@ -6,15 +6,16 @@ import {
   Input,
   OnInit,
   inject,
+  signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Keyboard } from '@capacitor/keyboard';
+import { Platform } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
   IonContent,
-  IonFooter,
   IonHeader,
-  IonIcon,
   IonInput,
   IonItem,
   IonLabel,
@@ -42,30 +43,31 @@ import {
   AddGridsAction,
   EditGridsAction,
 } from 'src/app/store/grids/grids.actions';
+import { NinetyKeyboardComponent } from 'src/app/tab2/ninety-keyboard/ninety-keyboard.component';
 import { v4 as guid } from 'uuid';
 
 @Component({
   selector: 'app-save-grid',
   standalone: true,
   imports: [
+    IonListHeader,
     CommonModule,
     IonHeader,
     IonToolbar,
-    IonIcon,
     IonButtons,
     IonList,
     IonContent,
     IonInput,
-    IonListHeader,
     IonLabel,
     IonTitle,
     IonItem,
     IonButton,
     FormsModule,
     GridFullComponent,
+    IonListHeader,
     IonSelect,
     IonSelectOption,
-    IonFooter,
+    NinetyKeyboardComponent,
   ],
   templateUrl: './save-grid.component.html',
   styleUrl: './save-grid.component.scss',
@@ -77,6 +79,9 @@ export class SaveGridComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   @Input() grid?: Grid;
 
+  public showKeyboard = signal(false);
+
+  public isNumeroInputFocused = signal(false);
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
   );
@@ -97,6 +102,18 @@ export class SaveGridComponent implements OnInit {
   field13Value?: number;
   field14Value?: number;
   field15Value?: number;
+  public currentFieldInput?: IonInput;
+  public nextFieldInput?: IonInput;
+
+  constructor(private platform: Platform) {
+    if (this.platform.is('android') || this.platform.is('ios')) {
+      Keyboard.addListener('keyboardWillShow', (info) => {
+        if (!this.isNumeroInputFocused) {
+          Keyboard.hide();
+        }
+      });
+    }
+  }
 
   public ngOnInit(): void {
     if (this.grid) {
@@ -118,6 +135,12 @@ export class SaveGridComponent implements OnInit {
       this.field14Value = this.grid.quines[2][3].number;
       this.field15Value = this.grid.quines[2][4].number;
     }
+  }
+
+  public isNumeroInputFocusedChange(): void {
+    this.isNumeroInputFocused.set(true);
+    this.showKeyboard.set(false);
+    this.cdr.detectChanges();
   }
 
   close(grid?: Grid) {
@@ -178,6 +201,10 @@ export class SaveGridComponent implements OnInit {
 
   public isNumbersDifferent(): boolean {
     return isNumbersDifferent(this.getAllValues());
+  }
+
+  public isAllValuesDefined(): boolean {
+    return this.getAllValues().every((value) => !!value);
   }
 
   public isSorted1(): boolean {
@@ -255,7 +282,7 @@ export class SaveGridComponent implements OnInit {
     return rulesOK;
   }
 
-  private getAllValues(): (number | undefined)[] {
+  public getAllValues(): (number | undefined)[] {
     return [
       this.field1Value,
       this.field2Value,
@@ -288,5 +315,77 @@ export class SaveGridComponent implements OnInit {
     //     await nextElement.setFocus();
     //   }
     // }
+  }
+
+  public async onInputFocus(
+    fieldInput: IonInput,
+    nextFieldInput?: IonInput
+  ): Promise<void> {
+    if (fieldInput.getInputElement) {
+      const element = await fieldInput.getInputElement();
+      element.setAttribute('inputmode', 'none');
+      element.setAttribute('readonly', 'true');
+    }
+
+    this.showKeyboard.set(true);
+    this.currentFieldInput = fieldInput;
+    this.nextFieldInput = nextFieldInput ?? undefined;
+    this.cdr.detectChanges();
+  }
+
+  public async onNumberClick(number: number): Promise<void> {
+    let elementId = this.currentFieldInput?.['elementRef']?.nativeElement.id;
+    if (elementId) {
+      switch (elementId) {
+        case 'field1':
+          this.field1Value = number;
+          break;
+        case 'field2':
+          this.field2Value = number;
+          break;
+        case 'field3':
+          this.field3Value = number;
+          break;
+        case 'field4':
+          this.field4Value = number;
+          break;
+        case 'field5':
+          this.field5Value = number;
+          break;
+        case 'field6':
+          this.field6Value = number;
+          break;
+        case 'field7':
+          this.field7Value = number;
+          break;
+        case 'field8':
+          this.field8Value = number;
+          break;
+        case 'field9':
+          this.field9Value = number;
+          break;
+        case 'field10':
+          this.field10Value = number;
+          break;
+        case 'field11':
+          this.field11Value = number;
+          break;
+        case 'field12':
+          this.field12Value = number;
+          break;
+        case 'field13':
+          this.field13Value = number;
+          break;
+        case 'field14':
+          this.field14Value = number;
+          break;
+        case 'field15':
+          this.field15Value = number;
+          break;
+      }
+    }
+    if (this.nextFieldInput) {
+      this.nextFieldInput.setFocus();
+    }
   }
 }

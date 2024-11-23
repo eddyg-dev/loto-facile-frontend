@@ -16,6 +16,7 @@
         [(ngModel)]="zoomGrid"
         slot="end"
         cancelText="Annuler"
+        interface="popover"
         (ionChange)="onZoomGridChange($event)"
       >
         <ion-select-option [value]="gridNumberFontSizeEnum.Small">

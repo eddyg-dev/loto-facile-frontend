@@ -16,7 +16,7 @@
   </div>
   @if (!isLoading()) {
   <div class="parent">
-    @for (grid of category.value; track $index) {
+    @for (grid of category.value; track grid.id) {
     <app-grid-full
       [grid]="grid"
       [tirageType]="tirageType"

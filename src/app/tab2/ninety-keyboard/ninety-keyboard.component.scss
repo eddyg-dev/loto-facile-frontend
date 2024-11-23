@@ -1,5 +1,5 @@
 .keyboard-numbers {
-  padding: 1rem;
+  padding: 0.5rem 0;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   gap: 0.5rem;
@@ -21,7 +21,7 @@
   color: darkslateblue;
 
   &.disabled {
-    background: lightgreen;
+    background: var(--ion-color-light-shade);
   }
 
   &.last {

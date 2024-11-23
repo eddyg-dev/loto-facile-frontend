@@ -10,26 +10,21 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AlertController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
+  IonChip,
   IonCol,
   IonContent,
-  IonFooter,
   IonGrid,
   IonHeader,
   IonIcon,
-  IonInput,
   IonItem,
   IonLabel,
-  IonList,
-  IonListHeader,
   IonRow,
   IonSelect,
   IonSelectOption,
-  IonSkeletonText,
-  IonTitle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -44,11 +39,10 @@ import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.compone
 import { isGridFromPhotoValid } from 'src/app/shared/utils/import.utils';
 import { CategoryState } from 'src/app/store/category/category.state';
 import { AddGridsAction } from 'src/app/store/grids/grids.actions';
-import { MyGridsComponent } from '../my-grids/my-grids.component';
 
 import 'cordova-plugin-purchase';
 import { Message } from 'src/app/data/enum/message.enum';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
 import { PageLoaderComponent } from 'src/app/shared/ui/page-loader/page-loader.component';
 import { PremiumOfferComponent } from 'src/app/tab3/premium-offer/premium-offer.component';
 import { environment } from 'src/environments/environment';
@@ -62,15 +56,10 @@ declare var CdvPurchase: any;
   standalone: true,
   imports: [
     CommonModule,
-    IonFooter,
     IonContent,
     IonToolbar,
-    IonTitle,
     IonButtons,
-    IonListHeader,
-    IonList,
     IonLabel,
-    IonInput,
     IonButton,
     IonIcon,
     IonItem,
@@ -79,13 +68,13 @@ declare var CdvPurchase: any;
     IonSelectOption,
     FormsModule,
     AsyncPipe,
-    MyGridsComponent,
     IonCol,
     IonGrid,
     IonRow,
-    IonSkeletonText,
     GridFullComponent,
     PageLoaderComponent,
+    IonChip,
+    CategoryColorComponent,
   ],
   templateUrl: './import-ai.component.html',
   styleUrls: ['./import-ai.component.scss'],
@@ -96,10 +85,10 @@ export class ImportAIComponent {
   private readonly alertController = inject(AlertController);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly modalcontroller = inject(ModalController);
-  private readonly toastService = inject(ToastService);
   private readonly store = inject(Store);
-  private readonly purchaseService = inject(InAppPurchaseService);
+  public readonly purchaseService = inject(InAppPurchaseService);
   private readonly openAiService = inject(OpenAiService);
+  private readonly toastController = inject(ToastController);
   tempGrids: Grid[] = [];
   isImporting = signal(false);
 
@@ -178,8 +167,7 @@ export class ImportAIComponent {
         this.cdr.markForCheck();
       },
       async (err: any) => {
-        await this.toastService.presentToast(Message.Import_Error);
-        console.log(err);
+        this.presentErrorToast(Message.Import_Error);
         this.isImporting.set(false);
         this.cdr.markForCheck();
       }
@@ -208,6 +196,7 @@ export class ImportAIComponent {
   private async openPremiumOffer(): Promise<void> {
     const modal = await this.modalcontroller.create({
       animated: true,
+      showBackdrop: true,
       component: PremiumOfferComponent,
     });
     await modal.present();
@@ -220,9 +209,7 @@ export class ImportAIComponent {
       // Vérification de la taille du fichier
       const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 20MB
       if (file.size > maxSizeInBytes) {
-        await this.toastService.presentToast(
-          'La taille du fichier dépasse la limite de 20MB.'
-        );
+        this.presentErrorToast(Message.FileTooLarge);
         return;
       }
 
@@ -236,7 +223,7 @@ export class ImportAIComponent {
           'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ].includes(file.type)
       ) {
-        await this.toastService.presentToast("Le fichier n'est pas supporté");
+        this.presentErrorToast(Message.FileNotSupported);
         return;
       }
 
@@ -263,8 +250,7 @@ export class ImportAIComponent {
           this.cdr.markForCheck();
         },
         async (err: any) => {
-          await this.toastService.presentToast(Message.Import_Error);
-          console.log(err);
+          this.presentErrorToast(Message.Import_Error);
           this.isImporting.set(false);
           this.cdr.markForCheck();
         }
@@ -306,18 +292,50 @@ export class ImportAIComponent {
         .map((grid: GridFromImageResponse) => this.mapResponseToGrid(grid));
 
       if (newTempGrids?.length) {
-        this.tempGrids = [...this.tempGrids, ...newTempGrids];
+        this.tempGrids = [...newTempGrids];
         this.cdr.detectChanges();
-        console.log('this.tempGrids ', this.tempGrids);
       } else {
-        await this.toastService.presentToast(Message.Import_Error);
+        this.toastController
+          .create({
+            message: Message.Import_Error,
+            duration: 5000,
+            color: 'danger',
+          })
+          .then((toast) => toast.present());
       }
     }
   }
 
-  deleteTempGrid(index: number): void {
-    this.tempGrids = this.tempGrids.filter((g, i) => i !== index);
-    this.cdr.detectChanges();
+  public presentErrorToast(message: Message): void {
+    this.toastController
+      .create({
+        message: message,
+        duration: 5000,
+        color: 'danger',
+      })
+      .then((toast) => toast.present());
+  }
+
+  public async deleteTempGrid(index: number): Promise<void> {
+    const alert = await this.alertController.create({
+      animated: true,
+      header: 'Annulation',
+      message: `Ne pas importer cette grille`,
+      buttons: [
+        {
+          text: 'Non',
+          role: 'cancel',
+        },
+        {
+          text: 'Oui',
+          handler: () => {
+            this.tempGrids = this.tempGrids.filter((g, i) => i !== index);
+            this.cdr.detectChanges();
+          },
+        },
+      ],
+    });
+    await alert.present();
   }
 
   private mapResponseToGrid(grid: GridFromImageResponse): Grid {
@@ -331,7 +349,7 @@ export class ImportAIComponent {
       isQuine: false,
       isDoubleQuine: false,
       isCartonPlein: false,
-      categoryId: this.categoryId ?? '',
+      categoryId: '',
     };
   }
 
@@ -342,6 +360,7 @@ export class ImportAIComponent {
       componentProps: { category },
       backdropDismiss: true,
       initialBreakpoint: 0.7,
+      showBackdrop: true,
     });
     await saveCategoryComponentModal.present();
   }

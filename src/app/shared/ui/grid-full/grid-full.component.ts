@@ -108,7 +108,7 @@ export class GridFullComponent implements OnInit, OnChanges {
   @HostBinding('class')
   public get gridNumberFontSizeClass(): string {
     const gridNumberFontSize =
-      this.preferencesSignal()?.zoomGrid ?? GridNumberFontSize.ExtraLarge;
+      this.preferencesSignal()?.zoomGrid ?? GridNumberFontSize.Medium;
     return `${gridNumberFontSize}`;
   }
 
@@ -117,11 +117,9 @@ export class GridFullComponent implements OnInit, OnChanges {
   });
 
   public ngOnInit(): void {
-    console.log('this.grid ', this.grid);
     const gridNumberFontSize =
       this.preferencesSignal()?.zoomGrid ?? GridNumberFontSize.Large;
 
-    console.log('gridNumberFontSize', gridNumberFontSize);
     this.updateGridFull();
 
     this.isTirageInProgess = !this.isSelectableForPlay && !this.isEditable;

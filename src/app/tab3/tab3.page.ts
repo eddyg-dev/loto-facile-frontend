@@ -28,8 +28,8 @@ import { ResetCategoriesAction } from '../store/category/category.actions';
 import { DeleteAllGridsAction } from '../store/grids/grids.actions';
 import { ClearTirageAction } from '../store/tirage/tirage.actions';
 import { DicoLotoComponent } from './dico-loto/dico-loto.component';
-import { PremiumOfferComponent } from './premium-offer/premium-offer.component';
 import { PreferencesComponent } from './preferences/preferences.component';
+import { PremiumOfferComponent } from './premium-offer/premium-offer.component';
 
 @Component({
   selector: 'app-tab3',
@@ -96,6 +96,7 @@ export class Tab3Page {
     const modal = await this.modalController.create({
       animated: true,
       component: DicoLotoComponent,
+      showBackdrop: true,
     });
     await modal.present();
   }
@@ -104,6 +105,7 @@ export class Tab3Page {
     const modal = await this.modalController.create({
       animated: true,
       component: DicoLotoComponent,
+      showBackdrop: true,
     });
     await modal.present();
   }
@@ -129,6 +131,7 @@ export class Tab3Page {
       const modal = await this.modalController.create({
         animated: true,
         component: PremiumOfferComponent,
+        showBackdrop: true,
       });
       await modal.present();
     }
@@ -138,6 +141,7 @@ export class Tab3Page {
     const modal = await this.modalController.create({
       animated: true,
       component: PreferencesComponent,
+      showBackdrop: true,
     });
     await modal.present();
   }

@@ -207,21 +207,21 @@ export class Tab1Page {
     await actionSheet.present();
   }
 
-  private async addManualGrid(): Promise<void> {
+  public async addManualGrid(): Promise<void> {
     const modal = await this.modalController.create({
       component: SaveGridComponent,
     });
     modal.present();
   }
 
-  private async openImportPhoto(): Promise<void> {
+  public async openImportPhoto(): Promise<void> {
     const modal = await this.modalController.create({
       component: ImportAIComponent,
+      showBackdrop: true,
     });
     modal.present();
     modal.onDidDismiss().then(() => {
       this.cd$.detectChanges();
-      console.log('dismissed');
     });
   }
 
@@ -266,6 +266,7 @@ export class Tab1Page {
     const saveCategoryComponentModal = await this.modalController.create({
       component: SaveCategoryComponent,
       animated: true,
+      showBackdrop: true,
       componentProps: { category },
       backdropDismiss: true,
       initialBreakpoint: 0.7,
@@ -276,6 +277,7 @@ export class Tab1Page {
   public async openPreferences(): Promise<void> {
     const modal = await this.modalController.create({
       animated: true,
+      showBackdrop: true,
       component: PreferencesComponent,
     });
     await modal.present();

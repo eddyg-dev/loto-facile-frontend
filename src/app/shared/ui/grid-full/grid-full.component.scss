@@ -6,16 +6,16 @@
   padding: 0.5rem 0.2rem;
 
   &.small {
-    zoom: 0.8;
-  }
-  &.medium {
     zoom: 1;
   }
-  &.large {
+  &.medium {
     zoom: 1.2;
   }
-  &.extraLarge {
+  &.large {
     zoom: 1.4;
+  }
+  &.extraLarge {
+    zoom: 1.6;
   }
 }
 

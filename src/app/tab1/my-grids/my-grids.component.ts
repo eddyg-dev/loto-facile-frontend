@@ -68,6 +68,7 @@ export class MyGridsComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['grids']) {
       this.setGridsByCategory(changes['grids'].currentValue);
+      this.cd.detectChanges();
     }
   }
   private readonly store = inject(Store);

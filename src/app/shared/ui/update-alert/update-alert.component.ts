@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IonButton, IonIcon, ModalController } from '@ionic/angular/standalone';
+import { environment } from 'src/environments/environment';
 import { VersionService } from '../../services/version.service';
 
 @Component({
@@ -11,6 +12,7 @@ import { VersionService } from '../../services/version.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdateAlertComponent {
+  public version = environment.version;
   constructor(
     private modalController: ModalController,
     private versionService: VersionService

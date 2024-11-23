@@ -6,30 +6,42 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content class="ion-padding">
-  <p>
-    Dernier numéro tiré: <span class="last-number">{{ lastNumber }}</span>
-  </p>
-  <div class="win-numbers">
-    <h2>{{ winNumbers }} &nbsp;</h2>
-    @if (winNumbers===1) {
-    <h2>grille gagnante</h2>
-    } @else {
-    <h2>grilles gagnantes</h2>
+<ion-content class="ion-padding ion-text-center">
+  <div class="confetti-container">
+    @for(i of
+    [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+    track i) {
+    <div class="confetti"></div>
     }
   </div>
+  <div class="celebration-container">
+    <h1 class="congratulations-text">Félicitations !</h1>
+    <p class="flex align-center justify-center">
+      Dernier numéro tiré : <span class="last-number">{{ lastNumber }}</span>
+    </p>
+    <div class="win-numbers">
+      <h2>{{ winNumbers }} &nbsp;</h2>
+      @if (winNumbers===1) {
+      <h2>grille gagnante</h2>
+      } @else {
+      <h2>grilles gagnantes</h2>
+      }
+    </div>
+  </div>
+
   <app-my-grids
     [isEditable]="isEditable"
     [isSelectableForPlay]="isSelectableForPlay"
     [grids]="grids"
     [displayBadges]="displayBadges"
   />
-  <div>
-    <ion-list>
+
+  <div class="continue-game-container">
+    <ion-list class="ion-text-center">
       <ion-list-header mode="ios">
         <ion-label>Continuer la partie</ion-label>
       </ion-list-header>
-      <ion-item>
+      <ion-item lines="none" class="ion-text-center button-container">
         @switch (tirageType) { @case (tirageTypeEnum.Quine) {
         <ion-button
           size="small"
