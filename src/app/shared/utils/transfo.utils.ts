@@ -105,6 +105,25 @@ export function gridToGridFull(
     }
   }
 
+  let nextWinningNumber: number | undefined;
+  if (remainingNumbers === 1) {
+    switch (tirageType) {
+      case TirageType.Quine:
+        nextWinningNumber = findNextWinningNumberForQuine(matrix);
+        break;
+      case TirageType.Double_Quine:
+        nextWinningNumber = findNextWinningNumberForDoubleQuine(matrix, [
+          isQuine1,
+          isQuine2,
+          isQuine3,
+        ]);
+        break;
+      case TirageType.Carton_Plein:
+        nextWinningNumber = findNextWinningNumberForCartonPlein(matrix);
+        break;
+    }
+  }
+
   let gridFull: GridFull = {
     numero: grid.numero,
     categoryId: grid.categoryId,
@@ -116,6 +135,7 @@ export function gridToGridFull(
     isDoubleQuine,
     isCartonPlein,
     remainingNumbers,
+    nextWinningNumber,
   };
 
   return gridFull;
@@ -156,4 +176,49 @@ function getDrawedNumbersCount(quines: TirageNumber[][]): number {
     }
   }
   return count;
+}
+
+function findNextWinningNumberForQuine(
+  matrix: TirageNumber[][]
+): number | undefined {
+  for (const quine of matrix) {
+    const nonDrawedNumbers = quine.filter((n) => n.number !== 0 && !n.isDrawed);
+    if (nonDrawedNumbers.length === 1) {
+      return nonDrawedNumbers[0].number;
+    }
+  }
+  return undefined;
+}
+
+function findNextWinningNumberForDoubleQuine(
+  matrix: TirageNumber[][],
+  quineStates: boolean[]
+): number | undefined {
+  const completedQuines = quineStates.filter((q) => q).length;
+  if (completedQuines === 1) {
+    // Chercher dans les quines non complétées
+    for (let i = 0; i < matrix.length; i++) {
+      if (!quineStates[i]) {
+        const nonDrawedNumbers = matrix[i].filter(
+          (n) => n.number !== 0 && !n.isDrawed
+        );
+        if (nonDrawedNumbers.length === 1) {
+          return nonDrawedNumbers[0].number;
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
+function findNextWinningNumberForCartonPlein(
+  matrix: TirageNumber[][]
+): number | undefined {
+  for (const quine of matrix) {
+    const nonDrawedNumbers = quine.filter((n) => n.number !== 0 && !n.isDrawed);
+    if (nonDrawedNumbers.length === 1) {
+      return nonDrawedNumbers[0].number;
+    }
+  }
+  return undefined;
 }

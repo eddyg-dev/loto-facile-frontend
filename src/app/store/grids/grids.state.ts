@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { GridNumberFontSize } from 'src/app/data/enum/grid-number-font-size.enum';
 import { StateKey } from 'src/app/data/enum/state-key.enum';
 import { Grid } from 'src/app/data/models/grid';
 import { Preferences } from 'src/app/data/models/preference';
+import { InAppPurchaseService } from 'src/app/shared/services/in-app-purchase.service';
+import { environment } from 'src/environments/environment';
 import {
   AddGridsAction,
   DeleteAllGridsAction,
@@ -31,6 +34,13 @@ export interface GridStateModel {
 })
 @Injectable()
 export class GridState {
+  private readonly GRID_LIMIT = 10; // Limite pour les utilisateurs gratuits
+
+  constructor(
+    private alertController: AlertController,
+    private purchaseService: InAppPurchaseService
+  ) {}
+
   @Selector()
   static getGrids(state: GridStateModel): Grid[] {
     return state.grids;
@@ -41,10 +51,20 @@ export class GridState {
   }
 
   @Action(AddGridsAction)
-  saveGrids(
+  async saveGrids(
     context: StateContext<GridStateModel>,
     action: AddGridsAction
-  ): void {
+  ): Promise<void> {
+    const totalGrids = context.getState().grids.length + action.grids.length;
+
+    if (
+      !(this.purchaseService.isPremiumUser$.value || !environment.production) &&
+      totalGrids > this.GRID_LIMIT
+    ) {
+      await this.showPremiumAlert();
+      return;
+    }
+
     context.patchState({
       grids: [...context.getState().grids, ...action.grids],
     });
@@ -134,5 +154,14 @@ export class GridState {
     context.patchState({
       preferences: { ...context.getState().preferences, ...action.preferences },
     });
+  }
+
+  private async showPremiumAlert(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Premium Required',
+      message: 'You need to upgrade to premium to create more grids.',
+      buttons: ['OK'],
+    });
+    await alert.present();
   }
 }

@@ -9,6 +9,13 @@
     >
     }@else {
     <span>N° {{ grid.numero }}</span>
+    <ion-badge
+      *ngIf="gridFull?.nextWinningNumber"
+      color="warning"
+      class="blink"
+    >
+      {{ gridFull?.nextWinningNumber }}
+    </ion-badge>
     @if (isEditable) {
     <ion-icon name="create" (click)="editGridEvent.emit(grid)" />
     <ion-icon name="trash" (click)="deleteGridEvent.emit(grid)" />

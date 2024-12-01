@@ -1,6 +1,7 @@
 export enum Message {
   FileNotSupported = "Le fichier n'est pas supporté",
   FileTooLarge = 'Le fichier est trop grand',
+  FileEncrypted = 'Le fichier est crypté',
   Cancel_Number = 'Souhaitez-vous annuler le numéro ',
   Delete_Grid = 'Souhaitez-vous supprimer la grille N° ',
   Delete_Multiple_Grids = 'Souhaitez-vous supprimer ces grilles ?',

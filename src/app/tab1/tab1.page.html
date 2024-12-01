@@ -61,14 +61,16 @@
   </ion-item>
   } @if (grids$ |async; as grids) { @if (!isLoading) {
 
-  <ion-button (click)="addManualGrid()" size="small">
-    <ion-icon slot="start" name="pencil-outline"></ion-icon>
-    Saisir un carton
-  </ion-button>
-  <ion-button (click)="openImportPhoto()" size="small" class="premium-option">
-    <ion-icon slot="start" name="camera-outline"></ion-icon>
-    Scanner une photo
-  </ion-button>
+  <div class="flex align-center justify-center">
+    <ion-button (click)="addManualGrid()" size="small">
+      <ion-icon slot="start" name="pencil-outline"></ion-icon>
+      Saisir un carton
+    </ion-button>
+    <ion-button (click)="openImportPhoto()" size="small" class="premium-option">
+      <ion-icon slot="start" name="camera-outline"></ion-icon>
+      Scanner une photo
+    </ion-button>
+  </div>
 
   <app-my-grids
     [isEditable]="true"

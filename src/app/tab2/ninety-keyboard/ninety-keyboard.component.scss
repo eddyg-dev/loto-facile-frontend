@@ -1,5 +1,6 @@
 .keyboard-numbers {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.25rem;
+  padding-bottom: 1rem;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   gap: 0.5rem;
@@ -14,11 +15,12 @@
 
 .number {
   border-radius: 4rem;
-  padding: 0.2rem;
+  padding: 0.1rem;
   font-weight: bold;
   font-weight: bold;
   background: ghostwhite;
   color: darkslateblue;
+  font-size: 1.2rem;
 
   &.disabled {
     background: var(--ion-color-light-shade);
