@@ -6,7 +6,6 @@ import { StateKey } from 'src/app/data/enum/state-key.enum';
 import { Grid } from 'src/app/data/models/grid';
 import { Preferences } from 'src/app/data/models/preference';
 import { InAppPurchaseService } from 'src/app/shared/services/in-app-purchase.service';
-import { environment } from 'src/environments/environment';
 import {
   AddGridsAction,
   DeleteAllGridsAction,
@@ -34,7 +33,7 @@ export interface GridStateModel {
 })
 @Injectable()
 export class GridState {
-  private readonly GRID_LIMIT = 10; // Limite pour les utilisateurs gratuits
+  // private readonly GRID_LIMIT = 10; // Limite pour les utilisateurs gratuits
 
   constructor(
     private alertController: AlertController,
@@ -55,15 +54,15 @@ export class GridState {
     context: StateContext<GridStateModel>,
     action: AddGridsAction
   ): Promise<void> {
-    const totalGrids = context.getState().grids.length + action.grids.length;
+    // const totalGrids = context.getState().grids.length + action.grids.length;
 
-    if (
-      !(this.purchaseService.isPremiumUser$.value || !environment.production) &&
-      totalGrids > this.GRID_LIMIT
-    ) {
-      await this.showPremiumAlert();
-      return;
-    }
+    // if (
+    //   !(this.purchaseService.isPremiumUser$.value || !environment.production) &&
+    //   totalGrids > this.GRID_LIMIT
+    // ) {
+    //   await this.showPremiumAlert();
+    //   return;
+    // }
 
     context.patchState({
       grids: [...context.getState().grids, ...action.grids],

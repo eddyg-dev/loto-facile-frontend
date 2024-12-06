@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  version: '1.0.2',
+  version: '1.0.3',
   baseUrl: '/api',
   facebookPageUrl: 'https://www.facebook.com/profile.php?id=61568338990283',
   whatsappUrl: 'https://wa.me/33615173154',

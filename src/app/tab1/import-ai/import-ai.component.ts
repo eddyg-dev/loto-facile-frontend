@@ -41,6 +41,7 @@ import { CategoryState } from 'src/app/store/category/category.state';
 import { AddGridsAction } from 'src/app/store/grids/grids.actions';
 
 import 'cordova-plugin-purchase';
+import { CategoryId } from 'src/app/data/enum/category-id.enum';
 import { Message } from 'src/app/data/enum/message.enum';
 import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
 import { PageLoaderComponent } from 'src/app/shared/ui/page-loader/page-loader.component';
@@ -97,7 +98,7 @@ export class ImportAIComponent {
   public categories$: Observable<Category[]> = this.store.select(
     CategoryState.getCategories
   );
-  categoryId?: string;
+  categoryId?: string = CategoryId.Loto;
 
   public update(): void {}
 
@@ -120,11 +121,12 @@ export class ImportAIComponent {
   }
 
   public selectPhotoPremium(): void {
-    if (this.purchaseService.isPremiumUser$.value || !environment.production) {
-      this.selectPhoto();
-    } else {
-      this.showPremiumAlert();
-    }
+    // if (this.purchaseService.isPremiumUser$.value || !environment.production) {
+    this.selectPhoto();
+    // }
+    // else {
+    //   this.showPremiumAlert();
+    // }
   }
 
   // Gestion de la capture d'image avec la caméra
@@ -150,15 +152,18 @@ export class ImportAIComponent {
   }
 
   public onFileInputClick() {
-    if (this.purchaseService.isPremiumUser$.value || !environment.production) {
-      this.fileInput.nativeElement.click();
-    } else {
-      this.showPremiumAlert();
-    }
+    // if (this.purchaseService.isPremiumUser$.value || !environment.production) {
+    // if (this.purchaseService.isPremiumUser$.value || !environment.production) {
+    this.fileInput.nativeElement.click();
+    // }
+    // else {
+    //   this.showPremiumAlert();
+    // }
   }
 
   private async analyzeImage(base64Image: string): Promise<void> {
     this.isImporting.set(true);
+    this.tempGrids = [];
     this.cdr.markForCheck();
     this.openAiService.analyzeImage(base64Image).subscribe(
       (gridsResponse: GridFromImageResponse[]) => {
@@ -167,7 +172,7 @@ export class ImportAIComponent {
         this.cdr.markForCheck();
       },
       async (err: any) => {
-        this.presentErrorToast(Message.Import_Error);
+        await this.presentErrorToast(Message.Import_Error);
         this.isImporting.set(false);
         this.cdr.markForCheck();
       }
@@ -205,11 +210,12 @@ export class ImportAIComponent {
   public async onFileSelected(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
+      this.tempGrids = [];
       const file = input.files[0];
       // Vérification de la taille du fichier
       const maxSizeInBytes = this.fileSizeLimit * 1024 * 1024; // 20MB
       if (file.size > maxSizeInBytes) {
-        this.presentErrorToast(Message.FileTooLarge);
+        await this.presentErrorToast(Message.FileTooLarge);
         return;
       }
 
@@ -223,7 +229,7 @@ export class ImportAIComponent {
           'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         ].includes(file.type)
       ) {
-        this.presentErrorToast(Message.FileNotSupported);
+        await this.presentErrorToast(Message.FileNotSupported);
         return;
       }
 
@@ -248,11 +254,13 @@ export class ImportAIComponent {
           this.actualizeTempGrids(gridsResponse);
           this.isImporting.set(false);
           this.cdr.markForCheck();
+          input.value = '';
         },
         async (err: any) => {
-          this.presentErrorToast(Message.Import_Error);
+          await this.presentErrorToast(Message.Import_Error);
           this.isImporting.set(false);
           this.cdr.markForCheck();
+          input.value = '';
         }
       );
     }
@@ -306,7 +314,7 @@ export class ImportAIComponent {
     }
   }
 
-  public presentErrorToast(message: Message): void {
+  public async presentErrorToast(message: Message): Promise<void> {
     this.toastController
       .create({
         message: message,

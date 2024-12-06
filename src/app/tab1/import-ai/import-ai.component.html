@@ -8,13 +8,16 @@
 
 <ion-content class="ion-padding" [fullscreen]="true">
   <div class="premium-info ion-text-center">
-    @if (!purchaseService.isPremiumUser$.value && !tempGrids.length) {
+    @if (!tempGrids.length) {
+    <!-- @if (!purchaseService.isPremiumUser$.value && !tempGrids.length) { -->
     <ion-icon name="star" color="warning" style="font-size: 24px"></ion-icon>
     <p>
-      Ces fonctionnalités <strong>Premium</strong> vous permettent d'importer
-      automatiquement plusieurs cartons à partir d'une <strong>photo</strong> ou
-      d'un <strong>fichier</strong>. Gagnez du temps et assurez-vous d'une
-      analyse rapide et précise. Fonctionne avec n'importe quel type de Loto.
+      Ces fonctionnalités
+      <!-- <strong>Premium</strong> -->
+      vous permettent d'importer automatiquement plusieurs cartons à partir
+      d'une <strong>photo</strong> ou d'un <strong>fichier</strong>. Gagnez du
+      temps et assurez-vous d'une analyse rapide et précise. Fonctionne avec
+      n'importe quel type de Loto.
     </p>
     } @else { @if (!tempGrids.length) {
     <p>
@@ -122,66 +125,67 @@
   <app-page-loader />
 
   } @if (tempGrids.length && !isImporting()) {
-  <div class="flex align-center justify-center m-1 gap-2">
-    @if (categoryId) {
-    <app-category-color [categoryId]="categoryId"></app-category-color>
-    }
-    <ion-item>
-      <ion-select
-        mode="ios"
-        placeholder="Catégorie"
-        [(ngModel)]="categoryId"
-        (ngModelChange)="update()"
-        interface="popover"
-        cancelText="Annuler"
-      >
-        <ion-select-option
-          *ngFor="let category of categories$ | async"
-          [value]="category.id"
-        >
-          {{ category.name }}
-        </ion-select-option>
-      </ion-select>
-    </ion-item>
-    <ion-button (click)="openSaveCategoryModal()" size="small" fill="clear">
-      <ion-icon slot="start" name="add"></ion-icon>
-    </ion-button>
-    @if (tempGrids.length) {
-    <ion-button
-      size="small"
-      [disabled]="!tempGrids.length || !categoryId"
-      (click)="validate()"
-      color="success"
-      >Valider</ion-button
-    >
-    }
-  </div>
+
   <div class="parent">
     <p>
       Voici les cartons qui seront importés lors de la validation. Vous pourrez
       toujours modifier leurs numéros et changer leur catégorie ultérieurement
       depuis votre liste de cartons.
     </p>
+    <div class="flex align-center justify-center m-1">
+      <ion-chip>
+        <ion-icon name="grid-outline"></ion-icon>
+        <ion-label>{{ tempGrids.length }} carton(s)</ion-label>
+      </ion-chip>
+    </div>
+    <div class="flex w-100 align-center">
+      <div class="flex align-center justify-center m-1 gap-2">
+        @if (categoryId) {
+        <app-category-color [categoryId]="categoryId"></app-category-color>
+        }
+        <ion-item>
+          <ion-select
+            mode="ios"
+            placeholder="Catégorie"
+            [(ngModel)]="categoryId"
+            (ngModelChange)="update()"
+            interface="popover"
+            cancelText="Annuler"
+          >
+            <ion-select-option
+              *ngFor="let category of categories$ | async"
+              [value]="category.id"
+            >
+              {{ category.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-button (click)="openSaveCategoryModal()" size="small" fill="clear">
+          <ion-icon slot="start" name="add"></ion-icon>
+        </ion-button>
+      </div>
+      <div>
+        <ion-button (click)="validate()" size="small" color="success">
+          Tout importer
+        </ion-button>
+      </div>
+    </div>
+
     @for (grid of tempGrids; track $index) {
-    <div class="flex align-center justify-center gap-1">
-      <div class="w-50">
-        <app-grid-full
-          [grid]="grid"
-          [isSelectableForPlay]="false"
-          [isSelectableForEdit]="false"
-          [isEditable]="false"
-          [displayBadges]="false"
-          [isTemp]="false"
-          [indexTemp]="$index"
-          (deleteTempGrid)="deleteTempGrid($index)"
-        />
-      </div>
-      <div class="flex">
-        <ion-chip (click)="deleteTempGrid($index)">
-          <ion-icon name="trash" color="primary"></ion-icon>
-          <ion-label>Ne pas importer</ion-label>
-        </ion-chip>
-      </div>
+    <div class="grid-import">
+      <app-grid-full
+        [grid]="grid"
+        [isSelectableForPlay]="false"
+        [isSelectableForEdit]="false"
+        [isEditable]="false"
+        [displayBadges]="false"
+        [isTemp]="false"
+        [indexTemp]="$index"
+        (deleteTempGrid)="deleteTempGrid($index)"
+      />
+      <ion-button (click)="deleteTempGrid($index)" size="small" fill="clear">
+        <ion-icon name="trash" color="primary"></ion-icon>
+      </ion-button>
     </div>
     }
   </div>

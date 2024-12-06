@@ -73,3 +73,8 @@ ion-col {
   display: flex;
   gap: 1rem;
 }
+
+.grid-import {
+  display: grid;
+  grid-template-columns: 1fr 100px;
+}

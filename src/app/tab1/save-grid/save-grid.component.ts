@@ -29,8 +29,10 @@ import {
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { CategoryId } from 'src/app/data/enum/category-id.enum';
 import { Category } from 'src/app/data/models/category';
 import { Grid } from 'src/app/data/models/grid';
+import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
 import { GridFullComponent } from 'src/app/shared/ui/grid-full/grid-full.component';
 import {
   isDifferentDizaine,
@@ -68,6 +70,7 @@ import { v4 as guid } from 'uuid';
     IonSelect,
     IonSelectOption,
     NinetyKeyboardComponent,
+    CategoryColorComponent,
   ],
   templateUrl: './save-grid.component.html',
   styleUrl: './save-grid.component.scss',
@@ -134,6 +137,9 @@ export class SaveGridComponent implements OnInit {
       this.field13Value = this.grid.quines[2][2].number;
       this.field14Value = this.grid.quines[2][3].number;
       this.field15Value = this.grid.quines[2][4].number;
+    } else {
+      this.numero = '';
+      this.category = CategoryId.Loto;
     }
   }
 
