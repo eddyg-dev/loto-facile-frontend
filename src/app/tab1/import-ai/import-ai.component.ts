@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import {
   IonButton,
   IonButtons,
@@ -27,6 +27,7 @@ import {
   IonSelectOption,
   IonToolbar,
   ModalController,
+  ToastController,
 } from '@ionic/angular/standalone';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';

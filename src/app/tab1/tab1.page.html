@@ -62,13 +62,20 @@
   } @if (grids$ |async; as grids) { @if (!isLoading) {
 
   <div class="flex align-center justify-center">
-    <ion-button (click)="addManualGrid()" size="small">
+    <ion-button
+      (click)="addManualGrid()"
+      [size]="grids.length ? 'small' : 'normal'"
+    >
       <ion-icon slot="start" name="pencil-outline"></ion-icon>
       Saisir un carton
     </ion-button>
-    <ion-button (click)="openImportPhoto()" size="small" class="premium-option">
+    <ion-button
+      (click)="openImportPhoto()"
+      [size]="grids.length ? 'small' : 'normal'"
+      class="premium-option"
+    >
       <ion-icon slot="start" name="camera-outline"></ion-icon>
-      Scanner une photo
+      Scanner un fichier
     </ion-button>
   </div>
 
