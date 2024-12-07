@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: '1.0.3',
+  version: '1.0.5',
   baseUrl: 'https://loto-facile-backend.onrender.com',
   facebookPageUrl: 'https://www.facebook.com/profile.php?id=61568338990283',
   whatsappUrl: 'https://wa.me/33615173154',
