@@ -46,7 +46,6 @@ import { CategoryId } from 'src/app/data/enum/category-id.enum';
 import { Message } from 'src/app/data/enum/message.enum';
 import { CategoryColorComponent } from 'src/app/shared/ui/category-color/category-color.component';
 import { PageLoaderComponent } from 'src/app/shared/ui/page-loader/page-loader.component';
-import { PremiumOfferComponent } from 'src/app/tab3/premium-offer/premium-offer.component';
 import { environment } from 'src/environments/environment';
 import { v4 as guid } from 'uuid';
 import { SaveCategoryComponent } from '../categories/save-category/save-category.component';
@@ -178,34 +177,6 @@ export class ImportAIComponent {
         this.cdr.markForCheck();
       }
     );
-  }
-
-  private async showPremiumAlert(): Promise<void> {
-    const alert = await this.alertController.create({
-      animated: true,
-      header: 'LOTO FACILE PREMIUM',
-      message: `Cette fonctionnalité est réservée aux utilisateurs premium. Souhaitez-vous passer à la version Premium ?`,
-      buttons: [
-        {
-          text: 'Non',
-          role: 'cancel',
-        },
-        {
-          text: 'Oui',
-          handler: () => this.openPremiumOffer(),
-        },
-      ],
-    });
-    await alert.present();
-  }
-
-  private async openPremiumOffer(): Promise<void> {
-    const modal = await this.modalcontroller.create({
-      animated: true,
-      showBackdrop: true,
-      component: PremiumOfferComponent,
-    });
-    await modal.present();
   }
 
   public async onFileSelected(event: Event): Promise<void> {

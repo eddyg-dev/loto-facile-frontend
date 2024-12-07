@@ -33,7 +33,7 @@ export interface GridStateModel {
 })
 @Injectable()
 export class GridState {
-  // private readonly GRID_LIMIT = 10; // Limite pour les utilisateurs gratuits
+  private readonly GRID_LIMIT = 1; // Limite pour les utilisateurs gratuits
 
   constructor(
     private alertController: AlertController,
@@ -54,15 +54,19 @@ export class GridState {
     context: StateContext<GridStateModel>,
     action: AddGridsAction
   ): Promise<void> {
-    // const totalGrids = context.getState().grids.length + action.grids.length;
+    const totalGrids = context.getState().grids.length + action.grids.length;
 
-    // if (
-    //   !(this.purchaseService.isPremiumUser$.value || !environment.production) &&
-    //   totalGrids > this.GRID_LIMIT
-    // ) {
-    //   await this.showPremiumAlert();
-    //   return;
-    // }
+    if (
+      !this.purchaseService.isPremiumUser$.value &&
+      totalGrids > this.GRID_LIMIT
+    ) {
+      await this.showPremiumAlert(
+        `Le nombre de grilles que vous pouvez créer est limité à ${this.GRID_LIMIT}.
+        Si vous souhaitez créer plus de grilles sans limite, vous pouvez passer à la version Premium.
+        Souhaitez-vous passer à la version Premium ?`
+      );
+      return;
+    }
 
     context.patchState({
       grids: [...context.getState().grids, ...action.grids],
@@ -155,10 +159,10 @@ export class GridState {
     });
   }
 
-  private async showPremiumAlert(): Promise<void> {
+  private async showPremiumAlert(message: string): Promise<void> {
     const alert = await this.alertController.create({
-      header: 'Premium Required',
-      message: 'You need to upgrade to premium to create more grids.',
+      header: 'LOTO FACILE PREMIUM',
+      message: message,
       buttons: ['OK'],
     });
     await alert.present();

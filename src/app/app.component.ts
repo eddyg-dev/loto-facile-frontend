@@ -68,23 +68,6 @@ export class AppComponent {
           },
         ]);
 
-        // this.store
-        //   .when()
-        //   .productUpdated((product) => {
-        //     console.log(`Produit mis à jour : ${product}`);
-        //     console.log(`Produit mis à jour : ${product.id}`);
-        //   })
-        //   .approved((transaction) => {
-        //     console.log('Transaction approuvée, en cours de vérification...');
-        //     transaction.verify(); // Vérifier la transaction
-        //   })
-        //   .verified((receipt) => {
-        //     console.log(
-        //       'Transaction vérifiée, activation de l’accès premium...'
-        //     );
-        //     this.setPremiumAccess(true); // Activer l'accès premium après vérification
-        //     receipt.finish(); // Terminer la transaction
-        //   });
         this.store
           .when()
           .productUpdated(() => {})

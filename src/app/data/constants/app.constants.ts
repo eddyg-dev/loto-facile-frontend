@@ -24,6 +24,7 @@ import {
   helpOutline,
   hourglass,
   imageOutline,
+  infiniteOutline,
   informationCircle,
   informationCircleOutline,
   keypad,
@@ -328,4 +329,5 @@ export const icons = {
   informationCircleOutline,
   giftOutline,
   cogOutline,
+  infiniteOutline,
 };
