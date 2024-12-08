@@ -33,7 +33,7 @@ export interface GridStateModel {
 })
 @Injectable()
 export class GridState {
-  private readonly GRID_LIMIT = 1; // Limite pour les utilisateurs gratuits
+  private readonly GRID_LIMIT = 5; // Limite pour les utilisateurs gratuits
 
   constructor(
     private alertController: AlertController,
