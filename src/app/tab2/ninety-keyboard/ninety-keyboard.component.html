@@ -1,9 +1,5 @@
 @if(hasHeader){
 <div class="keyboard-header">
-  <!-- <ion-button fill="outline" size="small" (click)="hideKeyboard.emit()">
-    <ion-icon name="keypad"></ion-icon>
-    <span> Cacher clavier </span>
-  </ion-button> -->
   @if ((tirageNumbers$|async)?.length) {
   <ion-button size="small" fill="outline" (click)="demarquer.emit()">
     Démarquer
@@ -16,6 +12,9 @@
     (click)="endTirage.emit()"
   >
     Fin de partie <ion-icon name="hourglass"></ion-icon>
+  </ion-button>
+  <ion-button fill="outline" size="small" (click)="hideKeyboard.emit()">
+    <ion-icon name="chevron-down-outline"></ion-icon>
   </ion-button>
 </div>
 }

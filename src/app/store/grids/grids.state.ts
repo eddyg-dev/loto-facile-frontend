@@ -55,11 +55,11 @@ export class GridState {
     action: AddGridsAction
   ): Promise<void> {
     const totalGrids = context.getState().grids.length + action.grids.length;
+    console.log('totalGrids', totalGrids);
+    const isPremiumUser = this.purchaseService.isPremiumUser$.value;
+    console.log('isPremiumUser', isPremiumUser);
 
-    if (
-      !this.purchaseService.isPremiumUser$.value &&
-      totalGrids > this.GRID_LIMIT
-    ) {
+    if (!isPremiumUser && totalGrids > this.GRID_LIMIT) {
       await this.showPremiumAlert(
         `Le nombre de grilles que vous pouvez créer est limité à ${this.GRID_LIMIT}.
         Si vous souhaitez créer plus de grilles sans limite, vous pouvez passer à la version Premium.
@@ -166,5 +166,8 @@ export class GridState {
       buttons: ['OK'],
     });
     await alert.present();
+    alert.onDidDismiss().then(() => {
+      this.purchaseService.openPremiumOffer();
+    });
   }
 }

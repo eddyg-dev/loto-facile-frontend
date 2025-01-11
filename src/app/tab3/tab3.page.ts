@@ -4,9 +4,7 @@ import { Browser } from '@capacitor/browser';
 import {
   AlertController,
   IonButton,
-  IonButtons,
   IonContent,
-  IonFooter,
   IonHeader,
   IonIcon,
   IonItem,
@@ -15,7 +13,6 @@ import {
   IonListHeader,
   IonNote,
   IonTitle,
-  IonToggle,
   IonToolbar,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -38,7 +35,6 @@ import { PremiumOfferComponent } from './premium-offer/premium-offer.component';
   standalone: true,
   imports: [
     IonNote,
-    IonToggle,
     IonList,
     IonListHeader,
     IonLabel,
@@ -49,9 +45,6 @@ import { PremiumOfferComponent } from './premium-offer/premium-offer.component';
     IonToolbar,
     IonHeader,
     IonContent,
-    IonFooter,
-    IonToggle,
-    IonButtons,
     AsyncPipe,
   ],
 })

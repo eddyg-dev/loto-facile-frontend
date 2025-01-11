@@ -21,12 +21,8 @@ import {
   IonHeader,
   IonIcon,
   IonItem,
-  IonLabel,
-  IonList,
-  IonListHeader,
   IonRadio,
   IonRadioGroup,
-  IonTabButton,
   IonTitle,
   IonToolbar,
   ModalController,
@@ -62,7 +58,6 @@ import { TirageLastNumbersComponent } from './tirage-last-numbers/tirage-last-nu
   styleUrls: ['tab2.page.scss'],
   standalone: true,
   imports: [
-    IonTabButton,
     IonFabButton,
     IonFab,
     IonButtons,
@@ -73,11 +68,8 @@ import { TirageLastNumbersComponent } from './tirage-last-numbers/tirage-last-nu
     IonToolbar,
     IonTitle,
     IonItem,
-    IonListHeader,
     CommonModule,
     IonButton,
-    IonList,
-    IonLabel,
     MyGridsComponent,
     TirageLastNumbersComponent,
     IonIcon,
@@ -284,7 +276,7 @@ export class Tab2Page implements OnInit {
     this.store.dispatch(new UnselectAllGridsAction());
     this.store.dispatch(new SetTirageModeAction(TirageMode.INITIAL));
     this.isDisplayGrids.set(false);
-    // this.showKeyboard = true;
+    this.showKeyboard = true;
   }
 
   public async demarquer(): Promise<void> {

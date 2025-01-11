@@ -7,6 +7,7 @@ import {
   bowlingBall,
   cameraOutline,
   checkboxOutline,
+  chevronDownOutline,
   close,
   closeOutline,
   cogOutline,
@@ -56,11 +57,6 @@ import { CategoryId } from '../enum/category-id.enum';
 import { TirageType } from '../enum/tirage-type.enum';
 import { Category } from '../models/category';
 import { TirageParams } from '../models/tirage-params';
-
-export const iconList = {
-  keypad,
-  square,
-};
 
 export const tirageTypeParams: { [key in TirageType]: TirageParams } = {
   [TirageType.Quine]: {
@@ -330,4 +326,5 @@ export const icons = {
   giftOutline,
   cogOutline,
   infiniteOutline,
+  chevronDownOutline,
 };

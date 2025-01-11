@@ -18,8 +18,10 @@
     </p>
   </div>
   } @else { @if ((tirageMode$|async) === TirageMode.INITIAL) {
-  <div class="frame animate__animated animate__zoomIn animate__faster">
-    <p>Choisissiez vos cartons pour ce nouveau tirage</p>
+  <div
+    class="frame animate__animated animate__zoomIn animate__faster flex gap-1"
+  >
+    <div>Choisissez vos cartons pour ce nouveau tirage</div>
     @if (!isDisplayGrids()) {
     <ion-button size="small" (click)="isDisplayGrids.set(true)">
       Choisir
